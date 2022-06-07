@@ -58,33 +58,33 @@
 			<a href="${pageContext.request.contextPath}/" class="logo">요리조리</a>
 			<div class="menus">
 				<div class="left-menu">
-					<a href="${pageContext.request.contextPath}/feed/list">피드</a>
-					<a href="${pageContext.request.contextPath}">클래스</a>
-					<a href="${pageContext.request.contextPath}">분류</a>
-					<a href="${pageContext.request.contextPath}">랭킹</a>
-					<a href="${pageContext.request.contextPath}">냉장고파먹기</a>
+					<a href="${pageContext.request.contextPath}/feed">피드</a>
+					<a href="${pageContext.request.contextPath}/class">클래스</a>
+					<a href="${pageContext.request.contextPath}/category">분류</a>
+					<a href="${pageContext.request.contextPath}/rank">랭킹</a>
+					<a href="${pageContext.request.contextPath}/frige">냉장고파먹기</a>
 				</div>
 				<div class="right-menu">
 					<div class="down-menu event">
-						<a href="#">
+						<a>
 					    	이벤트
 					  	</a>
 					  	<ul class="">
-					    	<li><a class="" href="${pageContext.request.contextPath}">쿠폰</a></li>
-					    	<li><a class="" href="${pageContext.request.contextPath}">공모전</a></li>
+					    	<li><a class="" href="${pageContext.request.contextPath}/event">쿠폰</a></li>
+					    	<li><a class="" href="${pageContext.request.contextPath}/contest">공모전</a></li>
 					  	</ul>
 					</div>
-					<a href="${pageContext.request.contextPath}">지역축제</a>
-					<a href="${pageContext.request.contextPath}">데일리쿡</a>
+					<a href="${pageContext.request.contextPath}/festival">지역축제</a>
+					<a href="${pageContext.request.contextPath}/daily">데일리쿡</a>
 					<div class="down-menu service">
-						<a class="" href="${pageContext.request.contextPath}">
+						<a>
 					    	고객센터
 					  	</a>
 					  	<ul class="">
-					    	<li><a class="" href="${pageContext.request.contextPath}">공지사항</a></li>
-					    	<li><a class="" href="${pageContext.request.contextPath}">FAQ</a></li>
-					    	<li><a class="" href="${pageContext.request.contextPath}">1:1 문의</a></li>
-					    	<li><a class="" href="${pageContext.request.contextPath}">쉐프신청</a></li>
+					    	<li><a class="" href="${pageContext.request.contextPath}/customer/notice">공지사항</a></li>
+					    	<li><a class="" href="${pageContext.request.contextPath}/customer/faq">FAQ</a></li>
+					    	<li><a class="" href="${pageContext.request.contextPath}/customer/qna">1:1 문의</a></li>
+					    	<li><a class="" href="${pageContext.request.contextPath}/customer/addChef">쉐프신청</a></li>
 					  	</ul>
 					</div>
 					<div class="btnArea">
@@ -95,7 +95,7 @@
 								<a href="${pageContext.request.contextPath}/member/login">로그인</a>
 							</c:when>
 							<c:otherwise>
-								<a href="${pageContext.request.contextPath}" title="레시피등록"><i class="bi bi-pencil-square"></i></a>
+								<a href="${pageContext.request.contextPath}/recipe/write" title="레시피등록"><i class="bi bi-pencil-square"></i></a>
 								<c:if test="${sessionScope.member.role == 0}">
 									<a href="${pageContext.request.contextPath}/admin" title="관리자"><i class="bi bi-gear"></i></a>			
 								</c:if>

@@ -71,11 +71,11 @@
 			<exclude-mapping path="/member/userIdCheck"/>
 			<exclude-mapping path="/member/complete"/>
 			<exclude-mapping path="/member/pwdFind"/>
-			<exclude-mapping path="/feed/list"/>
-			<exclude-mapping path="/rank/list"/>
-			<exclude-mapping path="/festival/list"/>
-			<exclude-mapping path="/faq"/>
-			<exclude-mapping path="/notice"/>
+			<exclude-mapping path="/feed"/>
+			<exclude-mapping path="/rank"/>
+			<exclude-mapping path="/festival"/>
+			<exclude-mapping path="/customer/faq"/>
+			<exclude-mapping path="/customer/notice"/>
 			
 			<beans:bean class="com.sp.yorizori.member.LoginCheckInterceptor"/>
 		</interceptor>
