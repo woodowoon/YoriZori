@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <style>
+
 @font-face {
 	font-family: 'GmarketSansBold';
 	src: url('${pageContext.request.contextPath}/resources/fonts/GmarketSansTTFBold.woff') format('woff');
