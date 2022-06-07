@@ -91,7 +91,7 @@
 						<div>
 							<c:choose>
 							<c:when test="${empty sessionScope.member}">
-								<a href="${pageContext.request.contextPath}/member/member">회원가입</a>
+								<a href="${pageContext.request.contextPath}/member/signup">회원가입</a>
 								<a href="${pageContext.request.contextPath}/member/login">로그인</a>
 							</c:when>
 							<c:otherwise>
