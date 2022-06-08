@@ -82,7 +82,7 @@
 					    	고객센터
 					  	</a>
 					  	<ul class="">
-					    	<li><a class="" href="${pageContext.request.contextPath}/customer/notice">공지사항</a></li>
+					    	<li><a class="" href="${pageContext.request.contextPath}/notice/list">공지사항</a></li>
 					    	<li><a class="" href="${pageContext.request.contextPath}/customer/faq">FAQ</a></li>
 					    	<li><a class="" href="${pageContext.request.contextPath}/customer/qna">1:1 문의</a></li>
 					    	<li><a class="" href="${pageContext.request.contextPath}/customer/addChef">쉐프신청</a></li>
