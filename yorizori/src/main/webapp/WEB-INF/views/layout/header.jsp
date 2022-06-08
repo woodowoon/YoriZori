@@ -59,7 +59,7 @@
 			<a href="${pageContext.request.contextPath}/" class="logo">요리조리</a>
 			<div class="menus">
 				<div class="left-menu">
-					<a href="${pageContext.request.contextPath}/recipe/feed">피드</a>  
+					<a href="${pageContext.request.contextPath}/recipe/feed">피드</a>   
 					<a href="${pageContext.request.contextPath}/class/list">클래스</a>
 					<a href="${pageContext.request.contextPath}/category">분류</a>
 					<a href="${pageContext.request.contextPath}/rank/list">랭킹</a>
