@@ -51,6 +51,7 @@ h3 img {
 	            <div class="col-auto">&nbsp;</div>
 	        </div>				
 			
+	
 			 <div class="row">
 			 	<c:forEach var="dto" items="" varStatus="status">
 			 		<div class="col-md-4 col-lg-3 p-1 item">
