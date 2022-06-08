@@ -35,11 +35,6 @@ label {
     font-weight: bold;
 }
 
-h3 {
-	font-size: 80%;
-    margin-bottom: 7%;
-}
-
 .body-container {
 	font-size: 25px
 	
@@ -217,7 +212,7 @@ button {
 <div class="container">
 	<div class="body-container">	
 		<div class="body-title">
-			<h3 style="	font-size: 100%; margin-bottom: 7%;"> yorizori 회원가입 </h3>
+			<h3 style="	font-size: 70%; margin-bottom: 7%;"> yorizori 회원가입 </h3>
 		</div>
 		    		
 		<div class="body-main">
@@ -316,6 +311,7 @@ button {
 						<span class="label"></span><span>할인쿠폰, 혜택, 이벤트 알림 받기</span></label>
 				        </div>
 				</div>
+				
 				
 				<div class="comment-message">
 								<div class="normal_cont-inputbox">
