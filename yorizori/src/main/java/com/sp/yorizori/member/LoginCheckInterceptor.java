@@ -76,7 +76,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 					resp.sendRedirect(cp + "/member/login");
 				}
 			} else {
-				if(uri.indexOf("admin")!=-1 && info.getRole() == 0) {
+				if(uri.indexOf("admin")!=-1 && info.getRole() != 0) {
 					result = false;
 					resp.sendRedirect(cp+"/member/noAuthorized");
 				}
