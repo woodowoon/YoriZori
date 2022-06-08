@@ -23,7 +23,7 @@ main {
 
 .recipe-container { 
 	background-color: #fff; border-radius: 24px; position: relative;
-	width: 95%; padding: 50px 20px; box-sizing: border-box; margin: 0 auto 60px auto;
+	width: 95%; padding: 50px 20px; box-sizing: border-box; margin: 0 auto 20px auto;
 }
 
 .info {
@@ -42,13 +42,13 @@ main {
 }
 .ai:hover, .ai:active { text-decoration: none; color: #333; }
 
-.ai-like { font-size: 27px; padding: 11px 10px 9px 10px; margin: 20px 20px 0 auto; }
+.ai-like { font-size: 27px; padding: 12px 11px 9px 9px; margin: 20px 20px 0 auto; }
 .ai-link { font-size: 35px; padding: 6px; margin: 20px auto 0 20px;}
 
 a > i { display: flex; }
 
-.img { margin-top: 40px; margin-bottom: 100px; }
-img { width: 100% }
+.finished { margin-top: 40px; margin-bottom: 100px; }
+.finishedImage { width: 100% }
 
 .recipe-icon { color: #666; text-align: center; display: flex; }
 .recipe-info { color: #666; text-align: center; display: flex; padding-top: 5px; }
@@ -64,6 +64,15 @@ img { width: 100% }
 
 .recipe-detail > span { font-size: 37px; font-weight: 700; }
 .recipe-detail > span > i { color: #f44502; }
+
+.writer-container {
+	display: flex; width: 95%; margin: 0 auto 60px auto; background-color: #fff;
+	padding: 25px; border-radius: 24px; height: 170px;
+}
+.writer-image { width: 120px; margin-left: 20px; }
+.profileImage { width: 100%; border-radius: 9999px; }
+.writer-nickName { line-height: 120px; margin-left: 50px; font-size: 25px; font-weight: 600; }
+.writer:hover, .writer:active { text-decoration: none; color: #f44502 }
 
 .prev-next { display: flex; width: 95%; margin: 0 auto; }
 .prev, .list, .next { width: 33.3%; }
@@ -118,8 +127,8 @@ img { width: 100% }
 			<a class="ai ai-link"><i class="bi bi-link-45deg"></i></a>
 		</div>
 		
-		<div class="img">
-			<img class="loginImage" src="${pageContext.request.contextPath}/resources/images/salad.jpg">
+		<div class="finished">
+			<img class="finishedImage" src="${pageContext.request.contextPath}/resources/images/salad.jpg">
 		</div>
 		
 		<div class="recipe-icon">
@@ -156,6 +165,15 @@ img { width: 100% }
 			<div class="editor">
 				${dto.content}
 			</div>
+		</div>
+	</div>
+	
+	<div class="writer-container">
+		<div class="writer-image">
+			<img class="profileImage" src="${pageContext.request.contextPath}/resources/images/profileImage.png">
+		</div>
+		<div class="writer-nickName">
+			<a class="writer">김쉐프</a>
 		</div>
 	</div>
 	
