@@ -4,6 +4,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <style type="text/css">
+
+.container {
+    width: 750px;
+}
+
 .body-title {
     -webkit-font-smoothing: antialiased;
     font-family: 'Noto Sans', sans-serif;
@@ -23,7 +28,6 @@
 
 label {
 	padding: 15px;
-	display: block;
     line-height: 1em;
     color: #000000;
     margin-bottom: 10px;
@@ -32,7 +36,7 @@ label {
 }
 
 h3 {
-	font-size: 100%;
+	font-size: 80%;
     margin-bottom: 7%;
 }
 
@@ -60,7 +64,7 @@ h3 {
 }
 
 #tel {
-	width: 200%;
+	width: 450%;
 }
 
 #zipSearch, #idcheck {
@@ -111,7 +115,7 @@ h3 {
     color: #777777;
     box-sizing: border-box;
     display: inline-block;
-    width: 72%;
+    width: 57%;
  }
 
 
@@ -180,7 +184,6 @@ button {
     outline: 0;
     font-size: 100%;
     position: relative;
-    display: block;
     width: 16px;
     height: 16px;
     margin-right: 10px;
@@ -205,7 +208,7 @@ button {
 }
 
 .select {
-	width:10%;
+	width:50%;
 }
 
 </style>
@@ -340,4 +343,4 @@ button {
 	</div>
 </div>
 
-					   
+								   
