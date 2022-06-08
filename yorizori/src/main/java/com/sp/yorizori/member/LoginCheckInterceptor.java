@@ -71,7 +71,6 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 						uri = uri.substring(req.getContextPath().length());
 					if (queryString != null)
 						uri += "?" + queryString;
-
 					session.setAttribute("preLoginURI", uri);
 					resp.sendRedirect(cp + "/member/login");
 				}
