@@ -4,6 +4,12 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <style type="text/css">
+main {
+	background-color: #f7f8fb;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: #000000; letter-spacing: -0.03em;
+}
+
 .body-container {
 	max-width: 800px;
 }
