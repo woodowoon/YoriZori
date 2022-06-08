@@ -29,8 +29,7 @@ h3 img {
 }
 
 .btn {
-    padding: 10px;
-    border-radius: 12px;
+    padding: 10px; border-radius: 12px;
     background: #f44502;
     line-height: 1em;
     color: #fff;
