@@ -4,6 +4,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <style type="text/css">
+
+.container {
+    width: 750px;
+}
+
 .body-title {
     -webkit-font-smoothing: antialiased;
     font-family: 'Noto Sans', sans-serif;
@@ -23,17 +28,11 @@
 
 label {
 	padding: 15px;
-	display: block;
     line-height: 1em;
     color: #000000;
     margin-bottom: 10px;
 	text-align: center;
     font-weight: bold;
-}
-
-h3 {
-	font-size: 100%;
-    margin-bottom: 7%;
 }
 
 .body-container {
@@ -60,7 +59,7 @@ h3 {
 }
 
 #tel {
-	width: 200%;
+	width: 450%;
 }
 
 #zipSearch, #idcheck {
@@ -111,7 +110,7 @@ h3 {
     color: #777777;
     box-sizing: border-box;
     display: inline-block;
-    width: 72%;
+    width: 57%;
  }
 
 
@@ -180,7 +179,6 @@ button {
     outline: 0;
     font-size: 100%;
     position: relative;
-    display: block;
     width: 16px;
     height: 16px;
     margin-right: 10px;
@@ -205,7 +203,7 @@ button {
 }
 
 .select {
-	width:10%;
+	width:50%;
 }
 
 </style>
@@ -214,7 +212,7 @@ button {
 <div class="container">
 	<div class="body-container">	
 		<div class="body-title">
-			<h3 style="	font-size: 100%; margin-bottom: 7%;"> yorizori 회원가입 </h3>
+			<h3 style="	font-size: 70%; margin-bottom: 7%;"> yorizori 회원가입 </h3>
 		</div>
 		    		
 		<div class="body-main">
@@ -314,6 +312,7 @@ button {
 				        </div>
 				</div>
 				
+				
 				<div class="comment-message">
 								<div class="normal_cont-inputbox">
 									<div class="input-box">
@@ -340,4 +339,4 @@ button {
 	</div>
 </div>
 
-					   
+								   

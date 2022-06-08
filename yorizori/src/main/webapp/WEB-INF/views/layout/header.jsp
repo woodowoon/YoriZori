@@ -59,10 +59,10 @@
 			<a href="${pageContext.request.contextPath}/" class="logo">요리조리</a>
 			<div class="menus">
 				<div class="left-menu">
-					<a href="${pageContext.request.contextPath}/feed">피드</a>
-					<a href="${pageContext.request.contextPath}/class">클래스</a>
+					<a href="${pageContext.request.contextPath}/recipe/feed">피드</a>   
+					<a href="${pageContext.request.contextPath}/class/list">클래스</a>
 					<a href="${pageContext.request.contextPath}/category">분류</a>
-					<a href="${pageContext.request.contextPath}/rank">랭킹</a>
+					<a href="${pageContext.request.contextPath}/rank/list">랭킹</a>
 					<a href="${pageContext.request.contextPath}/frige">냉장고파먹기</a>
 				</div>
 				<div class="right-menu">
@@ -71,18 +71,18 @@
 					    	이벤트
 					  	</a>
 					  	<ul class="">
-					    	<li><a class="" href="${pageContext.request.contextPath}/event">쿠폰</a></li>
-					    	<li><a class="" href="${pageContext.request.contextPath}/contest">공모전</a></li>
+					    	<li><a class="" href="${pageContext.request.contextPath}/event/list">쿠폰</a></li>
+					    	<li><a class="" href="${pageContext.request.contextPath}/contest/list">공모전</a></li>
 					  	</ul>
 					</div>
-					<a href="${pageContext.request.contextPath}/festival">지역축제</a>
-					<a href="${pageContext.request.contextPath}/daily">데일리쿡</a>
+					<a href="${pageContext.request.contextPath}/festival/list">지역축제</a>
+					<a href="${pageContext.request.contextPath}/daily/list">데일리쿡</a>
 					<div class="down-menu nav-service">
 						<a>
 					    	고객센터
 					  	</a>
 					  	<ul class="">
-					    	<li><a class="" href="${pageContext.request.contextPath}/customer/notice">공지사항</a></li>
+					    	<li><a class="" href="${pageContext.request.contextPath}/notice/list">공지사항</a></li>
 					    	<li><a class="" href="${pageContext.request.contextPath}/customer/faq">FAQ</a></li>
 					    	<li><a class="" href="${pageContext.request.contextPath}/customer/qna">1:1 문의</a></li>
 					    	<li><a class="" href="${pageContext.request.contextPath}/customer/addChef">쉐프신청</a></li>
@@ -100,7 +100,7 @@
 									<img src="${pageContext.request.contextPath}/resources/images/nav-recipe.png" style="width: 40px;">
 								</a>
 								<c:if test="${sessionScope.member.role == 1}">
-									<a href="${pageContext.request.contextPath}/mypage/" title="마이페이지">
+									<a href="${pageContext.request.contextPath}/mypage" title="마이페이지">
 										<img src="${pageContext.request.contextPath}/resources/images/nav-mypage.png" style="width: 40px;">
 									</a>
 								</c:if>
