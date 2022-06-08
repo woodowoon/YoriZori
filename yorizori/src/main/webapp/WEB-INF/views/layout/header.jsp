@@ -24,7 +24,7 @@
 
 .yorizori-nav { width: 100%; height: 90px; background: #fff; }
 .yorizori-nav a:hover { color: #f44502; text-decoration: none; }
-.yorizori-nav .nav-inner { position: relative; width: 1320px; padding: 0 20px; margin: 0 auto; }
+.yorizori-nav .nav-inner { position: relative; width: 1440px; padding: 0 20px; margin: 0 auto; }
 .yorizori-nav .nav-inner .logo { position: absolute; top: 14px; left: 28px; font-size: 40px; color: #000; }
 .yorizori-nav .nav-inner .logo:hover { color: #000; }
 
@@ -35,12 +35,12 @@
 .yorizori-nav .menus .right-menu .down-menu { display: inline-block; margin-right: 15px; }
 .yorizori-nav .menus .right-menu .down-menu ul { position: absolute; top: 85px; left: 0; width: 100%; background: rgba(0,0,0,0.5); }
 .yorizori-nav .menus .right-menu .down-menu ul li { list-style: none; }
-.yorizori-nav .menus .right-menu .event ul, 
-.yorizori-nav .menus .right-menu .service ul { display: none; z-index: 2; }
-.yorizori-nav .menus .right-menu .event:hover ul,
-.yorizori-nav .menus .right-menu .service:hover ul { display: block; }
-.yorizori-nav .menus .right-menu .event li { margin-left: 850px; }
-.yorizori-nav .menus .right-menu .service li { margin-left: 1075px; }
+.yorizori-nav .menus .right-menu .nav-event ul, 
+.yorizori-nav .menus .right-menu .nav-service ul { display: none; z-index: 2; }
+.yorizori-nav .menus .right-menu .nav-event:hover ul,
+.yorizori-nav .menus .right-menu .nav-service:hover ul { display: block; }
+.yorizori-nav .menus .right-menu .nav-event li { margin-left: 915px; }
+.yorizori-nav .menus .right-menu .nav-service li { margin-left: 1140px; }
 .yorizori-nav .menus .right-menu .down-menu ul li a { color: #fff; line-height: 50px; }
 .yorizori-nav .menus .right-menu .down-menu > a { margin-right: 0; }
 .yorizori-nav .menus .right-menu .btnArea { display: inline-block; }
@@ -66,7 +66,7 @@
 					<a href="${pageContext.request.contextPath}/frige">냉장고파먹기</a>
 				</div>
 				<div class="right-menu">
-					<div class="down-menu event">
+					<div class="down-menu nav-event">
 						<a>
 					    	이벤트
 					  	</a>
@@ -77,7 +77,7 @@
 					</div>
 					<a href="${pageContext.request.contextPath}/festival">지역축제</a>
 					<a href="${pageContext.request.contextPath}/daily">데일리쿡</a>
-					<div class="down-menu service">
+					<div class="down-menu nav-service">
 						<a>
 					    	고객센터
 					  	</a>
@@ -96,9 +96,18 @@
 								<a href="${pageContext.request.contextPath}/member/login">로그인</a>
 							</c:when>
 							<c:otherwise>
-								<a href="${pageContext.request.contextPath}/recipe/write" title="레시피등록"><i class="bi bi-pencil-square"></i></a>
+								<a href="${pageContext.request.contextPath}/recipe/write" title="레시피등록">
+									<img src="${pageContext.request.contextPath}/resources/images/nav-recipe.png" style="width: 40px;">
+								</a>
+								<c:if test="${sessionScope.member.role == 1}">
+									<a href="${pageContext.request.contextPath}/mypage/" title="마이페이지">
+										<img src="${pageContext.request.contextPath}/resources/images/nav-mypage.png" style="width: 40px;">
+									</a>
+								</c:if>
 								<c:if test="${sessionScope.member.role == 0}">
-									<a href="${pageContext.request.contextPath}/admin" title="관리자"><i class="bi bi-gear"></i></a>			
+									<a href="${pageContext.request.contextPath}/admin" title="관리자">
+										<img src="${pageContext.request.contextPath}/resources/images/nav-admin.png" style="width: 40px;">
+									</a>			
 								</c:if>
 								<a href="${pageContext.request.contextPath}/member/logout" title="로그아웃">로그아웃</a>
 							</c:otherwise>

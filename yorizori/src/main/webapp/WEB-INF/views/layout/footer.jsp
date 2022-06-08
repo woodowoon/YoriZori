@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <style>
-.footer { width: 1320px; padding: 40px 0; margin: 0 auto; }
+.footer { width: 1440px; padding: 40px 0; margin: 0 auto; }
 .footer a:hover { color: #999; text-decoration: none; }
 .footer .logo-area, .text-area { display: inline-block; vertical-align: top; }
 .footer .logo-area { width: 400px; }
