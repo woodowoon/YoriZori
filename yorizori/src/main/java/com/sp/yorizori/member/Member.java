@@ -4,6 +4,7 @@ public class Member {
 	private String userId;
 	private String userPwd;
 	private String userName;
+	private String nickName;
 	private int role;
 	private int countryNum;
 	
@@ -24,6 +25,12 @@ public class Member {
 	}
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+	public String getNickName() {
+		return nickName;
+	}
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 	public int getRole() {
 		return role;
