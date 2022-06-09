@@ -3,10 +3,17 @@ package com.sp.yorizori.foodclass;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller("foodClassController")
+@Controller("class.foodClassController")
+@RequestMapping("/class/*")
 public class FoodClassController {
-	@RequestMapping("/class")
-	public String list() {
+	
+	@RequestMapping(value = "list")
+	public String list() throws Exception {
 		return ".class.list";
+	}
+	
+	@RequestMapping(value = "article")
+	public String article() throws Exception {
+		return ".class.article";
 	}
 }
