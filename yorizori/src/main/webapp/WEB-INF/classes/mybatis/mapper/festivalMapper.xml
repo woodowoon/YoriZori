@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="festival">
+	<select id="seq" resultType="Integer">
+		SELECT festival_seq.NEXTVAL FROM dual
+	</select>
+
+	<insert id="insertFest" parameterType="com.sp.yorizori.festival.Festival">
+		INSERT INTO festival(festivalNum, festivalName, festivalContent, startDate, 
+			endDate, festivalHost, festivalSite, addr, place, latitude, longitude) 
+		VALUES (festival_seq.NEXTVAL, #{name}, #{content}, #{start_date}, 
+			#{end_date}, #{host}, #{site}, #{addr}, #{place}, #{latitude}, #{longitude})
+	</insert>
+	
+	<sql id="where-list">
+		<choose>
+			<when test="menu == 'ing'">
+				( TO_CHAR(startDate, 'YYYYMMDD') &lt; SYSDATE
+					AND TO_CHAR(endDate, 'YYYYMMDD') &gt; SYSDATE )
+			</when>
+			<when test="menu == 'before'">
+				TO_CHAR(startDate, 'YYYYMMDD') &gt; SYSDATE
+			</when>
+			<otherwise>
+				TO_CHAR(endDate, 'YYYYMMDD') &lt; SYSDATE
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM festival
+		<where>
+			<if test="menu != null and menu != ''">
+				<include refid="where-list"/>
+			</if>
+		</where>
+	</select>
+	
+	<select id="listFest" parameterType="map" resultType="com.sp.yorizori.festival.Festival">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+				SELECT festivalNum num, festivalName name, 
+					TO_CHAR(startDate, 'YYYY.MM.DD') start_date, 
+					TO_CHAR(endDate, 'YYYY.MM.DD') end_date
+				FROM festival
+				<where>
+					<if test="menu != null and menu != ''">
+						<include refid="where-list"/>
+					</if>
+				</where>
+				ORDER BY endDate ASC
+			) tb WHERE ROWNUM &lt;= #{end}
+		) WHERE rnum &gt;= #{start}	
+	</select>
+</mapper>
