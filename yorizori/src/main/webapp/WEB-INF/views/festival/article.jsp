@@ -215,7 +215,7 @@ a > i { display: flex; }
 	</div>
 </div>
 
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4c09fc6060151a83677eaa4c71bcdc06"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey="></script>
 <script type="text/javascript">
 
 var mapContainer = document.getElementById('map'), 			// 지도를 표시할 div 
