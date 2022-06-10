@@ -41,6 +41,8 @@
 .yorizori-nav .menus .right-menu .nav-service:hover ul { display: block; }
 .yorizori-nav .menus .right-menu .nav-event li { margin-left: 915px; }
 .yorizori-nav .menus .right-menu .nav-service li { margin-left: 1140px; }
+.yorizori-nav .menus .right-menu .nav-event li.nonMember { margin-left: 968px; }
+.yorizori-nav .menus .right-menu .nav-service li.nonMember { margin-left: 1193px; }
 .yorizori-nav .menus .right-menu .down-menu ul li a { color: #fff; line-height: 50px; }
 .yorizori-nav .menus .right-menu .down-menu > a { margin-right: 0; }
 .yorizori-nav .menus .right-menu .btnArea { display: inline-block; }
@@ -71,8 +73,16 @@
 					    	이벤트
 					  	</a>
 					  	<ul class="">
-					    	<li><a class="" href="${pageContext.request.contextPath}/event/list">쿠폰</a></li>
-					    	<li><a class="" href="${pageContext.request.contextPath}/contest/list">공모전</a></li>
+					  		<c:choose>
+						  		<c:when test="${empty sessionScope.member}">
+						    		<li class="nonMember"><a class="" href="${pageContext.request.contextPath}/event/list">쿠폰</a></li>
+						    		<li class="nonMember"><a class="" href="${pageContext.request.contextPath}/contest/list">공모전</a></li>
+						    	</c:when>
+						    	<c:otherwise>
+							    	<li><a class="" href="${pageContext.request.contextPath}/event/list">쿠폰</a></li>
+							    	<li><a class="" href="${pageContext.request.contextPath}/contest/list">공모전</a></li>
+						    	</c:otherwise>
+					    	</c:choose>
 					  	</ul>
 					</div>
 					<a href="${pageContext.request.contextPath}/festival/list">지역축제</a>
@@ -82,10 +92,20 @@
 					    	고객센터
 					  	</a>
 					  	<ul class="">
-					    	<li><a class="" href="${pageContext.request.contextPath}/notice/list">공지사항</a></li>
-					    	<li><a class="" href="${pageContext.request.contextPath}/faq/main">FAQ</a></li>
-					    	<li><a class="" href="${pageContext.request.contextPath}/qna/list">1:1 문의</a></li>
-					    	<li><a class="" href="${pageContext.request.contextPath}/customer/addChef">쉐프신청</a></li>
+					  		<c:choose>
+					  			<c:when test="${empty sessionScope.member}">
+							    	<li class="nonMember"><a class="" href="${pageContext.request.contextPath}/notice/list">공지사항</a></li>
+							    	<li class="nonMember"><a class="" href="${pageContext.request.contextPath}/faq/main">FAQ</a></li>
+							    	<li class="nonMember"><a class="" href="${pageContext.request.contextPath}/qna/list">1:1 문의</a></li>
+							    	<li class="nonMember"><a class="" href="${pageContext.request.contextPath}/customer/addChef">쉐프신청</a></li>
+							    </c:when>
+							    <c:otherwise>
+							    	<li><a class="" href="${pageContext.request.contextPath}/notice/list">공지사항</a></li>
+							    	<li><a class="" href="${pageContext.request.contextPath}/faq/main">FAQ</a></li>
+							    	<li><a class="" href="${pageContext.request.contextPath}/qna/list">1:1 문의</a></li>
+							    	<li><a class="" href="${pageContext.request.contextPath}/customer/addChef">쉐프신청</a></li>
+							    </c:otherwise>
+					    	</c:choose>
 					  	</ul>
 					</div>
 					<div class="btnArea">
