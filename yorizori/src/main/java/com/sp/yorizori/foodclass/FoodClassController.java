@@ -16,4 +16,9 @@ public class FoodClassController {
 	public String article() throws Exception {
 		return ".class.article";
 	}
+	
+	@RequestMapping(value = "write")
+	public String write() throws Exception {
+		return ".class.write";
+	}
 }

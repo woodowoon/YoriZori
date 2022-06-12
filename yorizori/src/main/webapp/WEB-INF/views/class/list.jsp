@@ -33,7 +33,9 @@
 .lecture .lec-category .lec-cate-4 { background: url(${pageContext.request.contextPath}/resources/images/class-cate4.png) 60px center no-repeat; background-size: 46px; }
 .lecture .lec-category .lec-cate-5 { background: url(${pageContext.request.contextPath}/resources/images/class-cate5.png) 60px center no-repeat; background-size: 46px; }
 
-.lecture .lec-list { margin-top: 40px; }
+.lecture .lec-list { margin-top: 20px; }
+.lecture .lec-list .insertClass { display: block; width: 200px; height: 50px; line-height: 48px; font-size: 20px; font-weight: 700; text-align: center; color: #fff; background: #77b347; margin: 0 22px 35px auto; }
+.lecture .lec-list .insertClass:hover { text-decoration: none; }
 .lecture .lec-list ul li { float: left; list-style: none; }
 .lecture .lec-list ul li > div { width: 274px; margin: 0 20px 50px; }
 
@@ -68,6 +70,9 @@
 		</div>
 		
 		<div class="lec-list">
+			<c:if test="${sessionScope.member.role == 0 || sessionScope.member.role == 2}">
+				<a href="#" class="insertClass">클래스 등록</a>
+			</c:if>
 			<ul class="clearFix">
 				<li>
 					<div>
