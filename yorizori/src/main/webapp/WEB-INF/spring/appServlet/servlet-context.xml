@@ -74,7 +74,8 @@
 			<exclude-mapping path="/member/pwdFind"/>
 			<exclude-mapping path="/feed"/>
 			<exclude-mapping path="/rank"/>
-			<exclude-mapping path="/festival"/>
+			<exclude-mapping path="/festival/list"/>
+			<exclude-mapping path="/festival/article"/>
 			<exclude-mapping path="/customer/faq"/>
 			<exclude-mapping path="/customer/notice"/>
 			
