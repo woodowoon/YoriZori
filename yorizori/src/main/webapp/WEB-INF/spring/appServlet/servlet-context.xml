@@ -70,6 +70,7 @@
 			<exclude-mapping path="/member/signup"/>
 			<exclude-mapping path="/member/userIdCheck"/>
 			<exclude-mapping path="/member/complete"/>
+			<exclude-mapping path="/member/member"/>
 			<exclude-mapping path="/member/pwdFind"/>
 			<exclude-mapping path="/feed"/>
 			<exclude-mapping path="/rank"/>
