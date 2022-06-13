@@ -28,11 +28,16 @@ main { background-color: #f7f8fb; font-family: 'Noto Sans KR', sans-serif; color
 .festival-box { border: 1px solid #dadada; text-align: center; }
 .festival-img { margin-bottom: 20px; width: 295px; height: 300px; overflow: hidden;}
 .festival-img > a > img { max-width: 100%; min-height: 100%; }
-.festival-info { letter-spacing: 0; }
-.festival-title { font-size: 20px; font-weight: 500; }
+.festival-info { letter-spacing: 0; margin: 0 10px; }
+.festival-title { font-size: 20px; font-weight: 500; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
 .festival-title > a { text-decoration: none; color: #000; }
 .festival-desc { font-size: 16px; font-weight: 300; }
 
+.btn-container { width: 95%; margin: 0 auto; text-align: right; }
+.btn-write { color: #ffffff; background-color: #f44502; font-size: 18px; border-radius: 9999px; padding: 10px 20px; margin: 0 10px; }
+
+.page-item.active .page-link { background-color: #f44502; border-color: #f44502; }
+.page-link, .page-link:hover, .page-link:active { color: #f44502; }
 </style>
 
 <script type="text/javascript">
@@ -61,101 +66,41 @@ $(function(){
 	</ul>
 	
 	<div class="festival-container">
-		<ul class="festival-list">
-			<c:forEach var="dto" items="${list}">
-				<li>
-					<div class="festival-box">
-						<div class="festival-img">
-							<a href="#"><img src="${pageContext.request.contextPath}/resources/images/festival_poster.jpg"></a>
+		<c:forEach var="dto" items="${list}" varStatus="status" step="4">
+			<ul class="festival-list">
+				<c:forEach var="dto" items="${list}" begin="${status.index}" end="${status.index+3}">
+					<li>
+						<div class="festival-box">
+							<div class="festival-img">
+								<a href="${articleUrl}&num=${dto.num}">
+									<c:choose>
+										<c:when test="${dto.fileName != null}">
+											<img src="${pageContext.request.contextPath}/uploads/festival/${dto.fileName}">
+										</c:when>
+										<c:otherwise>
+											<img src="${pageContext.request.contextPath}/resources/images/festival_poster.jpg">
+										</c:otherwise>
+									</c:choose>
+								</a>
+							</div>
+							<div class="festival-info">
+								<p class="festival-title"><a href="${articleUrl}&num=${dto.num}">${dto.name}</a></p>
+								<p class="festival-desc">${dto.start_date} ~ ${dto.end_date}</p>
+							</div>
 						</div>
-						<div class="festival-info">
-							<p class="festival-title"><a href="#">${dto.name}</a></p>
-							<p class="festival-desc">${dto.start_date} ~ ${dto.end_date}</p>
-						</div>
-					</div>
-				</li>
-				<li>
-					<div class="festival-box">
-						<div class="festival-img">
-							<a><img src="${pageContext.request.contextPath}/resources/images/festival_poster.jpg"></a>
-						</div>
-						<div class="festival-info">
-							<p class="festival-title"><a>안흥찐빵축제</a></p>
-							<p class="festival-desc">2022.06.09 ~ 2022.06.10</p>
-						</div>
-					</div>
-				</li>
-				<li>
-					<div class="festival-box">
-						<div class="festival-img">
-							<a><img src="${pageContext.request.contextPath}/resources/images/festival_poster.jpg"></a>
-						</div>
-						<div class="festival-info">
-							<p class="festival-title"><a>안흥찐빵축제</a></p>
-							<p class="festival-desc">2022.06.09 ~ 2022.06.10</p>
-						</div>
-					</div>
-				</li>
-				<li>
-					<div class="festival-box">
-						<div class="festival-img">
-							<a><img src="${pageContext.request.contextPath}/resources/images/festival_poster.jpg"></a>
-						</div>
-						<div class="festival-info">
-							<p class="festival-title"><a>안흥찐빵축제</a></p>
-							<p class="festival-desc">2022.06.09 ~ 2022.06.10</p>
-						</div>
-					</div>
-				</li>
-			</c:forEach>
-		</ul>
-		
-		<ul class="festival-list">
-			<li>
-				<div class="festival-box">
-					<div class="festival-img">
-						<a><img src="${pageContext.request.contextPath}/resources/images/festival_poster.jpg"></a>
-					</div>
-					<div class="festival-info">
-						<p class="festival-title"><a>안흥찐빵축제</a></p>
-						<p class="festival-desc">2022.06.09 ~ 2022.06.10</p>
-					</div>
-				</div>
-			</li>
-			<li>
-				<div class="festival-box">
-					<div class="festival-img">
-						<a><img src="${pageContext.request.contextPath}/resources/images/festival_poster.jpg"></a>
-					</div>
-					<div class="festival-info">
-						<p class="festival-title"><a>안흥찐빵축제</a></p>
-						<p class="festival-desc">2022.06.09 ~ 2022.06.10</p>
-					</div>
-				</div>
-			</li>
-			<li>
-				<div class="festival-box">
-					<div class="festival-img">
-						<a><img src="${pageContext.request.contextPath}/resources/images/festival_poster.jpg"></a>
-					</div>
-					<div class="festival-info">
-						<p class="festival-title"><a>안흥찐빵축제</a></p>
-						<p class="festival-desc">2022.06.09 ~ 2022.06.10</p>
-					</div>
-				</div>
-			</li>
-			<li>
-				<div class="festival-box">
-					<div class="festival-img">
-						<a><img src="${pageContext.request.contextPath}/resources/images/festival_poster.jpg"></a>
-					</div>
-					<div class="festival-info">
-						<p class="festival-title"><a>안흥찐빵축제</a></p>
-						<p class="festival-desc">2022.06.09 ~ 2022.06.10</p>
-					</div>
-				</div>
-			</li>
-		</ul>
+					</li>
+				</c:forEach>
+			</ul>
+		</c:forEach>
 	</div>
 	
+	<div class="btn-container">
+		<button type="button" class="btn btn-write" onclick="location.href='${pageContext.request.contextPath}/festival/write';">
+			<i class="bi bi-plus-lg"></i>
+		</button>
+	</div>
+	
+	<div class="page-box">
+		${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
+	</div>
 </div>
