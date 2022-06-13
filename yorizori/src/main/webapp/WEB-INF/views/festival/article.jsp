@@ -24,6 +24,7 @@ main { background-color: #f7f8fb; font-family: 'Noto Sans KR', sans-serif; color
 .btn_star > .ico {
 	width: 25px; height: 25px; background-size: 25px 25px; background-repeat: no-repeat;
 }
+.btn_bubble { cursor: default!important; }
 .btn_bubble > .ico {
 	width: 25px; height: 25px; background-size: 25px 25px; background-repeat: no-repeat; 
 	background-image: url("${pageContext.request.contextPath}/resources/images/replyBubble.png");
@@ -31,7 +32,6 @@ main { background-color: #f7f8fb; font-family: 'Noto Sans KR', sans-serif; color
 
 .carousel-item { overflow: hidden; width: 100%; height: 450px; }
 .carousel-item > img { width: auto; max-height: 100%; display: block; margin: 0 auto; }
-.carousel-control-next, .carousel-control-prev {  }
 
 .fest-contents { margin-top: 30px; }
 .fest-contents > span { display: block; font-size: 24px; font-weight: 600; color: #333; border-bottom: 2px solid #333; }
@@ -60,7 +60,7 @@ main { background-color: #f7f8fb; font-family: 'Noto Sans KR', sans-serif; color
 }
 .ai:hover, .ai:active { text-decoration: none; color: #333; }
 .ai-left, .ai-right { font-size: 20px; padding: 13px; }
-a > i { display: flex; }
+.ai > .bi { display: flex; }
 
 .btn-list {
 	color: #ffffff; background-color: #f44502; font-size: 14px;
@@ -131,17 +131,97 @@ $(function(){
 		const fn = function(data){
 			let state = data.state;
 			if(state === "true") {
+/*
 				if( userFestLiked ) {
-					$('.ico').css("background-image", "url('${pageContext.request.contextPath}/resources/images/star.png')");
+					$('.btnSendFestLike .ico').css("background-image", "url('${pageContext.request.contextPath}/resources/images/star.png')");
 				} else {
-					$('.ico').css("background-image", "url('${pageContext.request.contextPath}/resources/images/fill-star.png')");
+					$('.btnSendFestLike .ico').css("background-image", "url('${pageContext.request.contextPath}/resources/images/fill-star.png')");
 				}
 				
 				var count = data.festLikeCount;
 				$("#FestLikeCount").text(count);
+*/
+				location.href="${pageContext.request.contextPath}/festival/article?${query}&num=${dto.num}";
 				
 			} else if(state === "false") {
 				alert("관심 등록 처리를 실패했습니다.");
+			}
+		};
+		
+		ajaxFun(url, "post", query, "json", fn);
+	});
+});
+
+// 댓글 페이징
+$(function(){
+	listPage(1);
+});
+
+function listPage(page) {
+	let url = "${pageContext.request.contextPath}/festival/listReply";
+	let query = "num=${dto.num}&pageNo=" + page;
+	let selector = "#listReply";
+	
+	const fn = function(data){
+		$(selector).html(data);
+	};
+	ajaxFun(url, "get", query, "html", fn);
+}
+
+// 댓글 등록
+$(function(){
+	$(".btnReply").click(function(){
+		let num = "${dto.num}";
+		const $tb = $(this).closest("table");
+
+		let content = $tb.find("textarea").val().trim();
+		if(! content) {
+			$tb.find("textarea").focus();
+			return false;
+		}
+		content = encodeURIComponent(content);
+		
+		let url = "${pageContext.request.contextPath}/festival/insertReply";
+		let query = "num=" + num + "&content=" + content;
+		
+		const fn = function(data){
+			$tb.find("textarea").val("");
+			
+			let state = data.state;
+			if(state === "true") {
+				listPage(1);
+				let replyCount = $("#FestReplyCount").text();
+				$("#FestReplyCount").text(parseInt(replyCount)+1);
+			} else if(state === "false") {
+				alert("댓글 등록 처리를 실패했습니다.");
+			}
+		};
+		
+		ajaxFun(url, "post", query, "json", fn);
+	});
+});
+
+// 댓글 삭제
+$(function(){
+	$("body").on("click", ".reply-delete", function(){
+		if(! confirm("댓글을 삭제하시겠습니까 ? ")) {
+		    return false;
+		}
+		
+		let replyNum = $(this).attr("data-replyNum");
+		let page = $(this).attr("data-pageNo");
+		
+		let url = "${pageContext.request.contextPath}/festival/deleteReply";
+		let query = "replyNum=" + replyNum;
+		
+		const fn = function(data){
+			let state = data.state;
+			if(state === "true") {
+				listPage(page);
+				let replyCount = $("#FestReplyCount").text();
+				$("#FestReplyCount").text(parseInt(replyCount)-1);
+			} else if(state === "false") {
+				alert("댓글 삭제 처리를 실패했습니다.");
 			}
 		};
 		
@@ -166,7 +246,7 @@ $(function(){
 			</button>
 			<button type="button" class="btn btn_bubble">
 				<span class="ico">댓글</span>
-				<span class="num">${dto.replyCount}</span>
+				<span class="num" id="FestReplyCount">${replyCount}</span>
 			</button>
 		</div>
 		
@@ -284,7 +364,7 @@ $(function(){
 	</div>
 </div>
 
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey="></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4c09fc6060151a83677eaa4c71bcdc06"></script>
 <script type="text/javascript">
 
 var latitude = '${dto.latitude}';

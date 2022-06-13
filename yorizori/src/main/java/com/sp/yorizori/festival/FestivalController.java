@@ -145,9 +145,12 @@ public class FestivalController {
 		map.put("userId", info.getUserId());
 		boolean userFestLiked = service.userFestLiked(map);
 		
+		int replyCount = service.replyCount(map);
+		
 		model.addAttribute("dto", dto);
 		model.addAttribute("listFile", listFile);
 		model.addAttribute("userFestLiked", userFestLiked);
+		model.addAttribute("replyCount", replyCount);
 		model.addAttribute("preReadDto", preReadDto);
 		model.addAttribute("nextReadDto", nextReadDto);
 		model.addAttribute("page", page);
@@ -292,5 +295,82 @@ public class FestivalController {
 		model.put("festLikeCount", festLikeCount);
 		
 		return model;
+	}
+	
+	@RequestMapping(value = "listReply")
+	public String listReply(
+			@RequestParam int num,
+			@RequestParam(value = "pageNo", defaultValue = "1") int current_page,
+			Model model, HttpSession session) throws Exception {
+		
+		int rows = 5;
+		int total_page = 0;
+		int dataCount = 0;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("num", num);
+		
+		dataCount = service.replyCount(map);
+		total_page = myUtil.pageCount(rows, dataCount);
+		if (current_page > total_page) {
+			current_page = total_page;
+		}
+		
+		int start = (current_page - 1) * rows + 1;
+		int end = current_page * rows;
+		map.put("start", start);
+		map.put("end", end);
+		
+		List<Reply> listReply = service.listReply(map);
+		
+		for (Reply dto : listReply) {
+			dto.setContent(dto.getContent().replaceAll("\n", "<br>"));
+		}
+		
+		String paging = myUtil.pagingMethod(current_page, total_page, "listPage");
+		
+		model.addAttribute("listReply", listReply);
+		model.addAttribute("pageNo", current_page);
+		model.addAttribute("replyCount", dataCount);
+		model.addAttribute("total_page", total_page);
+		model.addAttribute("paging", paging);
+		
+		return "festival/listReply";
+	}
+	
+	@RequestMapping(value = "insertReply", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> insertReply(Reply dto, HttpSession session) {
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		String state = "true";
+		
+		try {
+			dto.setUserId(info.getUserId());
+			service.insertReply(dto);
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("state", state);
+		
+		return model;
+	}
+	
+	@RequestMapping(value = "deleteReply", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> deleteReply(@RequestParam Map<String, Object> paramMap) {
+		String state = "true";
+		
+		try {
+			service.deleteReply(paramMap);
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("state", state);
+		
+		return map;
 	}
 }

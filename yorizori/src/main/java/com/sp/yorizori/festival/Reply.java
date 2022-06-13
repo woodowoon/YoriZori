@@ -4,12 +4,9 @@ public class Reply {
 	private int replyNum;
 	private int num;
 	private String userId;
-	private String userName;
+	private String nickName;
 	private String content;
 	private String reg_date;
-	private int answer;
-	
-	private int answerCount;
 
 	public int getReplyNum() {
 		return replyNum;
@@ -35,12 +32,12 @@ public class Reply {
 		this.userId = userId;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getNickName() {
+		return nickName;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
 	public String getContent() {
@@ -57,21 +54,5 @@ public class Reply {
 
 	public void setReg_date(String reg_date) {
 		this.reg_date = reg_date;
-	}
-
-	public int getAnswer() {
-		return answer;
-	}
-
-	public void setAnswer(int answer) {
-		this.answer = answer;
-	}
-
-	public int getAnswerCount() {
-		return answerCount;
-	}
-
-	public void setAnswerCount(int answerCount) {
-		this.answerCount = answerCount;
 	}
 }
