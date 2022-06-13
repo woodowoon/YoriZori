@@ -1,12 +1,337 @@
-﻿<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <style type="text/css">
-.body-container {
-	max-width: 800px;
+
+.container {
+    width: 850px;
 }
+
+.body-title {
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Noto Sans', sans-serif;
+    letter-spacing: -0.03em;
+    word-break: keep-all;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    -webkit-text-size-adjust: none;
+    border: 0;
+    outline: 0;
+    font-size: 4.4rem;
+    font-weight: 700;
+    line-height: 1em;
+    color: #000000;
+}
+
+label {
+	padding: 15px;
+    line-height: 1em;
+    color: #000000;
+    margin-bottom: 10px;
+	text-align: center;
+    font-weight: bold;
+}
+
+.body-container {
+	font-size: 25px
+	
+}
+
+.col-sm-10 {
+	margin-bottom: 50px;
+}
+
+#nickName, #userPwd, #userPwd2, #birth {
+	display: block;
+    width: 100%;
+    height: 60px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 12px;
+    background: #f7f8fb;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: #777777;
+    box-sizing: border-box;
+}
+
+#selectEmail {
+	display: block;
+    width: 100%;
+    height: 60px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 12px;
+    background: #f7f8fb;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: #777777;
+    box-sizing: border-box;
+}
+
+#selectEmail1 {
+	display: block;
+    width: 160px;
+    height: 60px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 12px;
+    background: #f7f8fb;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: #777777;
+    box-sizing: border-box;
+}
+
+#selectEmail2 {
+	display: block;
+    width: 160px;
+    height: 60px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 12px;
+    background: #f7f8fb;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: #777777;
+    box-sizing: border-box;
+}
+
+#tel1 {
+	display: block;
+    width: 140px;
+    height: 60px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 12px;
+    background: #f7f8fb;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: #777777;
+    box-sizing: border-box;
+}
+
+#tel2 {
+	display: block;
+    width: 170px;
+    height: 60px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 12px;
+    background: #f7f8fb;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: #777777;
+    box-sizing: border-box;
+}
+
+#tel3 {
+	display: block;
+    width: 170px;
+    height: 60px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 12px;
+    background: #f7f8fb;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: #777777;
+    box-sizing: border-box;
+}
+
+#addr1 {
+	display: block;
+    width: 600x;
+    height: 50px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 12px;
+    background: #f7f8fb;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: #777777;
+    box-sizing: border-box;
+}
+
+#addr2 {
+	display: block;
+    width: 600x;
+    height: 50px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 12px;
+    background: #f7f8fb;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: #777777;
+    box-sizing: border-box;
+}
+
+#tel {
+	width: 450%;
+}
+
+#zipSearch, #idcheck {
+	float: left;
+    display: block;
+    width: 140px;
+    height: 60px;
+    padding: 0 10px;
+    margin-left: 5px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    background: #f44502;
+    font-size: 1.2rem;
+    font-weight: 400;
+    line-height: 60px;
+    color: #ffffff;
+    text-align: center;
+    float: none;
+    display: inline-block;
+}
+
+
+#userId {
+	display: block;
+    height: 60px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 12px;
+    background: #f7f8fb;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: #777777;
+    box-sizing: border-box;
+    display: inline-block;
+    width: 72%;
+}
+
+#zip {
+ 	display: block;
+    height: 60px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 12px;
+    background: #f7f8fb;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: #777777;
+    box-sizing: border-box;
+    display: inline-block;
+    width: 30%;
+ }
+
+
+
+#agree {
+	margin: 20px;
+}
+
+button {	
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Noto Sans', sans-serif;
+    color: #000000;
+    letter-spacing: -0.03em;
+    word-break: keep-all;
+    margin: 0;
+    padding: 0;
+    -webkit-text-size-adjust: none;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+}
+
+#food {
+	font-size: 25px;
+}
+
+.check {
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Noto Sans', sans-serif;
+    letter-spacing: -0.03em;
+    word-break: keep-all;
+    margin: 0;
+    padding: 0;
+    -webkit-text-size-adjust: none;
+    border: 0;
+    outline: 0;
+    display: flex;
+    align-items: center;
+    position: relative;
+    font-size: 1.6rem;
+    font-weight: 400;
+    line-height: 1em;
+    color: #777777;
+    cursor: pointer;
+    margin-bottom: 10px;
+    margin-right: 0;
+}
+
+.comment-message {
+    margin-bottom: 100px;
+}
+
+.label {
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Noto Sans', sans-serif;
+    letter-spacing: -0.03em;
+    word-break: keep-all;
+    font-weight: 400;
+    line-height: 1em;
+    color: #777777;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    -webkit-text-size-adjust: none;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    position: relative;
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+    vertical-align: middle;
+    background: url(/portal/img/contents/ico_checkbox_off.png)50% 50% /16px 16px no-repeat;
+    box-sizing: border-box;
+}
+
+.btn {
+    margin: 0;
+    border: 0;
+    cursor: pointer;
+    font-family: 'Noto Sans', sans-serif !important;
+    display: block;
+    width: 50%;
+    padding: 20px 30px;
+    border-radius: 9999px;
+    box-sizing: border-box;
+    background: #f44502;
+    margin-left: 30%;
+    font-size: 30px;
+}
+
+.btn1 {
+    margin: 20px;
+    border: 0;
+    cursor: pointer;
+    font-family: 'Noto Sans', sans-serif !important;
+    display: block;
+    width: 50%;
+    padding: 20px 30px;
+    border-radius: 9999px;
+    box-sizing: border-box;
+    background: #f44502;
+    margin-left: 30%;
+    font-size: 30px;
+}
+
+.select {
+	width:50%;
+}
+
 </style>
 
 <script type="text/javascript">
@@ -42,12 +367,14 @@ function memberOk() {
         return;
 	}
 	
-    str = f.userName.value;
+	
+    str = f.nickName.value;
     if( !/^[가-힣]{2,5}$/.test(str) ) {
         alert("이름을 다시 입력하세요. ");
-        f.userName.focus();
+        f.nickName.focus();
         return;
     }
+    
 
     str = f.birth.value;
     if( !str ) {
@@ -119,7 +446,7 @@ function userIdCheck() {
 		var str = "아이디는 5~10자 이내이며, 첫글자는 영문자로 시작해야 합니다.";
 		$("#userId").focus();
 		$("#userId").parent().find(".help-block").html(str);
-		return;
+		return false;
 	}
 	
 	let url = "${pageContext.request.contextPath}/member/userIdCheck";
@@ -151,12 +478,8 @@ function userIdCheck() {
 <div class="container">
 	<div class="body-container">	
 		<div class="body-title">
-			<h3><i class="bi bi-person-square"></i> ${mode=="member"?"회원가입":"정보수정"} </h3>
+			<h3 style="	font-size: 70%; margin-bottom: 7%;"> yorizori 회원가입 </h3>
 		</div>
-		
-	    <div class="alert alert-info" role="alert">
-	        <i class="bi bi-person-check-fill"></i> SPRING의 회원이 되시면 회원님만의 유익한 정보를 만날수 있습니다.
-	    </div>
 		    		
 		<div class="body-main">
 
@@ -164,46 +487,36 @@ function userIdCheck() {
 				<div class="row mb-3">
 					<label class="col-sm-2 col-form-label" for="userId">아이디</label>
 					<div class="col-sm-10 userId-box">
-						<div class="row">
-							<div class="col-5 pe-1">
-								<input type="text" name="userId" id="userId" class="form-control" value="${dto.userId}" 
-										${mode=="update" ? "readonly='readonly' ":""}
-										placeholder="아이디">
-							</div>
-							<div class="col-3 ps-1">
-								<c:if test="${mode=='member'}">
-									<button type="button" class="btn btn-light" onclick="userIdCheck();">아이디중복검사</button>
-								</c:if>
-							</div>
-						</div>
-						<c:if test="${mode=='member'}">
+			            <input type="text" name="userId" id="userId" class="form-control" placeholder="아이디를 입력해주세요" value="${dto.userId}"
+			            		${mode=="update" ? "readonly='readonly' ":""}
+			            		placeholder="아이디">
+			            <c:if test="${mode=='member'}">			 
+							<button type="button" id="idcheck" class="btn btn-light" onclick="userIdCheck();">중복검사</button>
 							<small class="form-control-plaintext help-block">아이디는 5~10자 이내이며, 첫글자는 영문자로 시작해야 합니다.</small>
 						</c:if>
+						<c:if test="${mode=='member'}">
+						</c:if>	
+				
 					</div>
 				</div>
+				<div class="row mb-3">
+					<label class="col-sm-2 col-form-label" for="nickName">닉네임</label>
+					<div class="col-sm-10">
+			            <input type="text" name="nickName" id="nickName" class="form-control" autocomplete="off" placeholder="닉네임을 입력해주세요." value="${dto.nickName}">			 
+			        </div>
+			    </div>
 			 
 				<div class="row mb-3">
 					<label class="col-sm-2 col-form-label" for="userPwd">패스워드</label>
 					<div class="col-sm-10">
-			            <input type="password" name="userPwd" id="userPwd" class="form-control" autocomplete="off" placeholder="패스워드">
-			            <small class="form-control-plaintext">패스워드는 5~10자이며 하나 이상의 숫자나 특수문자가 포함되어야 합니다.</small>
+			            <input type="password" name="userPwd" id="userPwd" class="form-control" autocomplete="off" placeholder="패스워드를 입력해주세요.">			 
 			        </div>
 			    </div>
 			    
 			    <div class="row mb-3">
 			        <label class="col-sm-2 col-form-label" for="userPwd2">패스워드 확인</label>
 			        <div class="col-sm-10">
-			            <input type="password" name="userPwd2" id="userPwd2" class="form-control" autocomplete="off" placeholder="패스워드 확인">
-			            <small class="form-control-plaintext">패스워드를 한번 더 입력해주세요.</small>
-			        </div>
-			    </div>
-			 
-			    <div class="row mb-3">
-			        <label class="col-sm-2 col-form-label" for="userName">이름</label>
-			        <div class="col-sm-10">
-			            <input type="text" name="userName" id="userName" class="form-control" value="${dto.userName}" 
-			            		${mode=="update" ? "readonly='readonly' ":""}
-			            		placeholder="이름">
+			            <input type="password" name="userPwd2" id="userPwd2" class="form-control" autocomplete="off" placeholder="패스워드 확인 더 입력해주세요.">
 			        </div>
 			    </div>
 			 
@@ -217,29 +530,28 @@ function userIdCheck() {
 			
 			    <div class="row mb-3">
 			        <label class="col-sm-2 col-form-label" for="selectEmail">이메일</label>
-			        <div class="col-sm-10 row">
+						<div class="col-sm-10 row">
 						<div class="col-3 pe-0">
 							<select name="selectEmail" id="selectEmail" class="form-select" onchange="changeEmail();">
 								<option value="">선 택</option>
-								<option value="naver.com" ${dto.email2=="naver.com" ? "selected='selected'" : ""}>네이버 메일</option>
-								<option value="gmail.com" ${dto.email2=="gmail.com" ? "selected='selected'" : ""}>지 메일</option>
-								<option value="hanmail.net" ${dto.email2=="hanmail.net" ? "selected='selected'" : ""}>한 메일</option>
-								<option value="hotmail.com" ${dto.email2=="hotmail.com" ? "selected='selected'" : ""}>핫 메일</option>
+								<option value="naver.com" ${dto.email2=="naver.com" ? "selected='selected'" : ""}>네이버</option>
+								<option value="gmail.com" ${dto.email2=="gmail.com" ? "selected='selected'" : ""}>구글</option>
+								<option value="hanmail.net" ${dto.email2=="hanmail.net" ? "selected='selected'" : ""}>다음</option>
 								<option value="direct">직접입력</option>
 							</select>
 						</div>
 						
 						<div class="col input-group">
-							<input type="text" name="email1" class="form-control" maxlength="30" value="${dto.email1}" >
+							<input type="text" id="selectEmail1" name="email1" class="form-control" maxlength="30" value="${dto.email1}" >
 						    <span class="input-group-text p-1" style="border: none; background: none;">@</span>
-							<input type="text" name="email2" class="form-control" maxlength="30" value="${dto.email2}" readonly="readonly">
+							<input type="text" id="selectEmail2" name="email2" class="form-control" maxlength="30" value="${dto.email2}" readonly="readonly">
 						</div>		
 	
 			        </div>
 			    </div>
 			    
 			    <div class="row mb-3">
-			        <label class="col-sm-2 col-form-label" for="tel1">전화번호</label>
+			        <label class="col-sm-2 col-form-label" for="tel">전화번호</label>
 			        <div class="col-sm-10 row">
 						<div class="col-sm-3 pe-1">
 							<input type="text" name="tel1" id="tel1" class="form-control" value="${dto.tel1}" maxlength="3">
@@ -258,17 +570,33 @@ function userIdCheck() {
 						</div>
 			        </div>
 			    </div>
-			
+				<!-- 
+			<form name="memberForm" method="post">
+				<div class="row mb-3">
+					<label class="col-sm-2 col-form-label" for="userId">아이디</label>
+					<div class="col-sm-10 userId-box">
+			            <input type="text" name="userId" id="userId" class="form-control" placeholder="아이디를 입력해주세요" value="${dto.userId}"
+			            		${mode=="update" ? "readonly='readonly' ":""}
+			            		placeholder="아이디">
+			            <c:if test="${mode=='member'}">			 
+							<button type="button" id="idcheck" class="btn btn-light" onclick="userIdCheck();">중복검사</button>
+							<small class="form-control-plaintext help-block">아이디는 5~10자 이내이며, 첫글자는 영문자로 시작해야 합니다.</small>
+						</c:if>
+						<c:if test="${mode=='member'}">
+						</c:if>
+				 -->
 			    <div class="row mb-3">
 			        <label class="col-sm-2 col-form-label" for="zip">우편번호</label>
-			        <div class="col-sm-5">
+			        <div class="col-sm-6">
 			       		<div class="input-group">
 			           		<input type="text" name="zip" id="zip" class="form-control" placeholder="우편번호" value="${dto.zip}" readonly="readonly">
-		           			<button class="btn btn-light" type="button" style="margin-left: 3px;" onclick="daumPostcode();">우편번호 검색</button>
+		           			<button class="btn btn-light" id="zipSearch" type="button" style="margin-left: 3px;" onclick="daumPostcode();">우편번호 검색</button>
 			           	</div>
 					</div>
 			    </div>
-		
+				<!-- 
+					<button class="btn btn-light" id="zipSearch" type="button" style="margin-left: 3px;" onclick="daumPostcode();">우편번호 검색</button>
+				 -->
 			    <div class="row mb-3">
 			        <label class="col-sm-2 col-form-label" for="addr1">주소</label>
 			        <div class="col-sm-10">
@@ -280,10 +608,51 @@ function userIdCheck() {
 						</div>
 					</div>
 			    </div>
+			    
+			     <div class="row mb-3">
+			        <label class="col-sm-2 col-form-label" for="countryNum">Q. 가장 선호하는 음식은 ?</label>
+			        <div class="col-sm-10">
+			        <div class="select">
+			        	<!-- 
+     					<input type="radio" id="select1" name="korea"><label for="select1">한식</label>
+    				    <input type="radio" id="select2" name="america"><label for="select2">양식</label>
+    				    <input type="radio" id="select3" name="japan"><label for="select3">일식</label>
+    				    <input type="radio" id="select4" name="china"><label for="select4">중식</label>
+    				    <input type="radio" id="select5" name="else"><label for="select5">기타</label>
+    				    <select name="selectEmail" id="selectEmail" class="form-select" onchange="changeEmail();">
+								<option value="">선 택</option>
+								<option value="naver.com" ${dto.email2=="naver.com" ? "selected='selected'" : ""}>네이버 메일</option>
+								<option value="gmail.com" ${dto.email2=="gmail.com" ? "selected='selected'" : ""}>지 메일</option>
+								<option value="hanmail.net" ${dto.email2=="hanmail.net" ? "selected='selected'" : ""}>한 메일</option>
+								<option value="hotmail.com" ${dto.email2=="hotmail.com" ? "selected='selected'" : ""}>핫 메일</option>
+								<option value="direct">직접입력</option>
+						</select>
+						<br>
+						-->
+						<!--
+						<input type="checkbox" id="select1" name="korea"><label for="select1">한식</label>
+    				    <input type="checkbox" id="select2" name="america"><label for="select2">양식</label>
+    				    <input type="checkbox" id="select3" name="japan"><label for="select3">일식</label>
+    				    <input type="checkbox" id="select4" name="china"><label for="select4">중식</label>
+    				    <input type="checkbox" id="select5" name="else"><label for="select5">기타</label>
+    				    -->
+    				    
+				
+						<input type="radio" id="select1" name="countryNum" value="1"><label for="select1">한식</label>
+    				    <input type="radio" id="select2" name="countryNum" value="2"><label for="select2">중식</label>
+    				    <input type="radio" id="select3" name="countryNum" value="3"><label for="select3">일식</label>
+    				    <input type="radio" id="select4" name="countryNum" value="4"><label for="select4">양식</label>
+
+    				    
+    				    
+					</div>
+			       </div>
+			    </div>
+			    
 		
 			    <div class="row mb-3">
 			        <label class="col-sm-2 col-form-label" for="agree">약관 동의</label>
-					<div class="col-sm-8" style="padding-top: 5px;">
+					<div class="col-sm-8">
 						<input type="checkbox" id="agree" name="agree"
 							class="form-check-input"
 							checked="checked"
@@ -297,8 +666,8 @@ function userIdCheck() {
 			     
 			    <div class="row mb-3">
 			        <div class="text-center">
-			            <button type="button" name="sendButton" class="btn btn-primary" onclick="memberOk();"> ${mode=="member"?"회원가입":"정보수정"} <i class="bi bi-check2"></i></button>
-			            <button type="button" class="btn btn-danger" onclick="location.href='${pageContext.request.contextPath}/';"> ${mode=="member"?"가입취소":"수정취소"} <i class="bi bi-x"></i></button>
+			            <button type="button" name="sendButton" class="btn1 btn-primary" onclick="memberOk();"> ${mode=="member"?"회원가입":"정보수정"} <i class="bi bi-check2"></i></button>
+			            <button type="button" class="btn1 btn-danger" onclick="location.href='${pageContext.request.contextPath}/';"> ${mode=="member"?"가입취소":"수정취소"} <i class="bi bi-x"></i></button>
 						<input type="hidden" name="userIdValid" id="userIdValid" value="false">
 			        </div>
 			    </div>
@@ -356,3 +725,5 @@ function userIdCheck() {
         }).open();
     }
 </script>
+
+								   
