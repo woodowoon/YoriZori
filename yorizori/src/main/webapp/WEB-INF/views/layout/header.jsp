@@ -97,13 +97,13 @@
 							    	<li class="nonMember"><a class="" href="${pageContext.request.contextPath}/notice/list">공지사항</a></li>
 							    	<li class="nonMember"><a class="" href="${pageContext.request.contextPath}/faq/main">FAQ</a></li>
 							    	<li class="nonMember"><a class="" href="${pageContext.request.contextPath}/qna/list">1:1 문의</a></li>
-							    	<li class="nonMember"><a class="" href="${pageContext.request.contextPath}">쉐프신청</a></li>
+							    	<li class="nonMember"><a class="" href="${pageContext.request.contextPath}/addchef/addchef">쉐프신청</a></li>
 							    </c:when>
 							    <c:otherwise>
 							    	<li><a class="" href="${pageContext.request.contextPath}/notice/list">공지사항</a></li>
 							    	<li><a class="" href="${pageContext.request.contextPath}/faq/main">FAQ</a></li>
 							    	<li><a class="" href="${pageContext.request.contextPath}/qna/list">1:1 문의</a></li>
-							    	<li><a class="" href="${pageContext.request.contextPath}/member/addChef">쉐프신청</a></li>
+							    	<li><a class="" href="${pageContext.request.contextPath}/addchef/addchef">쉐프신청</a></li>
 							    </c:otherwise>
 					    	</c:choose>
 					  	</ul>

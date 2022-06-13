@@ -17,4 +17,6 @@ public interface MemberService {
 	
 	public void deleteMember(Map<String, Object> map) throws Exception;
 	
+	public void generatePwd(Member dto) throws Exception;
+	
 }
