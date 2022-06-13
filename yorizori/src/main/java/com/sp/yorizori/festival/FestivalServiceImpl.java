@@ -257,8 +257,8 @@ public class FestivalServiceImpl implements FestivalService {
 		boolean result = false;
 		
 		try {
-			Festival dto = dao.selectOne("festival.userFestLiked", map);
-			if (dto != null) {
+			int cnt = dao.selectOne("festival.userFestLiked", map);
+			if (cnt != 0) {
 				result = true;
 			}
 		} catch (Exception e) {
@@ -271,7 +271,7 @@ public class FestivalServiceImpl implements FestivalService {
 	@Override
 	public void insertReply(Reply dto) throws Exception {
 		try {
-			
+			dao.insertData("festival.insertReply", dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -293,47 +293,24 @@ public class FestivalServiceImpl implements FestivalService {
 
 	@Override
 	public List<Reply> listReply(Map<String, Object> map) {
+		List<Reply> list = null;
 		
 		try {
-			
+			list = dao.selectList("festival.listReply", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return null;
+		return list;
 	}
 
 	@Override
 	public void deleteReply(Map<String, Object> map) throws Exception {
 		try {
-			
+			dao.deleteData("festival.deleteReply", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
-	}
-
-	@Override
-	public List<Reply> listReplyAnswer(int answer) {
-		
-		try {
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return null;
-	}
-
-	@Override
-	public int replyAnswerCount(int answer) {
-		
-		try {
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return 0;
 	}
 }

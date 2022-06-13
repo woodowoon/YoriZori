@@ -1,6 +1,7 @@
 package com.sp.yorizori.member;
 
 import java.util.Map;
+
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +9,18 @@ import org.springframework.stereotype.Service;
 
 import com.sp.yorizori.member.Member;
 import com.sp.yorizori.common.dao.CommonDAO;
+import com.sp.yorizori.mail.Mail;
+import com.sp.yorizori.mail.MailSender;
+
 
 @Service("member.memberService")
 public class MemberServiceImpl implements MemberService {
 
 	@Autowired
 	private  CommonDAO dao;
+	
+	@Autowired
+	private MailSender mailSender;
 	
 	
 	@Override
@@ -135,5 +142,41 @@ public class MemberServiceImpl implements MemberService {
 			e.printStackTrace();
 			throw e;
 		}
+	}
+
+	@Override
+	public void generatePwd(Member dto) throws Exception {
+		// 10 자리 임시 패스워드 생성
+		StringBuilder sb = new StringBuilder();
+		String s = "~!@#$%^&*-+=()ABCDEFGHIJKLMNOPQRSTUVWXYZ012345678abcdefghijklmnopqrstuvwxyz";
+		Random rd = new Random();
+		for(int i = 0; i < 10; i++) {
+			int  n = rd.nextInt(s.length());
+			sb.append(s.substring(n, n+1));
+		}
+		
+		String result;
+		result = dto.getUserId() + "님의 새로 발급된 임시 패스워드는 <b>"
+				+ sb.toString()
+				+ "</b> 입니다.<br>"
+				+ "로그인 후 반드시 패스워드를 변경하시기 바랍니다.";
+		
+		Mail mail = new Mail();
+		mail.setReceiverEmail(dto.getEmail());
+		
+		mail.setSenderEmail("kimsan4516@naver.com");
+		mail.setSenderName("관리자");
+		mail.setSubject("임시 패시워드 발급");
+		mail.setContent(result);
+		
+		boolean b = mailSender.mailSend(mail);
+		
+		if(b) {
+			dto.setUserPwd(sb.toString());
+			updateMember(dto);
+		} else {
+			throw new Exception("이메일 전송중 오류가 발생했습니다.");
+		}
+
 	}
 }

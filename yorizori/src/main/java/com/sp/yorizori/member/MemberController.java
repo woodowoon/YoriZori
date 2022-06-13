@@ -2,6 +2,8 @@ package com.sp.yorizori.member;
 
 import java.util.HashMap;
 
+
+
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -19,6 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.sp.yorizori.member.Member;
+import com.sp.yorizori.member.SessionInfo;
+import com.sp.yorizori.mail.Mail;
+import com.sp.yorizori.mail.MailSender;
 
 @Controller("member.memberController")
 @RequestMapping(value = "/member/*")
@@ -31,12 +37,6 @@ public class MemberController {
 	public String memberForm(Model model) {
 		model.addAttribute("mode", "member");
 		return ".member.member";
-	}
-	
-	@RequestMapping(value = "addChef", method = RequestMethod.GET)
-	public String addChef(Model model) {
-		model.addAttribute("mode", "member");
-		return ".member.addChef";
 	}
 	
 	@RequestMapping(value = "member", method = RequestMethod.POST)
@@ -237,5 +237,49 @@ public class MemberController {
 		Map<String, Object> model = new HashMap<>();
 		model.put("passed", p);
 		return model;
+	}
+	
+	// 패스워드 찾기
+	@RequestMapping(value="pwdFind", method=RequestMethod.GET)
+	public String pwdFindForm(HttpSession session) throws Exception {
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		if(info != null) {
+			return "redirect:/";
+		}
+		
+		return ".member.pwdFind";
+	}
+	
+	@RequestMapping(value = "pwdFind", method = RequestMethod.POST)
+	public String pwdFindSubmit(@RequestParam String userId,
+			RedirectAttributes reAttr,
+			Model model) throws Exception {
+		
+		Member dto = service.readMember(userId);
+		if(dto == null || dto.getEmail() == null || dto.getEnabled() == 0) {
+			model.addAttribute("message", "등록된 아이디가 아닙니다.");
+			return ".member.pwdFind";
+		}
+		
+		try {
+			service.generatePwd(dto);
+		} catch (Exception e) {
+			model.addAttribute("message", "이메일 전송이 실패 했습니다.");
+			return ".member.pwdFind";
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("회원님의 이메일로 임시 패스워드를 전송했습니다.<br>");
+		sb.append("로그인후 패스워드를 변경 하시기 바랍니다.<br>");
+		
+		reAttr.addFlashAttribute("title", "패스워드 찾기");
+		reAttr.addFlashAttribute("message", sb.toString());
+		
+		return "redirect:/member/complete";
+	}
+	
+	@RequestMapping(value = "noAuthorized")
+	public String noAuthorized(Model model) {
+		return ".member.noAuthorized";
 	}
 }

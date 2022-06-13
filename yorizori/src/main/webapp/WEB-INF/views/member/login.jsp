@@ -110,8 +110,8 @@ function sendLogin() {
 			</form>
             <div class="sign-info">
             	<p class="text-center mb-0">
-                	<a href="#" class="text-decoration-none me-2">아이디 찾기</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                	<a href="#" class="text-decoration-none me-2">비밀번호 찾기</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                	<!-- <a href="#" class="text-decoration-none me-2">아이디 찾기</a>&nbsp;&nbsp;&nbsp;&nbsp; -->
+                	<a href="${pageContext.request.contextPath}/member/pwdFind" class="text-decoration-none me-2">비밀번호 찾기</a>&nbsp;&nbsp;&nbsp;&nbsp;
                 	<a href="${pageContext.request.contextPath}/member/member" class="text-decoration-none">회원가입</a>
             	</p>
             </div>
