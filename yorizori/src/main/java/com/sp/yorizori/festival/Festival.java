@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 public class Festival {
+	private int rnum;
 	private int num;
 	private String name;
 	private String content;
@@ -21,9 +22,15 @@ public class Festival {
 	private int fileNum;
 	private String fileName;
 	
-	private int likeCount;
+	private int festLikeCount;
 	private int replyCount;
 	
+	public int getRnum() {
+		return rnum;
+	}
+	public void setRnum(int rnum) {
+		this.rnum = rnum;
+	}
 	public int getNum() {
 		return num;
 	}
@@ -108,11 +115,11 @@ public class Festival {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
-	public int getLikeCount() {
-		return likeCount;
+	public int getFestLikeCount() {
+		return festLikeCount;
 	}
-	public void setLikeCount(int likeCount) {
-		this.likeCount = likeCount;
+	public void setFestLikeCount(int festLikeCount) {
+		this.festLikeCount = festLikeCount;
 	}
 	public int getReplyCount() {
 		return replyCount;

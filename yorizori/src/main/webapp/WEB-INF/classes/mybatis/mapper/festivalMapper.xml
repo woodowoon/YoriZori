@@ -9,7 +9,7 @@
 	<insert id="insertFest" parameterType="com.sp.yorizori.festival.Festival">
 		INSERT INTO festival(festivalNum, festivalName, festivalContent, startDate, 
 			endDate, festivalHost, festivalSite, addr, place, latitude, longitude) 
-		VALUES (festival_seq.NEXTVAL, #{name}, #{content}, #{start_date}, 
+		VALUES (#{num}, #{name}, #{content}, #{start_date}, 
 			#{end_date}, #{host}, #{site}, #{addr}, #{place}, #{latitude}, #{longitude})
 	</insert>
 	
@@ -24,6 +24,20 @@
 			</when>
 			<otherwise>
 				TO_CHAR(endDate, 'YYYYMMDD') &lt; SYSDATE
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<sql id="order-list">
+		<choose>
+			<when test="menu == 'ing'">
+				ORDER BY endDate ASC, startDate ASC
+			</when>
+			<when test="menu == 'before'">
+				ORDER BY startDate ASC, endDate ASC
+			</when>
+			<otherwise>
+				ORDER BY endDate DESC, startDate DESC
 			</otherwise>
 		</choose>
 	</sql>
@@ -50,8 +64,143 @@
 						<include refid="where-list"/>
 					</if>
 				</where>
-				ORDER BY endDate ASC
+				<include refid="order-list"/>
 			) tb WHERE ROWNUM &lt;= #{end}
 		) WHERE rnum &gt;= #{start}	
 	</select>
+	
+	<select id="searchFest" parameterType="map" resultType="com.sp.yorizori.festival.Festival">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+				SELECT festivalNum num, festivalName name
+				FROM festival
+				<where>
+					<if test="menu != null and menu != ''">
+						<include refid="where-list"/>
+					</if>
+				</where>
+				<include refid="order-list"/>
+			) tb WHERE ROWNUM &lt;= #{end}
+		) WHERE rnum &gt;= #{start}	AND num = #{num}
+	</select>
+	
+	<select id="readFest" parameterType="Integer" resultType="com.sp.yorizori.festival.Festival">
+		SELECT f.festivalNum num, NVL(festLikeCount, 0) festLikeCount, NVL(replyCount, 0) replyCount, festivalName name, festivalContent content, 
+		    TO_CHAR(startDate, 'YYYY.MM.DD') start_date, 
+		    TO_CHAR(endDate, 'YYYY.MM.DD') end_date, festivalHost host, 
+		    festivalSite site, addr, place, latitude, longitude
+		FROM festival f
+		LEFT OUTER JOIN (
+		    SELECT l.festivalnum, COUNT(*) festLikeCount
+		    FROM festivalLike l
+		    GROUP BY l.festivalnum
+		) l ON f.festivalNum = l.festivalnum
+		LEFT OUTER JOIN (
+		    SELECT r.festivalnum, COUNT(*) replyCount
+		    FROM festivalReply r
+		    GROUP BY r.festivalnum
+		) r ON f.festivalNum = r.festivalnum
+		WHERE f.festivalNum = #{num}
+	</select>
+	
+	<select id="preReadFest" parameterType="map" resultType="com.sp.yorizori.festival.Festival">
+		SELECT * FROM (
+			SELECT * FROM (
+				SELECT ROWNUM rnum, tb.* FROM (
+					SELECT festivalNum num, festivalName name
+					FROM festival
+					<where>
+						<if test="menu != null and menu != ''">
+							<include refid="where-list"/>
+						</if>
+					</where>
+					<include refid="order-list"/>
+				) tb WHERE ROWNUM &lt;= #{end}
+			) WHERE rnum &gt;= #{start}	AND rnum &lt; #{rnum}
+			ORDER BY rnum DESC
+		) WHERE ROWNUM = 1
+	</select>
+	
+	<select id="nextReadFest" parameterType="map" resultType="com.sp.yorizori.festival.Festival">
+		SELECT * FROM (
+			SELECT * FROM (
+				SELECT ROWNUM rnum, tb.* FROM (
+					SELECT festivalNum num, festivalName name
+					FROM festival
+					<where>
+						<if test="menu != null and menu != ''">
+							<include refid="where-list"/>
+						</if>
+					</where>
+					<include refid="order-list"/>
+				) tb WHERE ROWNUM &lt;= #{end}
+			) WHERE rnum &gt;= #{start}	AND rnum &gt; #{rnum}
+			ORDER BY rnum ASC
+		) WHERE ROWNUM = 1
+	</select>
+	
+	<update id="updateFest" parameterType="com.sp.yorizori.festival.Festival">
+		UPDATE festival SET festivalName=#{name}, festivalContent=#{content}, 
+			startDate=#{start_date}, endDate=#{end_date}, festivalHost=#{host}, 
+			festivalSite=#{site}, addr=#{addr}, place=#{place}, 
+			latitude=#{latitude}, longitude=#{longitude}
+		WHERE festivalNum = #{num}
+	</update>
+	
+	<delete id="deleteFest" parameterType="Integer">
+		DELETE FROM festival WHERE festivalNum = #{num}
+	</delete>
+	
+	<!-- 관심 -->
+	<insert id="insertFestLike" parameterType="map">
+		INSERT INTO festivalLike(userId, festivalNum) VALUES (#{userId}, #{num})
+	</insert>
+	
+	<delete id="deleteFestLike" parameterType="map">
+		DELETE FROM festivalLike WHERE userId=#{userId} AND festivalNum=#{num}
+	</delete>
+	
+	<select id="festLikeCount" parameterType="Integer" resultType="Integer">
+		SELECT NVL(COUNT(*), 0) festLikeCount FROM festivalLike WHERE festivalNum=#{num}
+	</select>
+	
+	<select id="userFestLiked" parameterType="map" resultType="com.sp.yorizori.festival.Festival">
+		SELECT userId, festivalNum FROM festivalLike WHERE userId=#{userId} AND festivalNum=#{num}
+	</select>
+	
+	<!-- 댓글 -->
+	<select id="replyCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0) replyCount FROM festivalReply WHERE festivalNum=#{num}
+	</select>
+	
+	<!-- 파일 -->
+	<insert id="insertFile" parameterType="com.sp.yorizori.festival.Festival">
+		INSERT INTO festivalPhoto(festivalPhotoNum, festivalNum, festivalPhotoName)
+		VALUES (festivalPhoto_seq.NEXTVAL, #{num}, #{fileName})
+	</insert>
+	
+	<select id="listFile" parameterType="Integer" resultType="com.sp.yorizori.festival.Festival">
+		SELECT festivalPhotoNum fileNum, festivalPhotoName fileName
+		FROM festivalPhoto
+		WHERE festivalNum = #{num}
+	</select>
+	
+	<select id="searchFile" parameterType="Integer" resultType="com.sp.yorizori.festival.Festival">
+		SELECT ROWNUM rnum, tb.* FROM (
+		    SELECT festivalPhotoName fileName
+		    FROM festivalPhoto
+		    WHERE festivalNum = #{num}
+		    ORDER BY festivalPhotoNum
+		) tb WHERE ROWNUM = 1
+	</select>
+	
+	<select id="readFile" parameterType="Integer" resultType="com.sp.yorizori.festival.Festival">
+		SELECT festivalPhotoNum fileNum, festivalPhotoName fileName
+		FROM festivalPhoto
+		WHERE festivalPhotoNum = #{fileNum}
+	</select>
+	
+	<delete id="deleteFile" parameterType="map">
+		DELETE FROM festivalPhoto WHERE ${field} = #{num}
+	</delete>
 </mapper>

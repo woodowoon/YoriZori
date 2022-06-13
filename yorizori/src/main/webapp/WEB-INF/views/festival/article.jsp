@@ -18,19 +18,22 @@ main { background-color: #f7f8fb; font-family: 'Noto Sans KR', sans-serif; color
 .fest-title > span { display: block; font-size: 36px; font-weight: 700; color: #333; text-align: center; }
 .fest-period { margin-top: 10px; text-align: center; }
 .fest-period > span { font-size: 16px; color: #666; }
-.post-area { margin-top: 50px; }
+.post-area { margin-top: 50px; margin-bottom: 30px; }
 .post-area > button > .ico { display: inline-block; text-indent: -9999px; }
 .post-area > button > .num { margin-left: 8px; color: #000; font-size: 16px; }
 .btn_star > .ico {
-	width: 25px; height: 25px; background-size: 25px 25px; background-repeat: no-repeat; 
-	background-image: url("${pageContext.request.contextPath}/resources/images/star.png");
+	width: 25px; height: 25px; background-size: 25px 25px; background-repeat: no-repeat;
 }
 .btn_bubble > .ico {
 	width: 25px; height: 25px; background-size: 25px 25px; background-repeat: no-repeat; 
 	background-image: url("${pageContext.request.contextPath}/resources/images/replyBubble.png");
 }
 
-.fest-contents { margin-top: 25px; }
+.carousel-item { overflow: hidden; width: 100%; height: 450px; }
+.carousel-item > img { width: auto; max-height: 100%; display: block; margin: 0 auto; }
+.carousel-control-next, .carousel-control-prev {  }
+
+.fest-contents { margin-top: 30px; }
 .fest-contents > span { display: block; font-size: 24px; font-weight: 600; color: #333; border-bottom: 2px solid #333; }
 .fest-desc { padding-top: 30px; }
 .fest-desc > p { color: #333; font-size: 17px; }
@@ -78,65 +81,127 @@ a > i { display: flex; }
 </style>
 
 <script type="text/javascript">
+function deleteFest() {
+    if(confirm("게시물을 삭제하시겠습니까 ?")) {
+	    let query = "${query}&num=${dto.num}";
+	    let url = "${pageContext.request.contextPath}/festival/delete?" + query;
+    	location.href = url;
+    }
+}
+</script>
 
+<script type="text/javascript">
+function login() {
+	location.href="${pageContext.request.contextPath}/member/login";
+}
+
+function ajaxFun(url, method, query, dataType, fn) {
+	$.ajax({
+		type:method,
+		url:url,
+		data:query,
+		dataType:dataType,
+		success:function(data) {
+			fn(data);
+		},
+		beforeSend:function(jqXHR) {
+			jqXHR.setRequestHeader("AJAX", true);
+		},
+		error:function(jqXHR) {
+			if(jqXHR.status === 403) {
+				login();
+				return false;
+			} else if(jqXHR.status === 400) {
+				alert("요청 처리가 실패 했습니다.");
+				return false;
+			}
+			console.log(jqXHR.responseText);
+		}
+	});
+}
+
+$(function(){
+	$(".btnSendFestLike").click(function(){
+		let userFestLiked = "${userFestLiked}";
+		
+		let url = "${pageContext.request.contextPath}/festival/insertFestLike";
+		let num = "${dto.num}";
+		let query = "num=" + num + "&userFestLiked=" + userFestLiked;
+		
+		const fn = function(data){
+			let state = data.state;
+			if(state === "true") {
+				if( userFestLiked ) {
+					$('.ico').css("background-image", "url('${pageContext.request.contextPath}/resources/images/star.png')");
+				} else {
+					$('.ico').css("background-image", "url('${pageContext.request.contextPath}/resources/images/fill-star.png')");
+				}
+				
+				var count = data.festLikeCount;
+				$("#FestLikeCount").text(count);
+				
+			} else if(state === "false") {
+				alert("관심 등록 처리를 실패했습니다.");
+			}
+		};
+		
+		ajaxFun(url, "post", query, "json", fn);
+	});
+});
 </script>
 
 <div class="container">
 	<div class="contents-container">
 		<div class="fest-title">
-			<div class="fest-status"><span>진행중</span></div>
-			<span>제13회 안흥 찐빵축제</span>
+			<div class="fest-status"><span>${menu=='ing'?"진행중":menu=='before'?"예정":"종료"}</span></div>
+			<span>${dto.name}</span>
 		</div>
 		<div class="fest-period">
-			<span>2022.06.09 ~ 2022.06.10</span>
+			<span>${dto.start_date} ~ ${dto.end_date}</span>
 		</div>
 		<div class="post-area">
-			<button type="button" class="btn btn_star">
-				<span class="ico">관심</span>
-				<span class="num">99</span>
+			<button type="button" class="btn btn_star btnSendFestLike">
+				<span class="ico" style="background-image: url('${pageContext.request.contextPath}/resources/images/${userFestLiked?'fill-star':'star'}.png');">관심</span>
+				<span class="num" id="FestLikeCount">${dto.festLikeCount}</span>
 			</button>
 			<button type="button" class="btn btn_bubble">
 				<span class="ico">댓글</span>
-				<span class="num">24</span>
+				<span class="num">${dto.replyCount}</span>
 			</button>
 		</div>
 		
-<!--
-		<div id="carouselImageCaptions" class="carousel slide" data-bs-ride="carousel">
-			<div class="carousel-indicators">
-				<c:forEach var="dto" items="${list}" varStatus="status">
-					<button type="button" data-bs-target="#carouselImageCaptions" data-bs-slide-to="${status.index}" class="${status.index==0?'active':''}" aria-current="true" aria-label="${dto.subject}"></button>
-				</c:forEach>
-			</div>
-			 	
-			<div class="carousel-inner">
-				<c:forEach var="dto" items="${list}" varStatus="status">
-					<div class="carousel-item ${status.index==0?'active':''}">
-						<a href="${articleUrl}&num=${dto.num}">
-							<img src="${pageContext.request.contextPath}/uploads/festival/${dto.imageFilename}"
-								class="d-block w-100" style="max-height: 450px;">
-						</a>
-					</div>
-				</c:forEach>
-			</div>
+		<c:if test="${listFile.size() != 0}">
+			<div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+				<div class="carousel-indicators">
+					<c:forEach var="vo" items="${listFile}" varStatus="status">
+						<button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="${status.index}" class="${status.index==0?'active':''}" aria-current="true"></button>
+					</c:forEach>
+				</div>
 				
-			<button class="carousel-control-prev" type="button" data-bs-target="#carouselImageCaptions" data-bs-slide="prev">
-				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				<span class="visually-hidden">Previous</span>
-			</button>
-			<button class="carousel-control-next" type="button" data-bs-target="#carouselImageCaptions" data-bs-slide="next">
-				<span class="carousel-control-next-icon" aria-hidden="true"></span>
-				<span class="visually-hidden">Next</span>
-			</button>
-		</div>
--->
+				<div class="carousel-inner">
+					<c:forEach var="vo" items="${listFile}" varStatus="status">
+						<div class="carousel-item ${status.index==0?'active':''}">
+			      			<img src="${pageContext.request.contextPath}/uploads/festival/${vo.fileName}">
+			    		</div>
+		    		</c:forEach>
+				</div>
+				
+				<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+				    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				    <span class="visually-hidden">Previous</span>
+				</button>
+				<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">Next</span>
+				</button>
+			</div>
+		</c:if>
 		
 		<div class="fest-contents">
 			<span>축제내용</span>
 			<div class="fest-desc">
 				<p>
-					안흥 찐빵은 맛있습니다. 그래서 축제를 개최합니다. 다들 오셔서 찐빵 드세요. 안흥 찐빵은 맛있습니다. 그래서 축제를 개최합니다. 다들 오셔서 찐빵 드세요.
-					안흥 찐빵은 맛있습니다. 그래서 축제를 개최합니다. 다들 오셔서 찐빵 드세요. 안흥 찐빵은 맛있습니다. 그래서 축제를 개최합니다. 다들 오셔서 찐빵 드세요.
+					${dto.content}
 				</p>
 			</div>
 		</div>
@@ -145,27 +210,27 @@ a > i { display: flex; }
 			<ul>
 				<li>
 					<strong>시작일</strong>
-					<span>2022.06.09</span>
+					<span>${dto.start_date}</span>
 				</li>
 				<li>
 					<strong>종료일</strong>
-					<span>2022.06.10</span>
+					<span>${dto.end_date}</span>
 				</li>
 				<li>
 					<strong>주최기관</strong>
-					<span>안흥찐빵협회</span>
+					<span>${dto.host}</span>
 				</li>
 				<li>
 					<strong>홈페이지</strong>
-					<span><a>http://zzinbbang.com</a></span>
+					<span><a>${dto.site}</a></span>
 				</li>
 				<li>
 					<strong>주소</strong>
-					<span>서울특별시 찐빵구 찐빵로 78</span>
+					<span>${dto.addr}</span>
 				</li>
 				<li>
 					<strong>축제장소</strong>
-					<span>찐빵 전시관</span>
+					<span>${dto.place}</span>
 				</li>
 			</ul>
 		</div>
@@ -178,15 +243,19 @@ a > i { display: flex; }
 	<div class="prev-next">
 		<div class="prev">
 			<a class="ai ai-left"><i class="bi bi-chevron-left"></i></a>
-			<a class="prev-subject">안흥 찐빵축제</a>
+			<a class="prev-subject" href="${pageContext.request.contextPath}/festival/article?${query}&num=${preReadDto.num}">${preReadDto.name}</a>
 		</div>
 		<div class="list">
-			<button class="btn btn-white" type="button">수정</button>
-			<button class="btn btn-list" type="button">목록</button>
-			<button class="btn btn-white" type="button">삭제</button>
+			<c:if test="${sessionScope.member.role == 0}">
+				<button class="btn btn-white" type="button" onclick="location.href='${pageContext.request.contextPath}/festival/update?${query}&num=${dto.num}';">수정</button>
+			</c:if>
+			<button class="btn btn-list" type="button" onclick="location.href='${pageContext.request.contextPath}/festival/list?${query}';">목록</button>
+			<c:if test="${sessionScope.member.role == 0}">
+				<button class="btn btn-white" type="button" onclick="deleteFest();">삭제</button>
+			</c:if>
 		</div>
 		<div class="next">
-			<a class="next-subject">안흥 찐빵축제</a>
+			<a class="next-subject" href="${pageContext.request.contextPath}/festival/article?${query}&num=${nextReadDto.num}">${nextReadDto.name}</a>
 			<a class="ai ai-right"><i class="bi bi-chevron-right"></i></a>
 		</div>
 	</div>
@@ -218,9 +287,12 @@ a > i { display: flex; }
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey="></script>
 <script type="text/javascript">
 
+var latitude = '${dto.latitude}';
+var longitude = '${dto.longitude}';
+
 var mapContainer = document.getElementById('map'), 			// 지도를 표시할 div 
 mapOption = { 
-    center: new kakao.maps.LatLng(37.41281125, 128.1561222), 	// 지도의 중심좌표
+    center: new kakao.maps.LatLng(latitude, longitude), 	// 지도의 중심좌표
     level: 4 // 지도의 확대 레벨
 };
 
@@ -228,7 +300,7 @@ mapOption = {
 var map = new kakao.maps.Map(mapContainer, mapOption); 
 
 //마커가 표시될 위치입니다 
-var markerPosition  = new kakao.maps.LatLng(37.41281125, 128.1561222); 
+var markerPosition  = new kakao.maps.LatLng(latitude, longitude); 
 
 // 마커를 생성합니다
 var marker = new kakao.maps.Marker({

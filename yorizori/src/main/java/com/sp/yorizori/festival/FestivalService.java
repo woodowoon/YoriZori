@@ -7,6 +7,7 @@ public interface FestivalService {
 	public void insertFest(Festival dto, String pathname) throws Exception;
 	public List<Festival> listFest(Map<String, Object> map);
 	public int dataCount(Map<String, Object> map);
+	public Festival searchFest(Map<String, Object> map);
 	public Festival readFest(int num);
 	public Festival preReadFest(Map<String, Object> map);
 	public Festival nextReadFest(Map<String, Object> map);
@@ -15,6 +16,7 @@ public interface FestivalService {
 	
 	public void insertFile(Festival dto) throws Exception;
 	public List<Festival> listFile(int num);
+	public Festival searchFile(int num);
 	public Festival readFile(int fileNum);
 	public void deleteFile(Map<String, Object> map) throws Exception;
 	
