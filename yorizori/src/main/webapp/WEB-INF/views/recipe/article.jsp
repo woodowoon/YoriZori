@@ -11,7 +11,7 @@
 main {
 	background-color: #f7f8fb;
     font-family: 'Noto Sans KR', sans-serif;
-    color: #000000; letter-spacing: -0.03em; 
+    color: #000000; letter-spacing: -0.03em;  
 }
 
 .container { padding: 60px 0; }
