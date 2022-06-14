@@ -121,7 +121,7 @@
 								</a>
 								<c:if test="${sessionScope.member.role == 1}">
 									<a href="${pageContext.request.contextPath}/mypage" title="마이페이지">
-										<img src="${pageContext.request.contextPath}/resources/images/nav-mypage.png" style="width: 40px;">
+										<img src="${pageContext.request.contextPath}/resources/images/nav-mypage2.png" style="width: 40px;">
 									</a>
 								</c:if>
 								<c:if test="${sessionScope.member.role == 0}">
