@@ -64,7 +64,7 @@
 					<a href="${pageContext.request.contextPath}/recipe/feed">피드</a>   
 					<a href="${pageContext.request.contextPath}/class/list">클래스</a>
 					<a href="${pageContext.request.contextPath}/category">분류</a>
-					<a href="${pageContext.request.contextPath}/rank/list">랭킹</a>
+					<a href="${pageContext.request.contextPath}/rank/recipe">랭킹</a>
 					<a href="${pageContext.request.contextPath}/frige">냉장고파먹기</a>
 				</div>
 				<div class="right-menu">

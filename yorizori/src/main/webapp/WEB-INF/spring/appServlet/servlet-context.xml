@@ -73,7 +73,8 @@
 			<exclude-mapping path="/member/member"/>
 			<exclude-mapping path="/member/pwdFind"/>
 			<exclude-mapping path="/feed"/>
-			<exclude-mapping path="/rank"/>
+			<exclude-mapping path="/rank/recipe"/>
+			<exclude-mapping path="/rank/chef"/>
 			<exclude-mapping path="/festival/list"/>
 			<exclude-mapping path="/customer/faq"/>
 			<exclude-mapping path="/customer/notice"/>
