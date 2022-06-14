@@ -7,10 +7,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/rank/*")
 public class RankController {
 	
-	@RequestMapping(value = "list")
-	public String list() throws Exception {
+	@RequestMapping(value = "recipe")
+	public String recipe() throws Exception {
 		
-		return ".rank.list";
+		return ".rank.recipe";
+	}
+	
+	@RequestMapping(value = "chef")
+	public String chef() throws Exception {
+		
+		return ".rank.chef";
 	}
 	
 	@RequestMapping(value = "article")

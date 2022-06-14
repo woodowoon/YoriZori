@@ -60,8 +60,8 @@ li { list-style: none; }
 	<div class="full">
 		<h3>랭킹</h3>
 		<ul class="choice clearFix">
-			<li class="active"><a href="#">레시피</a></li>
-			<li><a href="#">쉐프</a></li>
+			<li><a href="${pageContext.request.contextPath}/rank/recipe">레시피</a></li>
+			<li class="active"><a href="${pageContext.request.contextPath}/rank/chef">쉐프</a></li>
 		</ul>
 		<ul class="rank-list clearFix">
 			<li>
