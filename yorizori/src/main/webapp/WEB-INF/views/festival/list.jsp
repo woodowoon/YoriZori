@@ -10,7 +10,7 @@
 <style type="text/css">
 main { background-color: #f7f8fb; font-family: 'Noto Sans KR', sans-serif; color: #000000; letter-spacing: -0.03em; padding: 60px 0; }
 
-.container { background: #fff; border-radius: 24px; padding: 35px 0; }
+.f-container { background: #fff; border-radius: 24px; padding: 35px 0; width: 1320px; margin: 0 auto; }
 
 .menu-title { width: 100%; text-align: center; font-size: 30px; font-weight: 700; margin-bottom: 35px; }
 
@@ -54,7 +54,7 @@ $(function(){
 
 </script>
 
-<div class="container">
+<div class="f-container">
 	<div class="menu-title">
 		<p>${menu=='ing'?"진행 중인 축제":menu=='before'?"예정된 축제":"종료된 축제"}</p>
 	</div>

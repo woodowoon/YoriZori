@@ -47,12 +47,6 @@ li { list-style: none; }
 .ranking .full .rank-list .info { margin-top: 3px; }
 .ranking .full .rank-list .info img { width: 25px; margin-right: 6px; }
 .ranking .full .rank-list .info span { font-size: 13px; color: #999; vertical-align: middle; }
-.ranking .full .chef-list { padding: 40px 0px 20px 128px; }
-.ranking .full .chef-list li { position: relative; float: left; margin: 2px 45px 24px; }
-.ranking .full .chef-list li div { width: 108px; }
-.ranking .full .chef-list li div img { width: 100%; border-radius: 50%; }
-.ranking .full .chef-list li div a { display: block; font-size: 16px; text-align: center; padding: 8px 0; }
-.ranking .full .chef-list li div a:hover { text-decoration: none; }
 
 </style>
 
@@ -64,130 +58,27 @@ li { list-style: none; }
 			<li><a href="${pageContext.request.contextPath}/rank/chef">쉐프</a></li>
 		</ul>
 		<ul class="rank-list clearFix">
-			<li>
-				<span class="rank-box">1</span>
-				<div>
-					<a href="#">
-						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-					</a>
-					<p>마늘장아찌 깐마늘장아찌 만드는법 레시피</p>
-					<div class="profile">
-						<div>
-							
+			<c:forEach var="dto" items="${list}">
+				<li>
+					<span class="rank-box">${dto.rnum}</span>
+					<div>
+						<a href="#">
+							<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
+						</a>
+						<p>${dto.subject}</p>
+						<div class="profile">
+							<div>
+								
+							</div>
+							<span>${dto.nickName}</span>
 						</div>
-						<span>햇살머금은집</span>
-					</div>
-					<div class="info">
-						<img src="${pageContext.request.contextPath}/resources/images/heart2.png">
-						<span>좋아요 (1,559)</span>
-					</div>
-				</div>
-			</li>
-			<li>
-				<span class="rank-box">2</span>
-				<div>
-					<a href="#">
-						<img src="${pageContext.request.contextPath}/resources/images/rank2.jpg">
-					</a>
-					<p>잔치국수 양념장 황금레시피 이렇게~</p>
-					<div class="profile">
-						<div>
-							
+						<div class="info">
+							<img src="${pageContext.request.contextPath}/resources/images/heart2.png">
+							<span>좋아요 (${dto.likeCount})</span>
 						</div>
-						<span>완소꽃남매</span>
 					</div>
-					<div class="info">
-						<img src="${pageContext.request.contextPath}/resources/images/heart2.png">
-						<span>좋아요 (1,113)</span>
-					</div>
-				</div>
-			</li>
-			<li>
-				<span class="rank-box">3</span>
-				<div>
-					<a href="#">
-						<img src="${pageContext.request.contextPath}/resources/images/rank3.jpg">
-					</a>
-					<p>요리초보도 실패없는 백종원 오이소박이</p>
-					<div class="profile">
-						<div>
-							
-						</div>
-						<span>뽀유TV</span>
-					</div>
-					<div class="info">
-						<img src="${pageContext.request.contextPath}/resources/images/heart2.png">
-						<span>좋아요 (959)</span>
-					</div>
-				</div>
-			</li>
-			<li>
-				<span class="rank-box">4</span>
-				<div>
-					<a href="#">
-						<img src="${pageContext.request.contextPath}/resources/images/rank4.jpg">
-					</a>
-					<p>부대찌개 양념 만드는법 홀릭되는 맛임</p>
-					<div class="profile">
-						<div>
-							
-						</div>
-						<span>블레스그레이스</span>
-					</div>
-					<div class="info">
-						<img src="${pageContext.request.contextPath}/resources/images/heart2.png">
-						<span>좋아요 (845)</span>
-					</div>
-				</div>
-			</li>
-		</ul>
-		
-		<ul class="chef-list clearFix">
-			<li>
-				<span class="rank-box">1</span>
-				<div>
-					<img src="${pageContext.request.contextPath}/resources/images/chef-rank-dummy.png">
-				</div>
-				<div>
-					<a href="#">뽀유TV</a>
-				</div>
-			</li>
-			<li>
-				<span class="rank-box">2</span>
-				<div>
-					<img src="${pageContext.request.contextPath}/resources/images/chef-rank-dummy.png">
-				</div>
-				<div>
-					<a href="#">뽀유TV</a>
-				</div>				
-			</li>
-			<li>
-				<span class="rank-box">3</span>
-				<div>
-					<img src="${pageContext.request.contextPath}/resources/images/chef-rank-dummy.png">
-				</div>
-				<div>
-					<a href="#">뽀유TV</a>
-				</div>				
-			</li>
-			<li>
-				<span class="rank-box">4</span>
-				<div>
-					<img src="${pageContext.request.contextPath}/resources/images/chef-rank-dummy.png">
-				</div>
-				<div>
-					<a href="#">뽀유TV</a>
-				</div>				
-			</li>
-			<li>
-				<span class="rank-box">5</span>
-				<div>
-					<img src="${pageContext.request.contextPath}/resources/images/chef-rank-dummy.png">
-				</div>
-				<div>
-					<a href="#">뽀유TV</a>
-				</div>				
-			</li>
+				</li>
+			</c:forEach>
 		</ul>
 	</div>
 </div>
