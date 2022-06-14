@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="recipe">
+	<!-- 재료시퀀스 -->
+	<select id="recipeseq" resultType="Integer">
+		SELECT recipe_seq.NEXTVAL FROM dual
+	</select>
+	
+	<!-- 상황별 카테고리 -->
+	<select id="listcaseCategory" parameterType="map" resultType="com.sp.yorizori.recipe.Recipe">
+		SELECT caseNum, caseName FROM caseCategory
+			ORDER BY caseNum
+	</select>
+	
+	<!-- 나라별 카테고리 -->
+	<select id="listcountryCategory" parameterType="map" resultType="com.sp.yorizori.recipe.Recipe">
+		SELECT countryNum, countryName FROM countryCategory
+			ORDER BY countryNum
+	</select>
+	
+	<!-- 재료 카테고리 -->
+	<select id="listingredient" parameterType="map" resultType="com.sp.yorizori.recipe.Recipe">
+		SELECT ingredientCode, ingredientName, NVL(parent, 0) parent, ingredimageName
+		FROM ingredient
+		<where>
+			<choose>
+				<when test="parent==null">
+					parent IS NULL
+				</when>
+				<otherwise>
+					parent = #{parent}
+				</otherwise>
+			</choose>
+		</where>
+		ORDER BY ingredientCode
+	</select>
+	
+	<!-- 레시피 등록 -->
+	<insert id="insertRecipe" parameterType="com.sp.yorizori.recipe.Recipe">
+		INSERT INTO recipe (recipeNum, caseNum, countryNum, recipeSubject, recipeHitcount, recipeReg_date, recipeServing, recipeLevel, 
+   			 recipeContent, recipeTime,userId, active) VALUES 
+   		(#{recipeNum}, #{caseNum}, #{countryNum}, #{recipeSubject}, 0, SYSDATE, 
+   		#{recipeServing}, #{recipeLevel}, #{recipeContent, jdbcType=VARCHAR}, #{recipeTime}, #{userId}, 0)
+	</insert>
+	
+	<!-- 레시피 포토 등록 -->
+	<insert id="insertRecipePhoto" parameterType="com.sp.yorizori.recipe.Recipe">
+		INSERT INTO recipePhoto (recipenum, recipephotoName) VALUES (#{recipeNum}, #{imageFilename, jdbcType=VARCHAR})
+	</insert>
+	
+	<!-- 레시피 재료 등록 -->
+	<insert id="insertingredientList" parameterType="com.sp.yorizori.recipe.Recipe">
+		INSERT INTO ingredientList (num, recipeNum , ingredientCode) VALUES (ingredientList_seq.NEXTVAL, #{recipeNum}, #{ingredientCode})
+	</insert>
+</mapper>
