@@ -10,7 +10,7 @@
 <style type="text/css">
 
 main { background-color: #f7f8fb; font-family: 'Noto Sans KR', sans-serif; color: #000000; letter-spacing: -0.03em; }
-.container { padding: 60px 0; }
+.f-container { padding: 60px 0; width: 1320px; margin: 0 auto; }
 .write-container { background-color: #fff; border-radius: 24px; padding: 35px; }
 .btn-container { text-align: center; margin-top: 30px; }
 
@@ -198,7 +198,7 @@ $(function(){
 });
 </script>
 
-<div class="container">
+<div class="f-container">
 	<div class="write-container">	
 		<div class="write-title">
 			<span>지역 축제 등록</span>
