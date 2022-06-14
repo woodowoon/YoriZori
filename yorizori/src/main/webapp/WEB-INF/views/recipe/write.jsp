@@ -409,8 +409,8 @@ function sendOk() {
     }
 	f.recipeContent.value = str;
 
-	// f.action="${pageContext.request.contextPath}/recipe/${mode}";
-	// f.submit();
+	f.action="${pageContext.request.contextPath}/recipe/${mode}";
+	f.submit();
 }
 </script>
 
@@ -665,7 +665,7 @@ $(function() {
 						<td class="table-light col-sm-2" scope="row">조리시간</td>
 						<td>
 							<input type="number" style="width:23%" name="recipeTime" class="form-control" value="${dto.recipeTime}"
-							 placeholder="ex) 1인분 -> 1">
+							 placeholder="ex) 30분 -> 30">
 						</td>
 					</tr>
 					<tr>
