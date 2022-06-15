@@ -19,6 +19,7 @@ ul.tabs > li {
 	position: relative;
 	background: #fff;
 	border-bottom: 1px solid #ddd;
+	font-size: 17px;
 }
 ul.tabs li:hover {
 	background: #e7e7e7;

@@ -6,42 +6,38 @@
 <h3 style="font-size: 15px; padding-top: 10px;"><i class="icofont-users"></i> 회원 정보</h3>
 <table class="table td-border mx-auto my-10">
 	<tr>
-		<td class="wp-15 text-center bg-light">회원번호</td>
-		<td class="wp-35 ps-5">${dto.memberIdx}</td>
 		<td class="wp-15 text-center bg-light">아이디</td>
 		<td class="wp-35 ps-5">${dto.userId}</td>
+		<td class="text-center bg-light">닉네임</td>
+		<td class="ps-5">${dto.nickName}</td>
 	</tr>
 	<tr>
-		<td class="text-center bg-light">닉네임</td>
-		<td class="ps-5">${dto.userNickname}</td>
 		<td class="text-center bg-light">생년월일</td>
 		<td class="ps-5">${dto.birth}</td>
-	</tr>
-	<tr>
 		<td class="text-center bg-light">전화번호</td>
 		<td class="ps-5">${dto.tel}</td>
+	</tr>
+	<tr>
 		<td class="text-center bg-light">이메일</td>
 		<td class="ps-5">${dto.email}</td>
-	</tr>
-	<tr>
 		<td class="text-center bg-light">회원가입일</td>
 		<td class="ps-5">${dto.register_date}</td>
+	</tr>
+	<tr>
 		<td class="text-center bg-light">최근로그인</td>
 		<td class="ps-5">${dto.last_login}</td>
-	</tr>
-	
-	<tr>
 		<td class="text-center bg-light">계정상태</td>
 		<td colspan="3" class="ps-5">
 			${dto.enabled==1?"활성":"잠금"}
-			<c:if test="${dto.enabled==0 && not empty memberState}">, ${memberState.memo}</c:if>
+			<c:if test="${dto.enabled==1 && not empty memberState}">, ${memberState.memo}</c:if>
 			&nbsp;<span class="btn" onclick="memberStateDetaileView();" style="cursor: pointer;">자세히</span>
 		</td>
 	</tr>
+	
 </table>
 
 <form id="deteailedMemberForm" name="deteailedMemberForm" method="post">
-	<h3 style="font-size: 15px; padding-top: 10px;"><i class="icofont-users"></i> 유저 상태 변경</h3>
+	<h3 style="font-size: 15px; padding-top: 10px;"><i class="icofont-users"></i> 회원 상태 변경</h3>
 	
 	<table class="table td-border mx-auto my-5">
 		<tr>
@@ -68,7 +64,6 @@
 		</tr>
 	</table>
 	
-	<input type="hidden" name="memberIdx" value="${dto.memberIdx}">
 	<input type="hidden" name="userId" value="${dto.userId}">
 	<input type="hidden" name="registerId" value="${sessionScope.member.userId}">
 </form>
@@ -87,7 +82,7 @@
 			<c:forEach var="vo" items="${listState}">
 				<tr>
 					<td class="ps-5">${vo.memo} (${vo.stateCode})</td>
-					<td class="text-center">${vo.registerId}</td>
+					<td class="text-center">관리자</td>
 					<td class="text-center">${vo.reg_date}</td>
 				</tr>
 			</c:forEach>

@@ -14,7 +14,7 @@ ul { list-style: none; }
 
 .wrapper { display: flex; min-height: 100%; }
 
-nav { width: 230px; background: #404040; }
+nav { width: 250px; background: #404040; font-size: 15px; }
 nav a { color: #fff; text-decoration: none; cursor: pointer; }
 nav a:hover { color: #fff; }
 
@@ -80,16 +80,15 @@ nav ul a:before {
 
 /* 메뉴 아이콘 */
 nav ul li:nth-child(2) a:before { content: '\ef47'; }
-nav ul li:nth-child(3) a:before { content: '\ed0a'; }
-nav ul li:nth-child(4) a:before { content: '\ee46'; }
-nav ul li:nth-child(5) a:before { content: '\efaa'; }
-nav ul li:nth-child(6) a:before { content: '\ead2'; }
-nav ul li:nth-child(7) a:before { content: '\f002'; }
-
-nav ul li:nth-child(9) a:before { content: '\e970'; }
-nav ul li:nth-child(10) a:before { content: '\ed1b'; }
+nav ul li:nth-child(3) a:before { content: '\ed0d'; }
+nav ul li:nth-child(4) a:before { content: '\eb4e'; }
+nav ul li:nth-child(5) a:before { content: '\ef9d'; }
+nav ul li:nth-child(6) a:before { content: '\ef4f'; }
+nav ul li:nth-child(7) a:before { content: '\efcb'; }
+nav ul li:nth-child(8) a:before { content: '\ef75'; }
+nav ul li:nth-child(9) a:before { content: '\eeeb'; }
+nav ul li:nth-child(10) a:before { content: '\efdd'; }
 nav ul li:nth-child(11) a:before { content: '\efb0'; }
-nav ul li:nth-child(12) a:before { content: '\f01b'; }
 
 main {
   flex: 1;
@@ -110,6 +109,7 @@ main h1 {
 .body-container {
 	display: block;
 	padding-top: 10px;
+	margin: auto;
 }
 
 .body-title {
@@ -133,4 +133,6 @@ main h1 {
 .body-main {
 	display: block;
 	padding-bottom: 15px;
+	font-size: 20px;
+	
 }
