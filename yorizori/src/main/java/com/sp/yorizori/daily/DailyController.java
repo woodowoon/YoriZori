@@ -252,45 +252,7 @@ public class DailyController {
 
 		return "redirect:/daily/list?" + query;
 	}
-	
 
-	
-	@RequestMapping(value = "insertDailyLike", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> insertDailyLike(
-			@RequestParam int dailyNum, 
-			@RequestParam boolean userLiked,
-			HttpSession session
-			) {
-		String state = "true";
-		int dailyLikeCount = 0;
-		SessionInfo info = (SessionInfo) session.getAttribute("member");
-
-		Map<String, Object> paramMap = new HashMap<>();
-		paramMap.put("dailyNum", dailyNum);
-		paramMap.put("userId", info.getUserId());
-
-		try {
-			if(userLiked) {
-				service.deleteDailyLike(paramMap);
-			} else {
-				service.insertDailyLike(paramMap);
-			}
-		} catch (DuplicateKeyException e) {
-			state = "liked";
-		} catch (Exception e) {
-			state = "false";
-		}
-
-		dailyLikeCount = service.dailyLikeCount(dailyNum);
-
-		Map<String, Object> model = new HashMap<>();
-		model.put("state", state);
-		model.put("dailyLikeCount", dailyLikeCount);
-
-		return model;
-		
-	}
 	
 	@RequestMapping(value = "listReply")
 	public String listReply(
@@ -373,30 +335,6 @@ public class DailyController {
 		
 	}
 	
-	@RequestMapping(value = "listReplyAnswer")
-	public String listReplyAnswer(@RequestParam int parentreplyNum, Model model) throws Exception {
-		List<DailyReply> listReplyAnswer = service.listReplyAnswer(parentreplyNum);
-		
-		for (DailyReply dto : listReplyAnswer) {
-			dto.setReplyContent(dto.getReplyContent().replaceAll("\n", "<br>"));
-		}
-
-		model.addAttribute("listReplyAnswer", listReplyAnswer);
-		return "daily/listReplyAnswer";
-		
-	}
-	
-	@RequestMapping(value = "countReplyAnswer")
-	@ResponseBody
-	public Map<String, Object> countReplyAnswer(@RequestParam(value = "parentreplyNum") int parentreplyNum) {
-		int count = service.replyAnswerCount(parentreplyNum);
-
-		Map<String, Object> model = new HashMap<>();
-		model.put("count", count);
-		return model;
-		
-	}
-	
 	@RequestMapping(value = "insertReplyLike", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> insertReplyLike(
@@ -419,7 +357,7 @@ public class DailyController {
 
 		Map<String, Object> countMap = service.replyLikeCount(paramMap);
 
-		int likeCount = ((BigDecimal) countMap.get("LIKECOUNT")).intValue();
+		int likeCount = ((BigDecimal)countMap.get("LIKECOUNT")).intValue();
 		int disLikeCount = ((BigDecimal)countMap.get("DISLIKECOUNT")).intValue();
 		
 		model.put("likeCount", likeCount);

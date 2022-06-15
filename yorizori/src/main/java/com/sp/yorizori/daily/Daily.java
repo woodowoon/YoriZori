@@ -19,6 +19,7 @@ public class Daily {
 	
 	private int replyCount;
 	private int dailyLikeCount;
+	
 	public int getListNum() {
 		return listNum;
 	}

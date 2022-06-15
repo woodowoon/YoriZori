@@ -166,57 +166,6 @@ public class DailyServiceImpl implements DailyService {
 		
 
 	@Override
-	public void insertDailyLike(Map<String, Object> map) throws Exception {
-		try {
-			dao.insertData("daily.insertDailyLike", map);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-		
-	}
-
-	@Override
-	public void deleteDailyLike(Map<String, Object> map) throws Exception {
-		try {
-			dao.deleteData("daily.deleteDailyLike", map);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-		
-	}
-
-	@Override
-	public int dailyLikeCount(int dailyNum) {
-		int result = 0;
-		
-		try {
-			result = dao.selectOne("daily.dailyLikeCount", dailyNum);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return result;
-	}
-
-	@Override
-	public boolean userDailyLiked(Map<String, Object> map) {
-		boolean result = false;
-		try {
-			Daily dto = dao.selectOne("daily.userDailyLiked", map);
-			if(dto != null) {
-				result = true; 
-			}
-				
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return result;
-	}	
-
-	@Override
 	public void insertReply(DailyReply dto) throws Exception {
 		try {
 			dao.insertData("daily.insertReply", dto);
@@ -264,31 +213,7 @@ public class DailyServiceImpl implements DailyService {
 		
 	}
 
-	@Override
-	public List<DailyReply> listReplyAnswer(int parentreplyNum) {
-		List<DailyReply> list = null;
-		
-		try {
-			list = dao.selectList("daily.listReplyAnswer", parentreplyNum);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return list;
-	}
 
-	@Override
-	public int replyAnswerCount(int parentreplyNum) {
-		int result = 0;
-		
-		try {
-			result = dao.selectOne("daily.replyAnswerCount", parentreplyNum);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return result;
-	}
 
 	@Override
 	public void insertReplyLike(Map<String, Object> map) throws Exception {

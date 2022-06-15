@@ -19,18 +19,10 @@ public interface DailyService {
 	public Daily readFile(int dailyPhotoNum);
 	public Daily readFile2(int dailyNum);
 	
-	public void insertDailyLike(Map<String, Object> map) throws Exception;
-	public void deleteDailyLike(Map<String, Object> map) throws Exception;
-	public int dailyLikeCount(int dailyNum);
-	public boolean userDailyLiked(Map<String, Object> map);
-	
 	public void insertReply(DailyReply dto) throws Exception;
 	public List<DailyReply> listReply(Map<String, Object> map);
 	public int replyCount(Map<String, Object> map);
 	public void deleteReply(Map<String, Object> map) throws Exception;
-	
-	public List<DailyReply> listReplyAnswer(int parentreplyNum);
-	public int replyAnswerCount(int parentreplyNum);
 	
 	public void insertReplyLike(Map<String, Object> map) throws Exception;
 	public Map<String, Object> replyLikeCount(Map<String, Object> map);

@@ -148,28 +148,6 @@
 		DELETE FROM dailyCookphoto WHERE ${field} = #{dailyNum}
 	</delete>
 	
-	
-	
-
-	<insert id="insertDailyLike" parameterType="map">
-		INSERT INTO dailyCookLike(dailyNum, userId) VALUES (#{dailyNum}, #{userId})
-	</insert>
-
-	<delete id="deleteDailyLike" parameterType="map">
-		DELETE FROM dailyCookLike WHERE dailyNum = #{dailyNum} AND userId = #{userId}
-	</delete>
-      
-	<select id="dailyLikeCount" parameterType="Integer" resultType="Integer">
-		SELECT COUNT(*) FROM dailyCookLike WHERE dailyNum=#{dailyNum}
-	</select>
-
-	<select id="userDailyLiked" parameterType="map" resultType="com.sp.yorizori.daily.Daily">
-		SELECT dailyNum, userId FROM dailyCookLike WHERE dailyNum = #{dailyNum} AND userId = #{userId}
-	</select>
-	
-	
-	
-	
 
 	<insert id="insertReply" parameterType="com.sp.yorizori.daily.DailyReply">
 		INSERT INTO dailyCookReply(replyNum, dailyNum, userId, replyContent, reg_date, parentreplyNum)
@@ -212,31 +190,17 @@
 			OR parentreplyNum=#{replyNum}
 		</if>
 	</delete>
-	
-	<select id="listReplyAnswer" parameterType="Integer" resultType="com.sp.yorizori.daily.DailyReply">
-		SELECT replyNum, dailyNum, r.userId, userName, replyContent, reg_date, parentreplyNum
-		FROM dailyCookReply r
-		JOIN member m ON r.userId = m.userId
-		WHERE parentreplyNum = #{parentreplyNum}
-		ORDER BY replyNum DESC
-	</select>
-	
-
-	<select id="replyAnswerCount" parameterType="Integer" resultType="Integer">
-		SELECT NVL(COUNT(*), 0)
-		FROM dailyCookReply WHERE parentreplyNum = #{parentreplyNum}
-	</select>
 
 	<insert id="insertReplyLike" parameterType="map">
-		INSERT INTO dailyCookLike(replyNum, userId, replyLike)
+		INSERT INTO dailyReplyLike(replyNum, userId, replyLike)
 		VALUES (#{replyNum}, #{userId}, #{replyLike})
 	</insert>
 
 	<select id="replyLikeCount" parameterType="map" resultType="map">
 		SELECT COUNT(DECODE(replyLike, 1, 1)) likeCount,
 			   COUNT(DECODE(replyLike, 0, 1)) disLikeCount
-		FROM dailyCookLike WHERE replyNum = #{replyNum}
+		FROM dailyReplyLike WHERE replyNum = #{replyNum}
 	</select>
-	
+
 	
 </mapper>
