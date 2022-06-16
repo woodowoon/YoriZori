@@ -25,8 +25,8 @@
 	-->
 	
     <insert id="insertMember" parameterType="com.sp.yorizori.member.Member">
-		INSERT INTO member(userId, role, nickName, userPwd, enabled, register_date, modify_date, failure_cnt, birth, email, tel, zip, addr1, addr2, countryNum)
-		VALUES (#{userId}, 1, #{nickName}, #{userPwd}, 1, SYSDATE, SYSDATE, 0, #{birth}, #{email}, #{tel}, 
+		INSERT INTO member(userId, userName, role, nickName, userPwd, enabled, register_date, modify_date, failure_cnt, birth, email, tel, zip, addr1, addr2, countryNum)
+		VALUES (#{userId}, #{userName}, 1, #{nickName}, #{userPwd}, 1, SYSDATE, SYSDATE, 0, #{birth}, #{email}, #{tel}, 
 			#{zip, jdbcType=VARCHAR}, #{addr1, jdbcType=VARCHAR}, 
 			#{addr2, jdbcType=VARCHAR}, #{countryNum}) 
     </insert>
@@ -42,16 +42,16 @@
 	
     <update id="insertMember12" parameterType="com.sp.yorizori.member.Member">
 		INSERT ALL
-		INTO member(userId, nickName, userPwd, enabled, 
+		INTO member(userId, userName, nickName, userPwd, enabled, 
 			register_date, modify_date, failure_cnt, birth, email, tel, zip, addr1, addr2, countryNum)
-		VALUES (#{userId}, #{nickName}, #{userPwd}, 1, SYSDATE, SYSDATE, 0, #{birth}, #{email}, #{tel}, 
+		VALUES (#{userId}, #{userName}, #{nickName}, #{userPwd}, 1, SYSDATE, SYSDATE, 0, #{birth}, #{email}, #{tel}, 
 			#{zip, jdbcType=VARCHAR}, #{addr1, jdbcType=VARCHAR}, 
 			#{addr2, jdbcType=VARCHAR}, #{countryNum})
 		SELECT * FROM dual     
     </update>
 	
 	<select id="readMember" parameterType="String" resultType="com.sp.yorizori.member.Member">
-		SELECT role, m.userId, nickName, userPwd, enabled,
+		SELECT role, m.userId, userName, nickName, userPwd, enabled,
 			register_date, modify_date, last_login,
 			TO_CHAR(birth, 'YYYY-MM-DD') birth, email, tel, 
 			zip, addr1, addr2

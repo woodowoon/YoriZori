@@ -44,7 +44,7 @@ label {
 	margin-bottom: 50px;
 }
 
-#nickName, #userPwd, #userPwd2, #birth {
+#nickName, #userPwd, #userPwd2, #birth, #userName {
 	display: block;
     width: 100%;
     height: 60px;
@@ -368,7 +368,7 @@ function memberOk() {
 	}
 	
 	
-    str = f.nickName.value;
+    str = f.userName.value;
     if( !/^[가-힣]{2,5}$/.test(str) ) {
         alert("이름을 다시 입력하세요. ");
         f.nickName.focus();
@@ -499,6 +499,14 @@ function userIdCheck() {
 				
 					</div>
 				</div>
+				
+				<div class="row mb-3">
+					<label class="col-sm-2 col-form-label" for="userName">이름</label>
+					<div class="col-sm-10">
+			            <input type="text" name="userName" id="userName" class="form-control" autocomplete="off" placeholder="이름을 입력해주세요." value="${dto.userName}">			 
+			        </div>
+			    </div>
+			    
 				<div class="row mb-3">
 					<label class="col-sm-2 col-form-label" for="nickName">닉네임</label>
 					<div class="col-sm-10">
