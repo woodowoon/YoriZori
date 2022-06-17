@@ -28,7 +28,7 @@
 .yorizori-nav .nav-inner .logo { position: absolute; top: 14px; left: 28px; font-size: 40px; color: #000; }
 .yorizori-nav .nav-inner .logo:hover { color: #000; }
 
-.yorizori-nav .menus .left-menu { padding-left: 200px; }
+.yorizori-nav .menus .left-menu { padding-left: 100px; }
 .yorizori-nav .menus .left-menu a { font-size: 22px; line-height: 90px; margin-right: 30px; }
 
 .yorizori-nav .menus .right-menu a { font-family: 'GmarketSansMedium'; font-size: 16px; line-height: 90px; color: #777777; margin-right: 15px; }
@@ -58,7 +58,9 @@
 <nav>
 	<div class="yorizori-nav">
 		<div class="nav-inner clearFix">
-			<a href="${pageContext.request.contextPath}/" class="logo">요리조리</a>
+			<a href="${pageContext.request.contextPath}/" class="logo">
+				<img alt="요리조리" src="${pageContext.request.contextPath}/resources/images/logo.png" style="width: 70px;">
+			</a>
 			<div class="menus">
 				<div class="left-menu">
 					<a href="${pageContext.request.contextPath}/recipe/feed">피드</a>   

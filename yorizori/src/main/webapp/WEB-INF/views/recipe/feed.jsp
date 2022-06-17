@@ -8,9 +8,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/infiniteScroll"></script>
-
-
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
 
@@ -61,7 +58,7 @@ main {
 			<!-- 좋아요O -->
 			<i style="color: red; font-size: 1.4rem;" class="bi bi-heart-fill"></i>
 				<span>좋아요 ${dto.recipeLikeCount}개</span>
-			<a href="#">${dto.recipeSubject}</a>
+			<a href="${articleUrl}?recipeNum=${dto.recipeNum}">${dto.recipeSubject}</a>
 			<div class="likes">
 				
 				<button type="button" onclick="">
