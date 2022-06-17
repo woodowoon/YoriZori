@@ -28,12 +28,11 @@ $(function() {
 		<li><a href="${pageContext.request.contextPath}/admin">Home</a></li>
 		<li><a href="${pageContext.request.contextPath}/admin/memberManage/memberList">회원리스트/관리</a></li>
 		<li><a href="${pageContext.request.contextPath}/admin/chefManage/chefList">쉐프리스트/관리</a></li>
-		<li><a href="${pageContext.request.contextPath}/admin/chefManage/addChef">쉐프승인</a></li>
 		<li><a href="${pageContext.request.contextPath}/admin/chefManage/sales">쉐프 수익 내역/정산</a></li>
 		<li><a href="${pageContext.request.contextPath}/admin/faq">자주 묻는 질문</a></li>
-		<li><a href="${pageContext.request.contextPath}/admin/qna">1:1 문의</a></li>
 		<li><a href="${pageContext.request.contextPath}/admin/category">카테고리 관리</a></li>
 		<li><a href="${pageContext.request.contextPath}/admin/notify">신고 레시피/댓글</a></li>
+		<li><a href="${pageContext.request.contextPath}/admin/coupon">쿠폰 등록</a></li>
 		<li><a href="${pageContext.request.contextPath}/member/logout">Logout</a></li>
 	</ul>
 </nav>

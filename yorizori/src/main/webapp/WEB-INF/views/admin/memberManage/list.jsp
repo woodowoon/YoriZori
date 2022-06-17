@@ -209,7 +209,7 @@ function selectStateChange() {
 							<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/admin/memberManage/memberlist">새로고침</button>
 						</td>
 						<td align="center">
-							<form name="searchForm" action="${pageContext.request.contextPath}/admin/memberManage/list" method="post">
+							<form name="searchForm" action="${pageContext.request.contextPath}/admin/memberManage/memberList" method="post">
 								<select name="condition" class="form-select">
 									<option value="userId"     ${condition=="userId" ? "selected='selected'":""}>아이디</option>
 									<option value="nickName"   ${condition=="nickName" ? "selected='selected'":""}>닉네임</option>

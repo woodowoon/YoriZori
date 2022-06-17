@@ -5,7 +5,7 @@
 	<sql id="where-list">
 		<choose>
 			<when test="condition=='userId'">
-				INSTR(#{userId}, #{keyword}) &gt;= 1
+				INSTR(userId, #{keyword}) &gt;= 1
 			</when>
 			<otherwise>
 				INSTR(${condition}, #{keyword}) &gt;= 1
@@ -19,6 +19,10 @@
 			<if test="keyword!=null and keyword!='' ">
 				<include refid="where-list"/>
 			</if>
+			<if test="enabled!=''">
+				AND enabled = #{enabled}
+			</if>					
+			
 			AND userId != 'admin'
 		</where>
 	</select>
@@ -36,6 +40,9 @@
 					<if test="keyword!=null and keyword!='' ">
 						<include refid="where-list"/>
 					</if>
+					<if test="enabled!=''">
+						AND enabled = #{enabled}
+					</if>					
 					AND userId != 'admin'
 				</where> 
 				ORDER BY register_date DESC

@@ -84,11 +84,10 @@ nav ul li:nth-child(3) a:before { content: '\ed0d'; }
 nav ul li:nth-child(4) a:before { content: '\eb4e'; }
 nav ul li:nth-child(5) a:before { content: '\ef9d'; }
 nav ul li:nth-child(6) a:before { content: '\ef4f'; }
-nav ul li:nth-child(7) a:before { content: '\efcb'; }
-nav ul li:nth-child(8) a:before { content: '\ef75'; }
-nav ul li:nth-child(9) a:before { content: '\eeeb'; }
-nav ul li:nth-child(10) a:before { content: '\efdd'; }
-nav ul li:nth-child(11) a:before { content: '\efb0'; }
+nav ul li:nth-child(7) a:before { content: '\ef75'; }
+nav ul li:nth-child(8) a:before { content: '\eeeb'; }
+nav ul li:nth-child(9) a:before { content: '\efdd'; }
+nav ul li:nth-child(10) a:before { content: '\efb0'; }
 
 main {
   flex: 1;
