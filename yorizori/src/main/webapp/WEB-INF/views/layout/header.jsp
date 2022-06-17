@@ -119,8 +119,8 @@
 								<a href="${pageContext.request.contextPath}/recipe/write" title="레시피등록">
 									<img src="${pageContext.request.contextPath}/resources/images/nav-recipe.png" style="width: 40px;">
 								</a>
-								<c:if test="${sessionScope.member.role == 1}">
-									<a href="${pageContext.request.contextPath}/mypage" title="마이페이지">
+								<c:if test="${sessionScope.member.role == 1 || sessionScope.member.role == 2}">
+									<a href="${pageContext.request.contextPath}/mypage/main" title="마이페이지">
 										<img src="${pageContext.request.contextPath}/resources/images/nav-mypage2.png" style="width: 40px;">
 									</a>
 								</c:if>
