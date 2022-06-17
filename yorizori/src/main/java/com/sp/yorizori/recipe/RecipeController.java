@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,57 @@ public class RecipeController {
 	private MyUtil myUtil;
 	
 	@RequestMapping(value = "feed")
-	public String list() throws Exception {
+	public String list(
+			@RequestParam(value = "page", defaultValue = "1") int current_page,
+			@RequestParam(value = "rows", defaultValue = "5") int rows,
+			HttpServletRequest req,
+			HttpSession session,
+			Recipe dto,
+			Model model
+			) throws Exception {
+		
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("userId", info.getUserId());
+		boolean isFollow = service.isFollow(map);
+		
+		map.put("isFollow", isFollow);
+		map.put("userCountryNum", info.getCountryNum());
+		
+		int dataCount = service.dataCount(map);
+		int total_page = myUtil.pageCount(rows, dataCount);
+		if(current_page > total_page) {
+			current_page = total_page;
+		}
+		
+		int start = (current_page - 1) * rows + 1;
+		int end = current_page * rows;
+		map.put("start", start);
+		map.put("end", end);
+		
+		String cp = req.getContextPath();
+		String query = "rows=" + rows;
+		String listUrl = cp + "/recipe/feed";
+		String articleUrl = cp + "/recipe/article?page=" + current_page;
+		
+		listUrl += "?" + query;
+		articleUrl += "&" + query;
+		
+		String paging = myUtil.paging(current_page, total_page, listUrl);
+		
+		List<Recipe> list = service.listRecipeFeed(map);
+
+		model.addAttribute("dataCount", dataCount);
+		model.addAttribute("total_page", total_page);
+		model.addAttribute("page", current_page);
+		model.addAttribute("total_page", total_page);
+		model.addAttribute("rows", rows);
+		model.addAttribute("articleUrl", articleUrl);
+		model.addAttribute("paging", paging);
+		
+		model.addAttribute("list", list);
 		
 		return ".recipe.feed";
 	}

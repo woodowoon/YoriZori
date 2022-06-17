@@ -97,4 +97,45 @@ public class RecipeServiceImpl implements RecipeService {
 		return list;
 	}
 
+	@Override
+	public int dataCount(Map<String, Object> map) {
+		int result = 0;
+		
+		try {
+			result = dao.selectOne("recipe.dataCount", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	@Override
+	public List<Recipe> listRecipeFeed(Map<String, Object> map) {
+		List<Recipe> list = null;
+		
+		try {
+			list = dao.selectList("recipe.listRecipeFeed", map);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+	@Override
+	public boolean isFollow(Map<String, Object> map) {
+		boolean b = false;
+		try {
+			int result = dao.selectOne("recipe.isFollow", map);
+			if(result > 0) {
+				b = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return b;
+	}
+
 }

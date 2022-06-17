@@ -6,7 +6,6 @@
 	<select id="recipeseq" resultType="Integer">
 		SELECT recipe_seq.NEXTVAL FROM dual
 	</select>
-	
 	<!-- 상황별 카테고리 -->
 	<select id="listcaseCategory" parameterType="map" resultType="com.sp.yorizori.recipe.Recipe">
 		SELECT caseNum, caseName FROM caseCategory
@@ -53,4 +52,71 @@
 	<insert id="insertingredientList" parameterType="com.sp.yorizori.recipe.Recipe">
 		INSERT INTO ingredientList (num, recipeNum , ingredientCode) VALUES (ingredientList_seq.NEXTVAL, #{recipeNum}, #{ingredientCode})
 	</insert>
+	
+	<!-- 좋아요 개수 -->
+	<select id="recipeLikeCount" resultType="Integer">
+		SELECT COUNT(*) recipeLikeCount FROM recipeLike WHERE recipeNum = #{recipeNum}
+	</select>
+	
+	<!-- 팔로우 유무 -->
+	<select id="isFollow" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0) FROM follow WHERE follower_id = #{userId}
+	</select>
+	
+	<select id="dataCount" resultType="Integer" parameterType="map">
+		SELECT COUNT(*)
+		FROM recipe r
+		JOIN member m ON m.userId = r.userId
+		LEFT OUTER JOIN (
+		    SELECT follower_id, following_id FROM follow
+	    ) f ON r.userId = f.following_id 
+	    <where>
+			<choose>
+				<when test="isFollow == true">
+					follower_id = #{userId} OR (m.userId = #{userId})
+				</when>
+				<otherwise>
+					r.countryNum = #{userCountryNum} OR (m.userId = #{userId})
+				</otherwise>
+			</choose>
+		</where>
+
+	</select>
+	
+	<!-- feed -->
+	<select id="listRecipeFeed" resultType="com.sp.yorizori.recipe.Recipe" parameterType="map">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+		        SELECT r.recipeNum recipeNum, r.countryNum countryNum, recipeSubject, nickName, memberImageName, imageFilename, 
+		            NVL(recipeLikeCount, 0) recipeLikeCount, follower_id
+		            FROM recipe r
+		            JOIN member m ON m.userId = r.userId
+		                LEFT OUTER JOIN (
+		                    SELECT recipeNum, COUNT(*) recipeLikeCount FROM recipeLike
+		                    GROUP BY recipeNum
+		                ) rl ON rl.recipeNum = r.recipeNum  
+		                LEFT OUTER JOIN (
+		                    SELECT userId, memberImageName FROM memberImage 
+		                ) mi ON mi.userId = r.userId
+		                LEFT OUTER JOIN (
+		                    SELECT recipeNum, recipePhotoName imageFilename FROM recipePhoto
+		                ) rp ON r.recipeNum = rp.recipeNum
+		                LEFT OUTER JOIN (
+		                    SELECT follower_id, following_id FROM follow
+		                ) f ON r.userId = f.following_id
+		             <where>
+						<choose>
+							<when test="isFollow == true">
+								follower_id = #{userId} OR (m.userId = #{userId})
+							</when>
+							<otherwise>
+								r.countryNum = #{userCountryNum} OR (m.userId = #{userId})
+							</otherwise>
+						</choose>		             
+		             </where>
+		            ORDER BY recipeLikeCount DESC
+		        ) tb WHERE ROWNUM &lt;= #{end}
+		) WHERE rnum &gt;= #{start}
+	</select>
+	
 </mapper>
