@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="foodClass">
+	<select id="classSeq" resultType="Integer">
+		SELECT classTable_seq.NEXTVAL FROM dual
+	</select>
+	
+	<select id="classCategory" parameterType="map" resultType="com.sp.yorizori.foodclass.FoodClass">
+		SELECT class_Category, classCname FROM classCategory
+			ORDER BY class_Category
+	</select>
+	
+	<insert id="insertClass" parameterType="com.sp.yorizori.foodclass.FoodClass">
+		INSERT INTO classTable(classCode, classSubject, price, class_category, classServing, classContent, videoTime, classHitCount, classReg_date, userId)
+			VALUES (classTable_seq.NEXTVAL, #{classSubject}, #{price}, #{category}, #{serving}, #{classContent}, #{videoTime}, 0, SYSDATE, #{userId})
+	</insert>
+	
+	<select id="listClass" parameterType="map" resultType="com.sp.yorizori.foodclass.FoodClass">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+				SELECT classSubject, userId, price, NVL(followCount, 0) followCount
+				FROM classTable c
+				LEFT OUTER JOIN (
+				    SELECT following_id, COUNT(*) followCount 
+				    FROM follow f
+				    JOIN member m ON f.following_id=m.userId
+				    WHERE following_id = m.userId
+				    GROUP BY following_id
+				) f ON c.userId = f.following_id
+			) tb WHERE ROWNUM &lt;= #{end}
+		) WHERE rnum &gt;= #{start}
+	</select>
+	
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM classTable
+	</select>
+	
+	<insert id="insertFile" parameterType="com.sp.yorizori.foodclass.FoodClass">
+		INSERT INTO classFile(classCode, classPhotoName, previewName, fullVideoName)
+			VALUES (#{classCode}, #{imageFileName}, #{previewFileName}, #{videoFileName})
+	</insert>
+</mapper>

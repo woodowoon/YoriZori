@@ -71,112 +71,28 @@
 		
 		<div class="lec-list">
 			<c:if test="${sessionScope.member.role == 0 || sessionScope.member.role == 2}">
-				<a href="#" class="insertClass">클래스 등록</a>
+				<a href="${pageContext.request.contextPath}/class/write" class="insertClass">클래스 등록</a>
 			</c:if>
 			<ul class="clearFix">
-				<li>
-					<div>
-						<div class="img-area">
-							<a href="#">
-								<img src="${pageContext.request.contextPath}/resources/images/class-list-dummy.jpg">
-							</a>						
-
+				<c:forEach var="dto" items="${list}">
+					<li>
+						<div>
+							<div class="img-area">
+								<a href="${articleUrl}&num=${dto.classCode}">
+									<img src="${pageContext.request.contextPath}/uploads/class/${dto.imageFileName}">
+								</a>						
+							</div>
+							<div class="text-area">
+								<p>${dto.classSubject}</p>
+								<p>${dto.userId} - 팔로워 (${dto.followCount})</p>
+								<p>${dto.price}원</p>
+								<a href="#" class="classLike">
+									<img src="${pageContext.request.contextPath}/resources/images/heart1.png">
+								</a>
+							</div>
 						</div>
-						<div class="text-area">
-							<p>요리연구가 김현숙의 방구석세계요리 - 일본편 [마제소바]</p>
-							<p>김현숙 - 팔로워 (1,531)</p>
-							<p>15,000원</p>
-							<a href="#" class="classLike">
-								<img src="${pageContext.request.contextPath}/resources/images/heart1.png">
-							</a>
-						</div>
-					</div>
-				</li>
-				<li>
-					<div>
-						<div class="img-area">
-							<a href="#">
-								<img src="${pageContext.request.contextPath}/resources/images/class-list-dummy.jpg">
-							</a>
-						</div>
-						<div class="text-area">
-							<p>요리연구가 김현숙의 방구석세계요리 - 일본편 [마제소바]</p>
-							<p>김현숙 - 팔로워 (1,531)</p>
-							<p>15,000원</p>
-							<a href="#" class="classLike">
-								<img src="${pageContext.request.contextPath}/resources/images/heart1.png">
-							</a>													
-						</div>
-					</div>
-				</li>
-				<li>
-					<div>
-						<div class="img-area">
-							<a href="#">
-								<img src="${pageContext.request.contextPath}/resources/images/class-list-dummy.jpg">
-							</a>
-						</div>
-						<div class="text-area">
-							<p>요리연구가 김현숙의 방구석세계요리 - 일본편 [마제소바]</p>
-							<p>김현숙 - 팔로워 (1,531)</p>
-							<p>15,000원</p>
-							<a href="#" class="classLike">
-								<img src="${pageContext.request.contextPath}/resources/images/heart1.png">
-							</a>												
-						</div>
-					</div>
-				</li>
-				<li>
-					<div>
-						<div class="img-area">
-							<a href="#">
-								<img src="${pageContext.request.contextPath}/resources/images/class-list-dummy.jpg">
-							</a>
-						</div>
-						<div class="text-area">
-							<p>요리연구가 김현숙의 방구석세계요리 - 일본편 [마제소바]</p>
-							<p>김현숙 - 팔로워 (1,531)</p>
-							<p>15,000원</p>
-							<a href="#" class="classLike">
-								<img src="${pageContext.request.contextPath}/resources/images/heart1.png">
-							</a>							
-						</div>
-					</div>
-				</li>
-				<li>
-					<div>
-						<div class="img-area">
-							<a href="#">
-								<img src="${pageContext.request.contextPath}/resources/images/class-list-dummy.jpg">
-							</a>
-						</div>
-						<div class="text-area">
-							<p>요리연구가 김현숙의 방구석세계요리 - 일본편 [마제소바]</p>
-							<p>김현숙 - 팔로워 (1,531)</p>
-							<p>15,000원</p>
-							<a href="#" class="classLike">
-								<img src="${pageContext.request.contextPath}/resources/images/heart1.png">
-							</a>							
-						</div>
-					</div>
-				</li>
-				<li>
-					<div>
-						<div class="img-area">
-							<a href="#">
-								<img src="${pageContext.request.contextPath}/resources/images/class-list-dummy.jpg">
-							</a>
-						</div>
-						<div class="text-area">
-							<p>요리연구가 김현숙의 방구석세계요리 - 일본편 [마제소바]</p>
-							<p>김현숙 - 팔로워 (1,531)</p>
-							<p>15,000원</p>
-							<a href="#" class="classLike">
-								<img src="${pageContext.request.contextPath}/resources/images/heart1.png">
-							</a>						
-						</div>
-					</div>
-				</li>
+					</li>
+				</c:forEach>
 			</ul>
 		</div>
 	</div>
