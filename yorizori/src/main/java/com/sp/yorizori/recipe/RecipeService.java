@@ -12,6 +12,8 @@ public interface RecipeService {
 	public List<Recipe> listRecipeFeed(Map<String, Object> map);
 	public boolean isFollow(Map<String, Object> map);
 	
+	public Recipe readRecip(int num);
+	
 	// 카테고리 리스트
 	public List<Recipe> listcaseCategory(Map<String, Object> map);
 	public List<Recipe> listcountryCategory(Map<String, Object> map);

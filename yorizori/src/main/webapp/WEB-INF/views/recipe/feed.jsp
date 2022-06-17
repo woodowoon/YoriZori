@@ -30,6 +30,9 @@ main {
 .feed .text-area .likes button { width: 35px; border: none; background: #fff; }
 .feed .text-area .likes span {  }
 
+.feed .img-box img:hover {
+	filter: brightness(70%);
+}
 </style>
 
 

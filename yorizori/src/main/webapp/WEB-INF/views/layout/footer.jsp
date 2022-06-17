@@ -18,7 +18,7 @@
 .footer .text-area:last-child ul { border-left: 1px solid #999; padding-left: 20px; margin-left: 20px; }
 .footer .text-area ul li { list-style: none; font-size: 14px; color: #999; margin-bottom: 5px; }
 .footer .text-area ul li a { color: #999; }
-
+ 
 .tossing{
 	animation-name: tossing;
 	-webkit-animation-name: tossing;	

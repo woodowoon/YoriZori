@@ -138,4 +138,10 @@ public class RecipeServiceImpl implements RecipeService {
 		return b;
 	}
 
+	@Override
+	public Recipe readRecip(int num) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
