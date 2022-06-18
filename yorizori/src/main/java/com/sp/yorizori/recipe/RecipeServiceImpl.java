@@ -139,9 +139,67 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 
 	@Override
-	public Recipe readRecip(int num) {
-		// TODO Auto-generated method stub
-		return null;
+	public Recipe readRecipe(int recipeNum) {
+		
+		Recipe dto = null;
+		
+		try {
+			dto = dao.selectOne("recipe.readRecipe", recipeNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
+
+	@Override
+	public void insertRecipeLike(Map<String, Object> map) throws Exception {
+		try {
+			dao.insertData("recipe.insertRecipeLike", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	@Override
+	public void deleteRecipeLike(Map<String, Object> map) throws Exception {
+		try {
+			dao.deleteData("recipe.deleteRecipeLike", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	@Override
+	public int RecipeLikeCount(int recipeNum) {
+		int result = 0;
+		
+		try {
+			result = dao.selectOne("recipe.recipeLikeCount");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public boolean isRecipeLike(Map<String, Object> map) {
+		boolean b = false;
+		
+		try {
+			int result = dao.selectOne("recipe.isRecipeLike", map);
+			
+			if(result > 0) {
+				b = true;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return b;
 	}
 
 }

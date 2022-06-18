@@ -28,8 +28,10 @@ public class Recipe {
 	private int recipeTime; // 분 단위
 	private String userId;
 	private int active; // 0: 활성화 1: 비활성화
+	private String recipeReg_date;
 	private String imageFilename;
 	private String nickName;
+	private int userRecipeLike;
 	
 	private int caseNum;
 	private String caseName;
@@ -111,11 +113,11 @@ public class Recipe {
 	public void setImageFilename(String imageFilename) {
 		this.imageFilename = imageFilename;
 	}
-	public String getNickName() {
-		return nickName;
+	public int getUserRecipeLike() {
+		return userRecipeLike;
 	}
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
+	public void setUserRecipeLike(int userRecipeLike) {
+		this.userRecipeLike = userRecipeLike;
 	}
 	public int getCaseNum() {
 		return caseNum;
@@ -201,4 +203,17 @@ public class Recipe {
 	public void setFollwer_id(String follwer_id) {
 		this.follwer_id = follwer_id;
 	}
+	public String getNickName() {
+		return nickName;
+	}
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+	public String getRecipeReg_date() {
+		return recipeReg_date;
+	}
+	public void setRecipeReg_date(String recipeReg_date) {
+		this.recipeReg_date = recipeReg_date;
+	}
+	
 }

@@ -36,7 +36,37 @@ main {
 </style>
 
 
+<script type="text/javascript">
 
+function ajaxFun(url, method, query, dataType, fn) {
+	$.ajax({
+		type:method,
+		url:url,
+		data:query,
+		dataType:dataType,
+		success:function(data) {
+			fn(data);
+		},
+		beforeSend:function(jqXHR) {
+			jqXHR.setRequestHeader("AJAX", true);
+		},
+		error:function(jqXHR) {
+			if(jqXHR.status === 403) {
+				login();
+				return false;
+			} else if(jqXHR.status === 400) {
+				alert("요청 처리가 실패 했습니다.");
+				return false;
+			}
+			console.log(jqXHR.responseText);
+		}
+	});
+}
+
+
+
+
+</script>
 
 <div class="feed">
 	<c:forEach var="dto" items="${list}">
@@ -51,17 +81,28 @@ main {
 				</c:otherwise>
 			</c:choose>   
 			<p> ${dto.nickName} </p>
+			
 			<div class="img-box">
-				<img class = "float" src="${pageContext.request.contextPath}/uploads/recipe/${dto.imageFilename}" style="height: 700px; object-fit: cover;">
+				<img class = "float" onclick="href='${articleUrl}?recipeNum=${dto.recipeNum}';" src="${pageContext.request.contextPath}/uploads/recipe/${dto.imageFilename}" style="height: 700px; object-fit: cover;">
 			</div>
+			
 		</div>
 		
 		<div class="text-area">
-			<!-- 좋아요X <i style="color: #5D5D5D; font-size: 1.5rem;" class="bi bi-heart"></i>  -->
-			<!-- 좋아요O -->
-			<i style="color: red; font-size: 1.4rem;" class="bi bi-heart-fill"></i>
+			<p> ${dto.recipeNum} </p>
+			<p> ${dto.userRecipeLike} </p>
+			<c:choose>
+				<c:when test="${dto.userRecipeLike == 0}">
+					<!-- 좋아요X -->
+					<i style="color: #5D5D5D; font-size: 1.5rem;" class="bi bi-heart"></i>  
+				</c:when>
+				<c:otherwise>
+					<!-- 좋아요O -->
+					<i style="color: red; font-size: 1.4rem;" class="bi bi-heart-fill"></i>
+				</c:otherwise>
+			</c:choose>
 				<span>좋아요 ${dto.recipeLikeCount}개</span>
-			<a href="${articleUrl}?recipeNum=${dto.recipeNum}">${dto.recipeSubject}</a>
+			<a href="${articleUrl}recipeNum=${dto.recipeNum}">${dto.recipeSubject}</a>
 			<div class="likes">
 				
 				<button type="button" onclick="">

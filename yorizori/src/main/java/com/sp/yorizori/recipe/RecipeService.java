@@ -12,7 +12,14 @@ public interface RecipeService {
 	public List<Recipe> listRecipeFeed(Map<String, Object> map);
 	public boolean isFollow(Map<String, Object> map);
 	
-	public Recipe readRecip(int num);
+	// article
+	public Recipe readRecipe(int recipeNum);
+	
+	// 좋아요
+	public void insertRecipeLike(Map<String, Object> map) throws Exception;
+	public void deleteRecipeLike(Map<String, Object> map) throws Exception;
+	public int RecipeLikeCount(int recipeNum);
+	public boolean isRecipeLike(Map<String, Object> map);
 	
 	// 카테고리 리스트
 	public List<Recipe> listcaseCategory(Map<String, Object> map);

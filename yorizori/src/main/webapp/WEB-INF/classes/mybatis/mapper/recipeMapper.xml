@@ -37,10 +37,10 @@
 	
 	<!-- 레시피 등록 -->
 	<insert id="insertRecipe" parameterType="com.sp.yorizori.recipe.Recipe">
-		INSERT INTO recipe (recipeNum, caseNum, countryNum, recipeSubject, recipeHitcount, recipeReg_date, recipeServing, recipeLevel, 
+		INSERT INTO recipe (recipeNum, caseNum, countryNum, recipeSubject, recipeHitcount, TO_CHAR(recipeReg_date, 'YYYY-MM-DD') recipeReg_date, recipeServing, recipeLevel, 
    			 recipeContent, recipeTime,userId, active) VALUES 
    		(#{recipeNum}, #{caseNum}, #{countryNum}, #{recipeSubject}, 0, SYSDATE, 
-   		#{recipeServing}, #{recipeLevel}, #{recipeContent, jdbcType=VARCHAR}, #{recipeTime}, #{userId}, 0)
+   		#{recipeServing}, #{recipeLevel}, #{recipeContent}, #{recipeTime}, #{userId}, 0)
 	</insert>
 	
 	<!-- 레시피 포토 등록 -->
@@ -55,8 +55,21 @@
 	
 	<!-- 좋아요 개수 -->
 	<select id="recipeLikeCount" resultType="Integer">
-		SELECT COUNT(*) recipeLikeCount FROM recipeLike WHERE recipeNum = #{recipeNum}
+		SELECT NVL(COUNT(*), 0) recipeLikeCount FROM recipeLike WHERE recipeNum = #{recipeNum}
 	</select>
+	
+	<!-- 해당 유저가 좋아요했는지 여부 -->
+	<select id="isRecipeLike" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0) FROM recipeLike WHERE recipeNum = #{recipeNum} AND userId = #{userId}
+	</select>
+	
+	<insert id="insertRecipeLike" parameterType="map">
+		INSERT INTO recipeLike(recipeNum, userId) VALUES (#{recipeNum}, #{userId})
+	</insert>
+	
+	<delete id="deleteRecipeLike" parameterType="map">
+		DELETE FROM recipeLike WHERE recipeNum = #{recipeNum} AND userId = #{userId}
+	</delete>
 	
 	<!-- 팔로우 유무 -->
 	<select id="isFollow" parameterType="map" resultType="Integer">
@@ -88,22 +101,27 @@
 		SELECT * FROM (
 		    SELECT ROWNUM rnum, tb.* FROM (
 		        SELECT r.recipeNum recipeNum, r.countryNum countryNum, recipeSubject, nickName, memberImageName, imageFilename, 
-		            NVL(recipeLikeCount, 0) recipeLikeCount, follower_id
+		            NVL(recipeLikeCount, 0) recipeLikeCount, follower_id, NVL(userRecipeLike, 0) userRecipeLike
 		            FROM recipe r
 		            JOIN member m ON m.userId = r.userId
-		                LEFT OUTER JOIN (
-		                    SELECT recipeNum, COUNT(*) recipeLikeCount FROM recipeLike
-		                    GROUP BY recipeNum
-		                ) rl ON rl.recipeNum = r.recipeNum  
-		                LEFT OUTER JOIN (
-		                    SELECT userId, memberImageName FROM memberImage 
-		                ) mi ON mi.userId = r.userId
-		                LEFT OUTER JOIN (
-		                    SELECT recipeNum, recipePhotoName imageFilename FROM recipePhoto
-		                ) rp ON r.recipeNum = rp.recipeNum
-		                LEFT OUTER JOIN (
-		                    SELECT follower_id, following_id FROM follow
-		                ) f ON r.userId = f.following_id
+	                LEFT OUTER JOIN (
+	                    SELECT recipeNum, COUNT(*) recipeLikeCount FROM recipeLike
+	                    GROUP BY recipeNum
+	                ) rl ON rl.recipeNum = r.recipeNum  
+	                LEFT OUTER JOIN (
+	                    SELECT userId, memberImageName FROM memberImage 
+	                ) mi ON mi.userId = r.userId
+	                LEFT OUTER JOIN (
+	                    SELECT recipeNum, recipePhotoName imageFilename FROM recipePhoto
+	                ) rp ON r.recipeNum = rp.recipeNum
+	                LEFT OUTER JOIN (
+	                    SELECT follower_id, following_id FROM follow
+	                ) f ON r.userId = f.following_id
+	                LEFT OUTER JOIN (
+	                	SELECT recipeNum, NVL(COUNT(*), 0) userRecipeLike FROM recipeLike 
+	                	WHERE userId = #{userId}
+	                	GROUP BY recipeNum
+	                ) ur ON r.recipeNum = ur.recipeNum
 		             <where>
 						<choose>
 							<when test="isFollow == true">
@@ -119,6 +137,25 @@
 		) WHERE rnum &gt;= #{start}
 	</select>
 	
-	
+	<select id="readRecipe" parameterType="Integer" resultType="com.sp.yorizori.recipe.Recipe">
+		SELECT r.recipeNum recipeNum, caseNum, countryNum, recipeSubject, recipeHitCount, 
+			TO_CHAR(recipeReg_date, 'YYYY-MM-DD') recipeReg_date, recipeServing, imageFilename,
+	       	recipeTime, recipeLevel, recipeContent, r.userId userId, nickName, memberImageName, NVL(recipeLikeCount, 0) recipeLikeCount
+	    		FROM recipe r
+		    LEFT OUTER JOIN (
+		        SELECT recipeNum, COUNT(*) recipeLikeCount FROM recipeLike rl
+		        GROUP BY recipeNum
+		    ) rl ON rl.recipeNum = r.recipeNum
+		    LEFT OUTER JOIN (
+		        SELECT userId, memberImageName FROM memberImage mi
+		    ) mi ON mi.userId = r.userId
+		    LEFT OUTER JOIN (
+	             SELECT recipeNum, recipePhotoName imageFilename FROM recipePhoto
+	        ) rp ON r.recipeNum = rp.recipeNum
+		    LEFT OUTER JOIN (
+		        SELECT userId, nickName FROM member m
+		    ) m ON m.userId = r.userId
+	    WHERE r.recipeNum = #{recipeNum}
+	</select>
 	
 </mapper>

@@ -101,7 +101,15 @@ a > i { display: flex; }
 .reply-form .btnReply:hover, .reply-form .btnReply:active  { background-color: #333; color: #fff; }
 
 .editor { color: #333; font-size: 20px; font-weight: 300; width: 90%; margin: 50px auto 0 auto; }
+.recipe-detail .editor img {
+	max-height: 400px;
+	display: block;
+	margin: auto;
+}
+
 .ck.ck-editor__main>.ck-editor__editable:not(.ck-focused) { border: none; }
+
+
 
 </style>
 
@@ -114,13 +122,13 @@ a > i { display: flex; }
 
 <div class="container">
 	<div class="recipe-title">
-		연어 샐러드
+		${dto.recipeSubject}
 	</div>
 	<div class="recipe-container">
 		<ul class="info">
-			<li>작성자&nbsp;&nbsp;&nbsp;&nbsp;김쉐프</li>
-			<li>등록일&nbsp;&nbsp;&nbsp;&nbsp;2000.10.10</li>
-			<li>조회수&nbsp;&nbsp;&nbsp;&nbsp;100</li>
+			<li>작성자&nbsp;&nbsp;&nbsp;&nbsp;${dto.nickName}</li>
+			<li>등록일&nbsp;&nbsp;&nbsp;&nbsp;${dto.recipeReg_date}</li>
+			<li>조회수&nbsp;&nbsp;&nbsp;&nbsp;${dto.recipeHitCount}</li>
 		</ul>
 		<div class="icon-container">
 			<a class="ai ai-like"><i class="bi bi-heart"></i></a>
@@ -128,7 +136,7 @@ a > i { display: flex; }
 		</div>
 		
 		<div class="finished">
-			<img class="finishedImage" src="${pageContext.request.contextPath}/resources/images/salad.jpg">
+			<img class="finishedImage" src="${pageContext.request.contextPath}/uploads/recipe/${dto.imageFilename}">
 		</div>
 		
 		<div class="recipe-icon">
@@ -137,9 +145,9 @@ a > i { display: flex; }
 			<i class="bi bi-bar-chart-fill"></i>
 		</div>
 		<div class="recipe-info">
-			<span>1인분</span>
-			<span>30분</span>
-			<span>난이도 상</span>
+			<span>${dto.recipeServing}인분</span>
+			<span>${dto.recipeTime}분</span>
+			<span>난이도 ${dto.recipeLevel}</span>
 		</div>
 		
 		<div class="recipe-ingredient">
@@ -163,7 +171,7 @@ a > i { display: flex; }
 		<div class="recipe-detail">
 			<span><i class="bi bi-circle-fill"></i>&nbsp;&nbsp;조리법</span>
 			<div class="editor">
-				${dto.content}
+				${dto.recipeContent}
 			</div>
 		</div>
 	</div>
@@ -173,7 +181,7 @@ a > i { display: flex; }
 			<img class="profileImage" src="${pageContext.request.contextPath}/resources/images/profileImage.png">
 		</div>
 		<div class="writer-nickName">
-			<a class="writer">김쉐프</a>
+			<a class="writer">${dto.nickName}</a>
 		</div>
 	</div>
 	
@@ -199,7 +207,9 @@ a > i { display: flex; }
 			<table class="table table-borderless reply-form">
 				<tr>
 					<td colspan="2">
-						<textarea class='form-control' name="content"></textarea>
+						<textarea class='form-control' name="content">
+							
+						</textarea>
 					</td>
 				</tr>
 				<tr>

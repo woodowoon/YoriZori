@@ -41,12 +41,14 @@ public class RecipeController {
 		
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
 		
-		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("userId", info.getUserId());
+		map.put("recipeNum", dto.getRecipeNum());
 		boolean isFollow = service.isFollow(map);
+		boolean isRecipeLike = service.isRecipeLike(map);
 		
 		map.put("isFollow", isFollow);
+		map.put("isRecipeLike", isRecipeLike);
 		map.put("userCountryNum", info.getCountryNum());
 		
 		int dataCount = service.dataCount(map);
@@ -61,7 +63,7 @@ public class RecipeController {
 		map.put("end", end);
 		
 		String cp = req.getContextPath();
-		String query = "rows=" + rows;
+		String query = "";
 		String listUrl = cp + "/recipe/feed";
 		String articleUrl = cp + "/recipe/article?page=" + current_page;
 		
@@ -79,6 +81,7 @@ public class RecipeController {
 		model.addAttribute("rows", rows);
 		model.addAttribute("articleUrl", articleUrl);
 		model.addAttribute("paging", paging);
+		model.addAttribute("isRecipeLike", isRecipeLike);
 		
 		model.addAttribute("list", list);
 		
@@ -121,6 +124,38 @@ public class RecipeController {
 		}
 		
 		return "redirect:/recipe/feed";
+	}
+	
+	
+	@RequestMapping(value = "article")
+	public String article(
+			@RequestParam int recipeNum,
+			@RequestParam String page,
+			HttpSession session, Model model) throws Exception {
+		
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		String query = "page=" + page;
+		
+		Recipe dto = service.readRecipe(recipeNum);
+		
+		if(dto == null) {
+			return "redirect:/recipe/peed?" + query;
+		}
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("recipeNum", recipeNum);
+		map.put("userId", info.getUserId());
+		map.put("nickName", info.getNickName());
+		
+		boolean isRecipeLike = service.isRecipeLike(map);
+		
+		model.addAttribute("dto", dto);
+		model.addAttribute("page", page);
+		model.addAttribute("query", query);
+		model.addAttribute("isRecipeLike", isRecipeLike);
+		
+		return ".recipe.article";
 	}
 	
 	@RequestMapping(value = "ingredient", method = RequestMethod.GET) 
