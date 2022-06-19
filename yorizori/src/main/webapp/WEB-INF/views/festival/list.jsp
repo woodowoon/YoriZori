@@ -94,11 +94,13 @@ $(function(){
 		</c:forEach>
 	</div>
 	
-	<div class="btn-container">
-		<button type="button" class="btn btn-write" onclick="location.href='${pageContext.request.contextPath}/festival/write';">
-			<i class="bi bi-plus-lg"></i>
-		</button>
-	</div>
+	<c:if test="${sessionScope.member.role == 0}">
+		<div class="btn-container">
+			<button type="button" class="btn btn-write" onclick="location.href='${pageContext.request.contextPath}/festival/write';">
+				<i class="bi bi-plus-lg"></i>
+			</button>
+		</div>
+	</c:if>
 	
 	<div class="page-box">
 		${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}

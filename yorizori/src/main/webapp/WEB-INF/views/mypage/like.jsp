@@ -99,7 +99,7 @@ li { list-style: none; }
 	</div>
 	
 	<div class="feed-subject">
-		<p>내가 등록한 레시피</p>
+		<p>좋아요한 레시피</p>
 	</div>
 	
 	<div class="myFeed">
@@ -109,42 +109,6 @@ li { list-style: none; }
 					<div class="box">
 						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
 						<div class="text">냥냥냥냥냥냥냥냥</div>
-					</div>
-				</li>
-				<li>
-					<div class="box">
-						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-						<div class="text">냥냥</div>
-					</div>
-				</li>
-				<li>
-					<div class="box">
-						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-						<div class="text">냥냥</div>
-					</div>
-				</li>
-				<li>
-					<div class="box">
-						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-						<div class="text">냥냥</div>
-					</div>
-				</li>
-				<li>
-					<div class="box">
-						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-						<div class="text">냥냥</div>
-					</div>
-				</li>
-				<li>
-					<div class="box">
-						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-						<div class="text">냥냥</div>
-					</div>
-				</li>
-				<li>
-					<div class="box">
-						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-						<div class="text">냥냥</div>
 					</div>
 				</li>
 	

@@ -9,45 +9,24 @@
 
 <style type="text/css">
 main { background-color: #fff; font-family: 'Noto Sans KR', sans-serif; color: #000000; letter-spacing: -0.03em; }
-
-.clearFix:after { content: ''; display: block; clear: both; }
-li { list-style: none; }
-
 .mypage { background: #fff; width: 1000px; margin: 0 auto; }
 
-.nav-mypage { display: flex; padding: 15px 25px; }
-.myNickname { width: 100%; text-align: center; padding-right: 42px; font-size: 20px; line-height: 38px; }
+.nav-mypage { display: flex; padding: 15px 25px; border-bottom: 2px solid #383d4a; }
+.mypage-subject { width: 100%; text-align: center; padding-right: 42px; font-size: 20px; line-height: 38px; }
 
-.myProfile { height: 300px; }
-.profile-detail { display: flex; height: 250px; padding-right: 25px; }
-.myImage { width: 250px; height: 250px; padding: 25px; margin-right: 100px; }
-.myImage > img { width: 200px; height: 200px; border-radius: 9999px; }
-.myInfo { width: 209px; height: 100px; margin: auto 0; text-align: center; }
-.myInfo .count { margin-top: 10px; margin-bottom: 0; font-size: 25px; font-weight: 700; }
-.myInfo .name { margin-bottom: 0; font-size: 16px; }
-.profile-follow { height:50px; text-align: center; padding: 5px; }
-.btn-follow { width: 260px; height: 40px; border: 1px solid #0095f6; border-radius: 8px; background-color: #0095f6; color: #fff; font-size: 16px; letter-spacing: 0.03em; }
-.btn-following { width: 260px; height: 40px; border: 1px solid #0095f6; border-radius: 8px; background-color: #fff; color: #0095f6; font-size: 16px; letter-spacing: 0.03em; }
-
-.feed-subject { width: 950px; height: 80px; margin: auto; border-bottom: 1px solid #d2d2d2; }
-.feed-subject > p { margin: 0; color:#333; font-size: 17px; font-weight: 300; text-align: center; height: 80px; line-height: 110px; }
-
-.mypage .myFeed { margin: 4px 25px 50px 25px; }
-.mypage .feed-list { padding: 0; margin: 0; border-bottom: 1px solid #d2d2d2; }
-.mypage .feed-list li { position: relative; float: left; width: 314px; margin: 0 4px 4px 0; }
-.mypage .feed-list li:nth-child(3n) { margin: 0 0 4px 0; }
-.mypage .feed-list li img { width: 100%; }
-.mypage .feed-list li .box:hover img { filter: brightness(70%); }
-
-.box { position: relative; cursor: pointer; }
-.text { position: absolute; visibility: hidden; left: 0; bottom: 0; width: 100%; height: 55%; text-align: center; color: #fff; font-size: 18px; }
-.box:hover .text { visibility: visible; }
-
-.modal-body ul { margin: 0; padding: 0; }
-.modal-body ul li { display: flex; padding: 10px 0; line-height: 30px; }
-.modal-body ul li div { width: 30px; height: 30px; border: 1px solid #eaeaea; border-radius: 9999px; margin-right: 10px; }
-.btn-sm-follow { width: 80px; height: 30px; border: 1px solid #0095f6; border-radius: 8px; background-color: #0095f6; color: #fff; font-size: 14px; letter-spacing: 0.03em; margin-left: auto; }
-.btn-sm-following { width: 80px; height: 30px; border: 1px solid #0095f6; border-radius: 8px; background-color: #fff; color: #0095f6; font-size: 14px; letter-spacing: 0.03em; margin-left: auto; }
+.order-list { margin: 0 0 30px 0; padding: 0; list-style: none; }
+.order { padding-bottom: 14px; position: relative; border-bottom: 1px solid #f2f2f2; }
+.order:last-child { border-bottom: 1px solid #dbdbdb; }
+.box { display: table; width: 100%; table-layout: fixed; padding: 24px 0 10px; }
+.order-img { display: table-cell; width: 110px; vertical-align: top; }
+.order-img a { display: block; position: relative; }
+.order-img img { vertical-align: top; width: 110px; height: 110px; }
+.order-info { display: table-cell; padding: 7px 40px 0 16px; vertical-align: top; width: 756px; }
+.order-info p { font-size: 13px; line-height: 17px; color: #959595; margin: 0; padding: 0; }
+.order-info a { overflow: hidden; text-overflow: ellipsis; line-height: 17px; white-space: nowrap; display: block; margin-top: 9px; font-size: 14px; color: #666; }
+.order-btn { display: table-cell; vertical-align: middle; width: 134px; padding-right: 15px; }
+.order-btn button { display: block; width: 100%; border: 1px solid #0095f6; font-size: 12px; line-height: 24px; color: #0095f6; background-color: #fff; text-align: center; }
+.order-btn button:first-child { margin-bottom: 4px; }
 
 .offcanvas-title { cursor: pointer; }
 .offcanvas-title:hover, .offcanvas-title:active { color: #0d6efd; }
@@ -71,84 +50,69 @@ li { list-style: none; }
 				<i class="bi bi-list"></i>
 			</button>
 		</div>
-		<div class="myNickname">
-			닉네임
+		<div class="mypage-subject">
+			주문 내역
 		</div>
 	</div>
-	<div class="myProfile">
-		<div class="profile-detail">
-			<div class="myImage">
-				<img src="${pageContext.request.contextPath}/resources/images/profileImage.png">
-			</div>
-			<div class="myInfo">
-				<p class="count">0</p>
-				<p class="name">레시피</p>
-			</div>
-			<div class="myInfo" data-bs-toggle="modal" data-bs-target="#exampleModal1" style="cursor: pointer;">
-				<p class="count">0</p>
-				<p class="name">팔로워</p>
-			</div>
-			<div class="myInfo" data-bs-toggle="modal" data-bs-target="#exampleModal2" style="cursor: pointer;">
-				<p class="count">0</p>
-				<p class="name">팔로잉</p>
-			</div>
-		</div>
-		<div class="profile-follow">
-			<button class="btn-follow" type="button">팔로우</button>
-		</div>
-	</div>
-	
-	<div class="feed-subject">
-		<p>내가 등록한 레시피</p>
-	</div>
-	
-	<div class="myFeed">
-		<ul class="feed-list clearFix">
+
+	<ul class="order-list">
 		
-				<li>
-					<div class="box">
+		<li class="order">
+			<div class="box">
+				<div class="order-img">
+					<a>
 						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-						<div class="text">냥냥냥냥냥냥냥냥</div>
-					</div>
-				</li>
-				<li>
-					<div class="box">
+					</a>
+				</div>
+				<div class="order-info">
+					<p>구매일자 : 22.06.17</p>
+					<a>냥냥 클래스</a>
+				</div>
+				<div class="order-btn">
+					<button type="button">리뷰쓰기</button>
+					<button type="button">환불하기</button>
+				</div>
+			</div>
+		</li>
+		<li class="order">
+			<div class="box">
+				<div class="order-img">
+					<a>
 						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-						<div class="text">냥냥</div>
-					</div>
-				</li>
-				<li>
-					<div class="box">
+					</a>
+				</div>
+				<div class="order-info">
+					<p>구매일자 : 22.06.17</p>
+					<a>냥냥 클래스</a>
+				</div>
+				<div class="order-btn">
+					<button type="button">리뷰쓰기</button>
+					<button type="button">환불하기</button>
+				</div>
+			</div>
+		</li>
+		<li class="order">
+			<div class="box">
+				<div class="order-img">
+					<a>
 						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-						<div class="text">냥냥</div>
-					</div>
-				</li>
-				<li>
-					<div class="box">
-						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-						<div class="text">냥냥</div>
-					</div>
-				</li>
-				<li>
-					<div class="box">
-						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-						<div class="text">냥냥</div>
-					</div>
-				</li>
-				<li>
-					<div class="box">
-						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-						<div class="text">냥냥</div>
-					</div>
-				</li>
-				<li>
-					<div class="box">
-						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-						<div class="text">냥냥</div>
-					</div>
-				</li>
+					</a>
+				</div>
+				<div class="order-info">
+					<p>구매일자 : 22.06.17</p>
+					<a>냥냥 클래스</a>
+				</div>
+				<div class="order-btn">
+					<button type="button">리뷰쓰기</button>
+					<button type="button">환불하기</button>
+				</div>
+			</div>
+		</li>
+			
+	</ul>
 	
-		</ul>
+	<div class="page-box">
+		1 2 3
 	</div>
 	
 	<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
@@ -226,55 +190,6 @@ li { list-style: none; }
 				      		<a href="${pageContext.request.contextPath}/mypage/qna">1:1 문의</a>
 				      	</div>
 				    </div>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-scrollable modal-sm">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel1">팔로워</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<ul>
-					
-						<li>
-							<div></div>
-							닉네임
-						</li>
-						
-					</ul>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-scrollable modal-sm">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel2">팔로잉</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<ul>
-					
-						<li>
-							<div></div>
-							닉네임
-							<button class="btn-sm-following" type="button">팔로잉</button>
-						</li>
-						
-					</ul>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>
