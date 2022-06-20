@@ -7,6 +7,24 @@
 .body-container {
 	max-width: 800px;
 }
+
+.btn {
+    padding: 10px;
+    border-radius: 12px;
+    background: #FFFFCC;
+    line-height: 1em;
+    color: #808080;
+    text-align: center;
+    margin-right: 0;	
+}
+
+main {
+    background-color: #f7f8fb;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: #000000;
+    letter-spacing: -0.03em;
+}
+
 </style>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/boot-board.css" type="text/css">
 
@@ -25,7 +43,7 @@
 <div class="container">
 	<div class="body-container">	
 		<div class="body-title">
-			<h3><i class="bi bi-clipboard"></i> 공지사항 </h3>
+			<h3><img src="${pageContext.request.contextPath}/resources/images/notice3.png"> 공지사항 </h3>
 		</div>
 		
 		<div class="body-main">

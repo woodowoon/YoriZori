@@ -21,4 +21,5 @@
 			<button type="button" class="btn btn-sm btnCategoryUpdateCancel px-0" title="수정취소" style="display: none;"><i class="bi bi-arrow-clockwise"></i></button>
 		</td>
 	</tr>
+	
 </c:forEach>

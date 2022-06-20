@@ -7,6 +7,37 @@
 .body-container {
 	max-width: 800px;
 }
+
+.btn {
+    padding: 10px; border-radius: 12px;
+    background: #FFFFCC;
+    line-height: 1em;
+    color: #808080;
+    text-align: center;
+    margin-right: 0;
+    border: none;	
+}
+
+main {
+    background-color: #f7f8fb;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: #000000;
+    letter-spacing: -0.03em;
+}
+
+.form-control-plaintext {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0;
+    margin-bottom: 0;
+    line-height: 1.5;
+    color: #212529;
+    background-color: transparent;
+    border: solid transparent;
+    border-radius: 30px 10px;
+    border-width: 1px 0;
+}
+
 </style>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/boot-board.css" type="text/css">
 
@@ -25,7 +56,7 @@
 <div class="container">
 	<div class="body-container">	
 		<div class="body-title">
-			<h3><i class="bi bi-exclamation-square"></i> 질문과 답변 </h3>
+			<h3><img src="${pageContext.request.contextPath}/resources/images/question3.png"> 질문과 답변 </h3>
 		</div>
 		
 		<div class="body-main">

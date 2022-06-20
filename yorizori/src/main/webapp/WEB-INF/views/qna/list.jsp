@@ -7,6 +7,17 @@
 .body-container {
 	max-width: 800px;
 }
+
+.btn {
+    padding: 12px;
+    border-radius: 12px;
+    background: #FFFFCC;
+    line-height: 1em;
+    color: #808080;
+    text-align: center;
+    margin-right: 0;	
+}
+
 </style>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/boot-board.css" type="text/css">
 
@@ -20,7 +31,7 @@ function searchList() {
 <div class="container">
 	<div class="body-container">	
 		<div class="body-title">
-			<h3><i class="bi bi-exclamation-square"></i> 1:1 문의 </h3>
+			<h3><img src="${pageContext.request.contextPath}/resources/images/qna1.png"></i> 1:1 문의 </h3>
 		</div>
 		
 		<div class="body-main">
@@ -35,12 +46,12 @@ function searchList() {
 			<table class="table table-hover board-list">
 				<thead class="table-light">
 					<tr>
-						<th class="bw-60">번호</th>
-						<th class="bw-100">유형</th>
-						<th>제목</th>
-						<th class="bw-100">작성자</th>
-						<th class="bw-90">문의일자</th>
-						<th class="bw-80">처리결과</th>
+						<th class="bw-60" style="background: #FFFFCC;">번호</th>
+						<th class="bw-100" style="background: #FFFFCC;">유형</th>
+						<th style="background: #FFFFCC;">제목</th>
+						<th class="bw-100" style="background: #FFFFCC;">작성자</th>
+						<th class="bw-90" style="background: #FFFFCC;">문의일자</th>
+						<th class="bw-80" style="background: #FFFFCC;">처리결과</th>
 					</tr>
 				</thead>
 				

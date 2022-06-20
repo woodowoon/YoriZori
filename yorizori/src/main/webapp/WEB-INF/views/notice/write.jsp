@@ -7,8 +7,47 @@
 .body-container {
 	max-width: 800px;
 }
+
+main {
+    background-color: #f7f8fb;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: #000000;
+    letter-spacing: -0.03em;
+}
 </style>
+
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/boot-board.css" type="text/css">
+
+<style type="text/css">
+
+.write-form .img-viewer {
+	cursor: pointer;
+	border: 1px solid #ccc;
+	width: 45px;
+	height: 45px;
+	background-image: url("${pageContext.request.contextPath}/resources/images/add_photo.png");
+	position: relative;
+	z-index: 9999;
+	background-repeat : no-repeat;
+	background-size : cover;
+}
+
+h3 img {
+	width: 7%;
+}
+
+.btn {
+    padding: 10px; border-radius: 12px;
+    background: #FFFFCC;
+    line-height: 1em;
+    color: #808080;
+    text-align: center;
+    margin-right: 0;
+    border: none;	
+}
+
+
+</style>
 
 <script type="text/javascript">
 function sendOk() {
@@ -46,7 +85,7 @@ function sendOk() {
 <div class="container">
 	<div class="body-container">	
 		<div class="body-title">
-			<h3><i class="bi bi-clipboard"></i> 공지사항 </h3>
+			<h3><img src="${pageContext.request.contextPath}/resources/images/notice2.png"> 공지사항 </h3>
 		</div>
 		
 		<div class="body-main">
@@ -54,14 +93,14 @@ function sendOk() {
 			<form name="noticeForm" method="post" enctype="multipart/form-data">
 				<table class="table mt-5 write-form">
 					<tr>
-						<td class="table-light col-sm-2" scope="row">제 목</td>
+						<td class="table-light col-sm-2" scope="row" style="background: #FFFFCC; color: #808080;">제 목</td>
 						<td>
 							<input type="text" name="subject" class="form-control" value="${dto.subject}">
 						</td>
 					</tr>
 					
 					<tr>
-						<td class="table-light col-sm-2" scope="row">공지여부</td>
+						<td class="table-light col-sm-2" scope="row" style="background: #FFFFCC; color: #808080;">공지여부</td>
 						<td class="py-3">
 							<input type="checkbox" name="notice" id="notice" class="form-check-input" value="1" ${dto.notice==1 ? "checked='checked' ":"" } >
 							<label class="form-check-label" for="notice"> 공지</label>
@@ -69,21 +108,21 @@ function sendOk() {
 					</tr>        
         
 					<tr>
-						<td class="table-light col-sm-2" scope="row">작성자명</td>
+						<td class="table-light col-sm-2" scope="row" style="background: #FFFFCC; color: #808080;">작성자명</td>
  						<td>
 							<p class="form-control-plaintext">${sessionScope.member.userName}</p>
 						</td>
 					</tr>
 
 					<tr>
-						<td class="table-light col-sm-2" scope="row">내 용</td>
+						<td class="table-light col-sm-2" scope="row" style="background: #FFFFCC; color: #808080;">내 용</td>
 						<td>
 							<textarea name="content" id="content" class="form-control">${dto.content}</textarea>
 						</td>
 					</tr>
 					
 					<tr>
-						<td class="table-light col-sm-2">첨 부</td>
+						<td class="table-light col-sm-2" style="background: #FFFFCC; color: #808080;">첨 부</td>
 						<td> 
 							<input type="file" name="selectFile" multiple="multiple" class="form-control">
 						</td>

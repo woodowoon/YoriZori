@@ -8,7 +8,6 @@
 .container {
     width: 850px;
 }
-
 .body-title {
     -webkit-font-smoothing: antialiased;
     font-family: 'Noto Sans', sans-serif;
@@ -25,6 +24,7 @@
     line-height: 1em;
     color: #000000;
 }
+
 
 label {
 	padding: 15px;
@@ -618,8 +618,8 @@ function userIdCheck() {
 			    </div>
 			    
 			     <div class="row mb-3">
-			        <label class="col-sm-2 col-form-label" for="countryNum">Q. 가장 선호하는 음식은 ?</label>
-			        <div class="col-sm-10">
+			        <label class="col-sm-2 col-form-label" for="countryNum">가장 선호하는 음식 ?</label>
+			        <div class="col-sm-9">
 			        <div class="select">
 			        	<!-- 
      					<input type="radio" id="select1" name="korea"><label for="select1">한식</label>
@@ -667,7 +667,7 @@ function userIdCheck() {
 							style="margin-left: 0;"
 							onchange="form.sendButton.disabled = !checked">
 						<label class="form-check-label">
-							<a href="#" class="text-decoration-none">이용약관</a>에 동의합니다.
+							<a href="https://www.linktoviatris.co.kr/user/services" class="text-decoration-none">이용약관</a>에 동의합니다.
 						</label>
 					</div>
 			    </div>

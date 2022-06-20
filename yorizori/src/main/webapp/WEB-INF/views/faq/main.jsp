@@ -7,6 +7,31 @@
 .body-container {
 	max-width: 800px;
 }
+
+.btn {
+    padding: 12px;
+    border-radius: 12px;
+    background: #FFFFCC;
+    line-height: 1em;
+    color: #808080;
+    text-align: center;
+    margin-right: 0;	
+}
+
+.nav-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: green;
+    text-decoration: none;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
+}
+
+.accordion-button:not(.collapsed) {
+    color: GREEN;
+    background-color: #e7f1ff;
+    box-shadow: inset 0 -1px 0 rgb(0 0 0 / 13%);
+}
+
 </style>
 
 <script type="text/javascript">
@@ -106,10 +131,10 @@ function deleteFaq(num, page) {
 <div class="container">
 	<div class="body-container">	
 		<div class="body-title">
-			<h3><i class="bi bi-question-octagon"></i> 자주하는 질문 </h3>
+			<h3><img src="${pageContext.request.contextPath}/resources/images/faq.png"> 자주하는 질문 </h3>
 		</div>
 		
-	    <div class="alert alert-info" role="alert">
+	    <div class="alert alert-info" role="alert" style="background: #FFFFCC;">
 	        <i class="bi bi-search"></i> 궁금한 문의 사항을 빠르게 검색 할 수 있습니다.
 	    </div>
 	    		

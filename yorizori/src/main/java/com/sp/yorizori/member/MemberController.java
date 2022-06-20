@@ -269,7 +269,7 @@ public class MemberController {
 		}
 		
 		StringBuilder sb = new StringBuilder();
-		sb.append("회원님의 이메일로 임시 패스워드를 전송했습니다.<br>");
+		sb.append(dto.getUserName()+"회원님의 이메일로 임시 패스워드를 전송했습니다.<br>");
 		sb.append("로그인후 패스워드를 변경 하시기 바랍니다.<br>");
 		
 		reAttr.addFlashAttribute("title", "패스워드 찾기");
