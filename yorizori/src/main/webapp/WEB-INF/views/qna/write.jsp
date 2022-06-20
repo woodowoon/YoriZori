@@ -7,7 +7,6 @@
 .body-container {
 	max-width: 800px;
 }
-
 main {
     background-color: #f7f8fb;
     font-family: 'Noto Sans KR', sans-serif;

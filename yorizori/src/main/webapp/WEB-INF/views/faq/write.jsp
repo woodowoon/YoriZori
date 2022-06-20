@@ -7,7 +7,6 @@
 .body-container {
 	max-width: 800px;
 }
-
 .table-category input, .table-category select {
 	border: none;
 }

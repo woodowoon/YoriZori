@@ -7,7 +7,6 @@
 .body-container {
 	max-width: 800px;
 }
-
 .btn {
     padding: 12px;
     border-radius: 12px;
