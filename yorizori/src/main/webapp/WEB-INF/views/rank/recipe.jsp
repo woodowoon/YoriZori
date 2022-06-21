@@ -62,7 +62,7 @@ li { list-style: none; }
 				<li>
 					<span class="rank-box">${dto.rnum}</span>
 					<div>
-						<a href="#">
+						<a href="${pageContext.request.contextPath}/recipe/article?page=1&recipeNum=${dto.num}">
 							<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
 						</a>
 						<p>${dto.subject}</p>
