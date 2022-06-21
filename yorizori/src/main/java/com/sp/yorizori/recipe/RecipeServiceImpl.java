@@ -225,10 +225,18 @@ public class RecipeServiceImpl implements RecipeService {
 		
 		return list;
 	}
-
+	
 	@Override
-	public void updateRecipe(Recipe dto, String pathname) throws Exception {
+	public List<Recipe> readRecipeseasoning(int recipeNum) {
+		List<Recipe> list = null;
 		
+		try {
+			list = dao.selectList("recipe.readRecipeseasoning", recipeNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
 	}
 
 	@Override
@@ -271,4 +279,34 @@ public class RecipeServiceImpl implements RecipeService {
 		
 		return dto;
 	}
+
+	@Override
+	public void updateRecipe(Recipe dto) throws Exception {
+		try {
+			dao.updateData("recipe.updateRecipe", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public void updateRecipePhoto(Recipe dto) throws Exception {
+		try {
+			dao.updateData("recipe.updateRecipePhoto", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void updateRecipeingredientList(Recipe dto) throws Exception {
+		try {
+			dao.updateData("recipe.updateRecipeingredientList", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	
 }

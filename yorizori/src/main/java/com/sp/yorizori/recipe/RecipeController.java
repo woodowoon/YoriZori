@@ -141,6 +141,7 @@ public class RecipeController {
 		service.updateHitCount(recipeNum);
 		Recipe dto = service.readRecipe(recipeNum);
 		List<Recipe> list = service.readRecipeingredient(recipeNum);
+		List<Recipe> selist = service.readRecipeseasoning(recipeNum);
 		
 		if(dto == null) {
 			return "redirect:/recipe/peed?" + query;
@@ -160,6 +161,7 @@ public class RecipeController {
 		
 		boolean isRecipeLike = service.isRecipeLike(map);
 		
+		model.addAttribute("selist", selist);
 		model.addAttribute("list", list);
 		model.addAttribute("dto", dto);
 		model.addAttribute("page", page);
@@ -207,6 +209,48 @@ public class RecipeController {
 		return "redirect:/recipe/feed?" + query;
 	}
 	
+	@RequestMapping(value = "update", method = RequestMethod.GET)
+	public String update(
+			@RequestParam int recipeNum,
+			@RequestParam String page,
+			HttpSession session,
+			Model model
+			) throws Exception {
+		
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		Recipe dto = service.readRecipe(recipeNum);
+		
+		if(dto == null) {
+			return "redirect:/recipe/list?page=" + page;
+		}
+		
+		if(!info.getUserId().equals(dto.getUserId())) {
+			return "redirect:/recipe/list?page=" + page;
+		}
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> ingredientMap = new HashMap<String, Object>();
+		
+		List<Recipe> list = service.readRecipeingredient(recipeNum);
+		
+		ingredientMap.put("parent", null);
+		
+		List<Recipe> caseCategory = service.listcaseCategory(map);
+		List<Recipe> countryCategory = service.listcountryCategory(map);
+		
+		List<Recipe> ingredientCategory = service.listingredient(ingredientMap);
+		
+		model.addAttribute("dto", dto);
+		model.addAttribute("list", list);
+		model.addAttribute("page", page);
+		model.addAttribute("mode", "update");
+		model.addAttribute("caseCategory", caseCategory);
+		model.addAttribute("countryCategory", countryCategory);
+		model.addAttribute("ingredientCategory", ingredientCategory);
+		
+		return ".recipe.write";
+	}
 	
 	@RequestMapping(value = "insertRecipeLike", method = RequestMethod.POST)
 	@ResponseBody

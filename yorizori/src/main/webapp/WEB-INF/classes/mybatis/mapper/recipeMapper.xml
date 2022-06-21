@@ -37,8 +37,10 @@
 	
 	<!-- 레시피 등록 -->
 	<insert id="insertRecipe" parameterType="com.sp.yorizori.recipe.Recipe">
-		INSERT INTO recipe (recipeNum, caseNum, countryNum, recipeSubject, recipeHitcount, TO_CHAR(recipeReg_date, 'YYYY-MM-DD') recipeReg_date, recipeServing, recipeLevel, 
-   			 recipeContent, recipeTime,userId, active) VALUES 
+		INSERT INTO recipe (recipeNum, caseNum, countryNum, recipeSubject, recipeHitcount, 
+			recipeReg_date, 
+			recipeServing, recipeLevel, 
+			recipeContent, recipeTime,userId, active) VALUES 
    		(#{recipeNum}, #{caseNum}, #{countryNum}, #{recipeSubject}, 0, SYSDATE, 
    		#{recipeServing}, #{recipeLevel}, #{recipeContent}, #{recipeTime}, #{userId}, 0)
 	</insert>
@@ -159,57 +161,11 @@
 	</select>
 	
 	<select id="preReadRecipe" parameterType="map" resultType="com.sp.yorizori.recipe.Recipe">
-		SELECT * FROM (
-		    SELECT r.recipeNum, recipeSubject, NVL(recipeLikeCount, 0) recipeLikeCount, r.countryNum countryNum, follower_id, r.userId userId
-		        FROM recipe r
-		        JOIN member m ON m.userId = r.userId
-		        LEFT OUTER JOIN (
-		            SELECT recipeNum, COUNT(*) recipeLikeCount FROM recipeLike
-		            GROUP BY recipeNum 
-		        ) rl ON rl.recipeNum = r.recipeNum
-		        LEFT OUTER JOIN (
-		            SELECT follower_id, following_id FROM follow
-		        ) f ON r.userId = f.following_id
-		    <where>
-				<choose>
-					<when test="isFollow == true">
-						follower_id = #{userId} OR (m.userId = #{userId})
-					</when>
-					<otherwise>
-						r.countryNum = #{userCountryNum} OR (m.userId = #{userId})
-					</otherwise>
-				</choose>	
-				AND (r.recipeNum &gt; #{recipeNum})	             
-             </where>
-		    ORDER BY recipeLikeCount DESC
-		)WHERE ROWNUM = 1
+		
 	</select>
 	
 	<select id="nextReadRecipe" parameterType="map" resultType="com.sp.yorizori.recipe.Recipe">
-		SELECT * FROM (
-		    SELECT r.recipeNum, recipeSubject, NVL(recipeLikeCount, 0) recipeLikeCount, r.countryNum countryNum, follower_id, r.userId userId
-		        FROM recipe r
-		        JOIN member m ON m.userId = r.userId
-		        LEFT OUTER JOIN (
-		            SELECT recipeNum, COUNT(*) recipeLikeCount FROM recipeLike
-		            GROUP BY recipeNum 
-		        ) rl ON rl.recipeNum = r.recipeNum
-		        LEFT OUTER JOIN (
-		            SELECT follower_id, following_id FROM follow
-		        ) f ON r.userId = f.following_id
-		    <where>
-				<choose>
-					<when test="isFollow == true">
-						follower_id = #{userId} OR (m.userId = #{userId})
-					</when>
-					<otherwise>
-						r.countryNum = #{userCountryNum} OR (m.userId = #{userId})
-					</otherwise>
-				</choose>	
-				AND (r.recipeNum &lt; #{recipeNum})	             
-             </where>
-		    ORDER BY recipeLikeCount DESC
-		)WHERE ROWNUM = 1
+		
 	</select>
 	
 	<update id="updateHitCount" parameterType="Integer">
@@ -222,11 +178,47 @@
 		    LEFT OUTER JOIN (
 		        SELECT ingredientCode, ingredientName, parent FROM ingredient i
 		    ) i ON i.ingredientCode = il.ingredientCode
-		WHERE recipeNum = #{recipeNum}
+		WHERE recipeNum = #{recipeNum} AND parent &lt;&gt; 100
+	</select>
+	
+	<select id="readRecipeseasoning" parameterType="Integer" resultType="com.sp.yorizori.recipe.Recipe">
+		SELECT recipeNum, il.ingredientCode ingredientCode, ingredientName, parent
+		    FROM ingredientList il
+		    LEFT OUTER JOIN (
+		        SELECT ingredientCode, ingredientName, parent FROM ingredient i
+		    ) i ON i.ingredientCode = il.ingredientCode
+		WHERE recipeNum = #{recipeNum} AND parent = 100
 	</select>
 	
 	<delete id="deleteRecipe" parameterType="Integer">
 		DELETE FROM recipe WHERE recipeNum = #{recipeNum}
 	</delete>
+	
+	<update id="updateRecipe" parameterType="com.sp.yorizori.recipe.Recipe">
+		UPDATE recipe
+		    SET 
+		    caseNum = #{caseNum},
+		    countryNum = #{countryNum},
+		    recipeSubject = #{recipeSubject},
+		    recipeServing = #{recipeServing},
+		    recipeTime = #{recipeTime},
+		    recipeLevel = #{recipeLevel}, 
+		    recipeContent  = #{recipeContent}
+		WHERE recipeNum = #{recipeNum}
+	</update>
+	
+	<update id="updateRecipePhoto" parameterType="com.sp.yorizori.recipe.Recipe">
+		UPDATE recipePhoto
+		    SET 
+		    recipePhotoName = #{imageFilename, jdbcType=VARCHAR}
+		WHERE recipeNum = #{recipeNum}
+	</update>
+	
+	<update id="updateRecipeingredientList" parameterType="com.sp.yorizori.recipe.Recipe">
+		UPDATE ingredientList
+		    SET 
+		    IngredientCode = #{ingredientCode}
+		WHERE recipeNum = #{recipeNum}
+	</update>
 	
 </mapper>

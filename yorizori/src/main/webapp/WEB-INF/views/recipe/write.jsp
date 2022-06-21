@@ -448,7 +448,7 @@ function ajaxFun(url, method, query, dataType, fn) {
 $(function() {
 	var img = "${dto.imageFilename}";
 	if( img ) { // 수정인 경우
-		img = "${pageContext.request.contextPath}/uploads/photo/" + img;
+		img = "${pageContext.request.contextPath}/uploads/recipe/" + img;
 		$(".write-form .img-viewer").empty();
 		$(".write-form .img-viewer").css("background-image", "url("+img+")");
 	}
@@ -462,7 +462,7 @@ $(function() {
 		if(! file) {
 			$(".write-form .img-viewer").empty();
 			if( img ) {
-				img = "${pageContext.request.contextPath}/uploads/photo/" + img;
+				img = "${pageContext.request.contextPath}/uploads/recipe/" + img;
 				$(".write-form .img-viewer").css("background-image", "url("+img+")");
 			} else {
 				img = "${pageContext.request.contextPath}/resources/images/add_photo.png";
@@ -483,6 +483,13 @@ $(function() {
 		}
 		reader.readAsDataURL(file);
 	});
+});
+
+$(function() {
+	var list = "${list}";
+	if(list) {
+		
+	}
 });
 
 $(function() {
@@ -651,7 +658,14 @@ $(function() {
 					              </dt>
 					              <dd>
 					                <ul class="selected-ingre">
-					                
+					                	<c:forEach var="dto" items="${list}">
+					                		<div class='ingredient'>
+					                			<li class='content' data-id='${dto.ingredientCode}'> ${dto.ingredientName}
+					                				<span class='close'></span>
+					                			</li>
+												<input type='hidden' name='ingredientCodes' value='ingredientCode'>
+											</div>
+					                	</c:forEach>
 					                </ul>
 					              </dd>
 					            </dl>
@@ -675,9 +689,9 @@ $(function() {
 								<div class="col-sm-4 pe-1" style="width:15%;">
 									<select name="recipeLevel" class="form-select">
 										<option value="">:: 난이도 ::</option>
-										<option value="상">상</option>
-										<option value="중">중</option>
-										<option value="하">하</option>
+										<option value="상" ${dto.recipeLevel=="상"?"selected='selected'":""}>상</option>
+										<option value="중" ${dto.recipeLevel=="중"?"selected='selected'":""}>중</option>
+										<option value="하" ${dto.recipeLevel=="하"?"selected='selected'":""}>하</option>
 									</select>
 								</div>
 							</div>
@@ -687,7 +701,9 @@ $(function() {
 					<tr>
 						<td class="table-light col-sm-2" scope="row">요 리 내 용</td>
 						<td>
-							<div class="editor"></div>
+							<div class="editor">
+								${dto.recipeContent}
+							</div>
 							<input type="hidden" name="recipeContent">
 						</td>
 					</tr>

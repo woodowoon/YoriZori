@@ -47,8 +47,14 @@ main {
 
 a > i { display: flex; }
 
-.finished { margin-top: 40px; margin-bottom: 100px; }
-.finishedImage { width: 100% }
+.finished { 
+	margin-top: 40px; margin-bottom: 100px; 
+}
+.finishedImage { 
+	width: 100%;
+	max-height: 800px;
+	object-fit: cover;
+}
 
 .recipe-icon { color: #666; text-align: center; display: flex; }
 .recipe-info { color: #666; text-align: center; display: flex; padding-top: 5px; }
@@ -101,16 +107,13 @@ a > i { display: flex; }
 .reply-form .btnReply:hover, .reply-form .btnReply:active  { background-color: #333; color: #fff; }
 
 .editor { color: #333; font-size: 20px; font-weight: 300; width: 90%; margin: 50px auto 0 auto; }
+.editor .image { width: 100%!important; }
 .recipe-detail .editor img {
 	max-height: 400px;
 	display: block;
 	margin: 0 auto;
 }
-img {
-	max-height: 400px;
-	display: block;
-	margin: 0 auto;
-	}
+
 
 .ck.ck-editor__main>.ck-editor__editable:not(.ck-focused) { border: none; }
 
@@ -125,6 +128,18 @@ function deleteRecipe() {
 		let url = "${pageContext.request.contextPath}/recipe/delete?" + query;
 		location.href = url;
 	}
+}
+
+function clip(){
+	var url = '';
+	var textarea = document.createElement("textarea");
+	document.body.appendChild(textarea);
+	url = window.document.location.href;
+	textarea.value = url;
+	textarea.select();
+	document.execCommand("copy");
+	document.body.removeChild(textarea);
+	alert("url 복사가 완료 되었습니다.");
 }
 
 function ajaxFun(url, method, query, dataType, fn) {
@@ -198,7 +213,7 @@ $(function() {
 					<a class="ai ai-like like"><i style="color: red;" class="bi bi-heart-fill"></i></a>
 				</c:otherwise>
 			</c:choose>
-			<a class="ai ai-link"><i class="bi bi-link-45deg"></i></a>
+			<a class="ai ai-link" href="" onclick="clip();"><i class="bi bi-link-45deg"></i></a>
 		</div>
 		
 		<div class="finished">
@@ -235,8 +250,9 @@ $(function() {
 			<div>
 				<span><i class="bi bi-record"></i>&nbsp;&nbsp;양념</span>
 				<ul>
-					<li>소금</li>
-					<li>후추</li>
+					<c:forEach var="vo" items="${selist}">
+						<li>${vo.ingredientName}</li>
+					</c:forEach>
 				</ul>
 			</div>
 		</div>
@@ -275,18 +291,22 @@ $(function() {
 		<div class="list">
 			<c:choose>
 				<c:when test="${sessionScope.member.userId==dto.userId}">
-					<button class="btn btn-white" type="button">수정</button>
+					<button class="btn btn-white" type="button" onclick="location.href='${pageContext.request.contextPath}/recipe/update?page=${page}&recipeNum=${dto.recipeNum}';">수정</button>
 					<button class="btn btn-list" type="button" onclick="location.href='${pageContext.request.contextPath}/recipe/feed';">목록</button>
 					<button class="btn btn-white" type="button" onclick="deleteRecipe();">삭제</button>	
 				</c:when>
 				<c:when test="${sessionScope.member.role==0}">
-					<button class="btn btn-white" type="button" >신고</button>
+					<button type="button" class="btn btn-white btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+					 	신고
+					</button>
 					<button class="btn btn-list" type="button" onclick="location.href='${pageContext.request.contextPath}/recipe/feed';">목록</button>
 					<button class="btn btn-white" type="button" onclick="deleteRecipe();">삭제</button>	
 				</c:when>
 				<c:otherwise>
 					<button class="btn btn-list" type="button" onclick="location.href='${pageContext.request.contextPath}/recipe/feed';">목록</button>
-					<button class="btn btn-white" type="button" >신고</button>	
+					<button type="button" class="btn btn-white btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+					 	신고
+					</button>	
 				</c:otherwise>
 			</c:choose>  
 			
@@ -323,4 +343,26 @@ $(function() {
 		<div id="listReply"></div>
 		
 	</div>
+	
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">신고</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+	        <p> 닉네임 : ${dto.nickName} </p>
+	        <p> 신고사유 </p>
+	        <textarea rows="7" cols="63"></textarea>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	        <button type="button" class="btn btn-primary">신고</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
 </div>
