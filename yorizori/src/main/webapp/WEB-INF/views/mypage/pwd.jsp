@@ -64,7 +64,7 @@ function sendOk() {
                 
                 <div class="btn-div">
                 	<button type="button" class="btn btn-list" onclick="sendOk();">확인</button>
-                	<button type="button" class="btn btn-white" onclick="location.href='${pageContext.request.contextPath}/mypage/main'">취소</button>
+                	<button type="button" class="btn btn-white" onclick="location.href='${pageContext.request.contextPath}/mypage/main?userId=${sessionScope.member.userId}'">취소</button>
                 </div>
 			</form>
 

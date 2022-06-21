@@ -265,7 +265,7 @@ function changeEmail() {
 			<div class="btn-div">
 		        <div class="text-center">
 		            <button type="button" name="sendButton" class="btn btn-list" onclick="modifyOk();">수정</button>
-		            <button type="button" class="btn btn-white" onclick="location.href='${pageContext.request.contextPath}/mypage/main';">취소</button>
+		            <button type="button" class="btn btn-white" onclick="location.href='${pageContext.request.contextPath}/mypage/main?userId=${sessionScope.member.userId}';">취소</button>
 		        </div>
 		    </div>
 

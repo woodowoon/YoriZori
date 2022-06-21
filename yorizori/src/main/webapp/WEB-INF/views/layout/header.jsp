@@ -122,7 +122,7 @@
 									<img src="${pageContext.request.contextPath}/resources/images/nav-recipe.png" style="width: 40px;">
 								</a>
 								<c:if test="${sessionScope.member.role == 1 || sessionScope.member.role == 2}">
-									<a href="${pageContext.request.contextPath}/mypage/main" title="마이페이지">
+									<a href="${pageContext.request.contextPath}/mypage/main?userId=${sessionScope.member.userId}" title="마이페이지">
 										<img src="${pageContext.request.contextPath}/resources/images/nav-mypage2.png" style="width: 40px;">
 									</a>
 								</c:if>

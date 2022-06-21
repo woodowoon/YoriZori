@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mypage">
+	<insert id="insertMemberImage" parameterType="com.sp.yorizori.mypage.Mypage">
+		INSERT INTO memberImage(userId, memberImageName)
+		VALUES (#{userId}, #{memberImageName, jdbcType=VARCHAR})
+	</insert>
+	
+	<update id="updateMemberImage" parameterType="com.sp.yorizori.mypage.Mypage">
+		UPDATE memberImage SET memberImageName=#{memberImageName}
+		WHERE userId = #{userId}
+	</update>
+	
+	<delete id="deleteMemberImage" parameterType="String">
+		DELETE FROM memberImage WHERE userId = #{userId}
+	</delete>
+	
+	<select id="readMypage" parameterType="String" resultType="com.sp.yorizori.mypage.Mypage">
+		SELECT m.userId, nickName, memberImageName, NVL(recipeCount, 0) recipeCount, 
+		    NVL(followerCount ,0) followerCount, NVL(followingCount, 0) followingCount
+		FROM member m
+		LEFT OUTER JOIN (
+		    SELECT i.userId, memberImageName
+		    FROM memberImage i
+		) i ON m.userid = i.userId
+		LEFT OUTER JOIN (
+		    SELECT r.userId, COUNT(*) recipeCount
+		    FROM recipe r
+		    GROUP BY r.userId
+		) r ON m.userId = r.userId
+		LEFT OUTER JOIN (
+		    SELECT f.following_Id, COUNT(*) followerCount
+		    FROM follow f
+		    GROUP BY f.following_Id
+		) f ON m.userId = f.following_Id
+		LEFT OUTER JOIN (
+		    SELECT f.follower_Id, COUNT(*) followingCount
+		    FROM follow f
+		    GROUP BY f.follower_Id
+		) f ON m.userId = f.follower_Id
+		WHERE m.userId = #{userId}
+	</select>
+	
+	<select id="listFollower" parameterType="String" resultType="com.sp.yorizori.mypage.Mypage">
+		SELECT follower_id followId, nickName followNickName, memberImageName followImageName
+		FROM follow f
+		LEFT OUTER JOIN (
+		    SELECT userId, nickName
+		    FROM member m
+		) m ON f.follower_id = m.userId
+		LEFT OUTER JOIN (
+		    SELECT i.userId, memberImageName
+		    FROM memberImage i
+		) i ON f.follower_id = i.userId
+		WHERE following_id = #{userId}
+	</select>
+	
+	<select id="listFollowing" parameterType="String" resultType="com.sp.yorizori.mypage.Mypage">
+		SELECT following_id followId, nickName followNickName, memberImageName followImageName
+		FROM follow f
+		LEFT OUTER JOIN (
+		    SELECT userId, nickName
+		    FROM member m
+		) m ON f.following_id = m.userId
+		LEFT OUTER JOIN (
+		    SELECT i.userId, memberImageName
+		    FROM memberImage i
+		) i ON f.following_id = i.userId
+		WHERE follower_id = #{userId}
+	</select>
+	
+	<select id="dataCountMyrecipe" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM recipe r
+		LEFT OUTER JOIN (
+		    SELECT p.recipeNum, recipePhotoName
+		    FROM recipePhoto p
+		) p ON r.recipeNum = p.recipeNum
+		WHERE userId = #{userId}
+	</select>
+	
+	<select id="listMyrecipe" parameterType="String" resultType="com.sp.yorizori.mypage.Mypage">
+		SELECT r.recipeNum recipeNum, userId, recipeSubject, recipePhotoName
+		FROM recipe r
+		LEFT OUTER JOIN (
+		    SELECT p.recipeNum, recipePhotoName
+		    FROM recipePhoto p
+		) p ON r.recipeNum = p.recipeNum
+		WHERE userId = #{userId}
+		ORDER BY r.recipeNum DESC
+	</select>
+	
+	<select id="dataCountLike" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM recipeLike l
+		LEFT OUTER JOIN (
+		    SELECT r.recipenum, recipeSubject
+		    FROM recipe r
+		) r ON l.recipenum = r.recipenum
+		LEFT OUTER JOIN (
+		    SELECT p.recipeNum, recipePhotoName
+		    FROM recipePhoto p
+		) p ON r.recipeNum = p.recipeNum
+		WHERE userId = #{userId}
+	</select>
+	
+	<select id="listLike" parameterType="String" resultType="com.sp.yorizori.mypage.Mypage">
+		SELECT l.recipeNum recipeNum, userId, recipeSubject, recipePhotoName
+		FROM recipeLike l
+		LEFT OUTER JOIN (
+		    SELECT r.recipenum, recipeSubject
+		    FROM recipe r
+		) r ON l.recipenum = r.recipenum
+		LEFT OUTER JOIN (
+		    SELECT p.recipeNum, recipePhotoName
+		    FROM recipePhoto p
+		) p ON r.recipeNum = p.recipeNum
+		WHERE userId = #{userId}
+	</select>
+	
+	<select id="dataCountWish" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM classLike l
+		LEFT OUTER JOIN (
+		    SELECT c.classCode, classSubject
+		    FROM classTable c
+		) c ON l.classCode = c.classCode
+		LEFT OUTER JOIN (
+		    SELECT f.classCode, classPhotoName
+		    FROM classFile f
+		) f ON c.classCode = f.classCode
+		WHERE userId = #{userId}
+	</select>
+	
+	<select id="listWish" parameterType="String" resultType="com.sp.yorizori.mypage.Mypage">
+		SELECT l.classCode classCode, userId, classSubject, classPhotoName
+		FROM classLike l
+		LEFT OUTER JOIN (
+		    SELECT c.classCode, classSubject
+		    FROM classTable c
+		) c ON l.classCode = c.classCode
+		LEFT OUTER JOIN (
+		    SELECT f.classCode, classPhotoName
+		    FROM classFile f
+		) f ON c.classCode = f.classCode
+		WHERE userId = #{userId}
+	</select>
+	
+	<select id="dataCountFavorite" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM festivalLike l
+		LEFT OUTER JOIN (
+		    SELECT f.festivalNum, festivalName
+		    FROM festival f
+		) f ON l.festivalNum = f.festivalNum
+		LEFT OUTER JOIN (
+		    SELECT ROWNUM, p.festivalNum, festivalPhotoName
+		    FROM festivalPhoto p
+		    WHERE ROWNUM = 1
+		    ORDER BY festivalPhotoNum ASC
+		) p ON f.festivalNum = p.festivalNum
+		WHERE userId = #{userId}
+	</select>
+	
+	<select id="listFavorite" parameterType="String" resultType="com.sp.yorizori.mypage.Mypage">
+		SELECT l.festivalNum, userId, festivalName, festivalPhotoName
+		FROM festivalLike l
+		LEFT OUTER JOIN (
+		    SELECT f.festivalNum, festivalName
+		    FROM festival f
+		) f ON l.festivalNum = f.festivalNum
+		LEFT OUTER JOIN (
+		    SELECT ROWNUM, p.festivalNum, festivalPhotoName
+		    FROM festivalPhoto p
+		    WHERE ROWNUM = 1
+		    ORDER BY festivalPhotoNum ASC
+		) p ON f.festivalNum = p.festivalNum
+		WHERE userId = #{userId}
+	</select>
+</mapper>

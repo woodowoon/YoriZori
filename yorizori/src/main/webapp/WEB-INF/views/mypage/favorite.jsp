@@ -30,7 +30,7 @@ li { list-style: none; }
 .btn-following { width: 260px; height: 40px; border: 1px solid #0095f6; border-radius: 8px; background-color: #fff; color: #0095f6; font-size: 16px; letter-spacing: 0.03em; }
 
 .feed-subject { width: 950px; height: 80px; margin: auto; border-bottom: 1px solid #d2d2d2; }
-.feed-subject > p { margin: 0; color:#333; font-size: 17px; font-weight: 300; text-align: center; height: 80px; line-height: 110px; }
+.feed-subject > p { cursor: default; margin: 0; color:#333; font-size: 17px; font-weight: 300; text-align: center; height: 80px; line-height: 110px; }
 
 .mypage .myFeed { margin: 4px 25px 50px 25px; }
 .mypage .feed-list { padding: 0; margin: 0; border-bottom: 1px solid #d2d2d2; }
@@ -46,8 +46,11 @@ li { list-style: none; }
 .modal-body ul { margin: 0; padding: 0; }
 .modal-body ul li { display: flex; padding: 10px 0; line-height: 30px; }
 .modal-body ul li div { width: 30px; height: 30px; border: 1px solid #eaeaea; border-radius: 9999px; margin-right: 10px; }
-.btn-sm-follow { width: 80px; height: 30px; border: 1px solid #0095f6; border-radius: 8px; background-color: #0095f6; color: #fff; font-size: 14px; letter-spacing: 0.03em; margin-left: auto; }
-.btn-sm-following { width: 80px; height: 30px; border: 1px solid #0095f6; border-radius: 8px; background-color: #fff; color: #0095f6; font-size: 14px; letter-spacing: 0.03em; margin-left: auto; }
+.btn-sm-follow { width: 80px; height: 31px; border: 1px solid #0095f6; border-radius: 8px; background-color: #0095f6; color: #fff; font-size: 14px; letter-spacing: 0.03em; margin-left: auto; }
+.btn-sm-following { width: 80px; height: 31px; border: 1px solid #0095f6; border-radius: 8px; background-color: #fff; color: #0095f6; font-size: 14px; letter-spacing: 0.03em; margin-left: auto; }
+
+.page-item.active .page-link { background-color: #0095f6; border-color: #0095f6; }
+.page-link, .page-link:hover, .page-link:active { color: #0095f6; }
 
 .offcanvas-title { cursor: pointer; }
 .offcanvas-title:hover, .offcanvas-title:active { color: #0d6efd; }
@@ -72,7 +75,7 @@ li { list-style: none; }
 			</button>
 		</div>
 		<div class="myNickname">
-			닉네임
+			${dto.nickName}
 		</div>
 	</div>
 	<div class="myProfile">
@@ -81,15 +84,15 @@ li { list-style: none; }
 				<img src="${pageContext.request.contextPath}/resources/images/profileImage.png">
 			</div>
 			<div class="myInfo">
-				<p class="count">0</p>
+				<p class="count">${dto.recipeCount}</p>
 				<p class="name">레시피</p>
 			</div>
 			<div class="myInfo" data-bs-toggle="modal" data-bs-target="#exampleModal1" style="cursor: pointer;">
-				<p class="count">0</p>
+				<p class="count">${dto.followerCount}</p>
 				<p class="name">팔로워</p>
 			</div>
 			<div class="myInfo" data-bs-toggle="modal" data-bs-target="#exampleModal2" style="cursor: pointer;">
-				<p class="count">0</p>
+				<p class="count">${dto.followingCount}</p>
 				<p class="name">팔로잉</p>
 			</div>
 		</div>
@@ -104,20 +107,24 @@ li { list-style: none; }
 	
 	<div class="myFeed">
 		<ul class="feed-list clearFix">
-		
+			<c:forEach var="vo" items="${list}">
 				<li>
 					<div class="box">
 						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-						<div class="text">냥냥냥냥냥냥냥냥</div>
+						<div class="text">${vo.festivalName}</div>
 					</div>
 				</li>
-	
+			</c:forEach>
 		</ul>
+	</div>
+	
+	<div class="page-box">
+		${dataCount == 0 ? "관심 등록된 축제가 없습니다." : paging}
 	</div>
 	
 	<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
 		<div class="offcanvas-header">
-			<h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel"  onclick="location.href='${pageContext.request.contextPath}/mypage/main'">마이페이지</h5>
+			<h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel"  onclick="location.href='${pageContext.request.contextPath}/mypage/main?userId=${sessionScope.member.userId}'">마이페이지</h5>
 			<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 		</div>
 		
@@ -204,12 +211,12 @@ li { list-style: none; }
 				</div>
 				<div class="modal-body">
 					<ul>
-					
-						<li>
-							<div></div>
-							닉네임
-						</li>
-						
+						<c:forEach var="vo" items="${listFollower}">
+							<li>
+								<div></div>
+								${vo.followNickName}
+							</li>
+						</c:forEach>
 					</ul>
 				</div>
 				<div class="modal-footer">
@@ -228,13 +235,13 @@ li { list-style: none; }
 				</div>
 				<div class="modal-body">
 					<ul>
-					
-						<li>
-							<div></div>
-							닉네임
-							<button class="btn-sm-following" type="button">팔로잉</button>
-						</li>
-						
+						<c:forEach var="vo" items="${listFollowing}">
+							<li>
+								<div></div>
+								${vo.followNickName}
+								<button class="btn-sm-following" type="button">팔로잉</button>
+							</li>
+						</c:forEach>
 					</ul>
 				</div>
 				<div class="modal-footer">
