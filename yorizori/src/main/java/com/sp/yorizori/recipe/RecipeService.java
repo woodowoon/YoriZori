@@ -14,12 +14,22 @@ public interface RecipeService {
 	
 	// article
 	public Recipe readRecipe(int recipeNum);
+	public Recipe preReadRecipe(Map<String, Object> map);
+	public Recipe nextReadRecipe(Map<String, Object> map);
 	
 	// 좋아요
 	public void insertRecipeLike(Map<String, Object> map) throws Exception;
 	public void deleteRecipeLike(Map<String, Object> map) throws Exception;
 	public int RecipeLikeCount(int recipeNum);
 	public boolean isRecipeLike(Map<String, Object> map);
+	
+	public void updateHitCount(int recipeNum) throws Exception;
+	
+	// article 재료 리스트
+	public List<Recipe> readRecipeingredient(int recipeNum);
+	
+	public void updateRecipe(Recipe dto, String pathname) throws Exception;
+	public void deleteRecipe(int recipeNum, String userId, int role) throws Exception;
 	
 	// 카테고리 리스트
 	public List<Recipe> listcaseCategory(Map<String, Object> map);

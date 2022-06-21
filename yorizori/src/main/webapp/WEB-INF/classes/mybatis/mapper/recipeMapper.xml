@@ -158,4 +158,75 @@
 	    WHERE r.recipeNum = #{recipeNum}
 	</select>
 	
+	<select id="preReadRecipe" parameterType="map" resultType="com.sp.yorizori.recipe.Recipe">
+		SELECT * FROM (
+		    SELECT r.recipeNum, recipeSubject, NVL(recipeLikeCount, 0) recipeLikeCount, r.countryNum countryNum, follower_id, r.userId userId
+		        FROM recipe r
+		        JOIN member m ON m.userId = r.userId
+		        LEFT OUTER JOIN (
+		            SELECT recipeNum, COUNT(*) recipeLikeCount FROM recipeLike
+		            GROUP BY recipeNum 
+		        ) rl ON rl.recipeNum = r.recipeNum
+		        LEFT OUTER JOIN (
+		            SELECT follower_id, following_id FROM follow
+		        ) f ON r.userId = f.following_id
+		    <where>
+				<choose>
+					<when test="isFollow == true">
+						follower_id = #{userId} OR (m.userId = #{userId})
+					</when>
+					<otherwise>
+						r.countryNum = #{userCountryNum} OR (m.userId = #{userId})
+					</otherwise>
+				</choose>	
+				AND (r.recipeNum &gt; #{recipeNum})	             
+             </where>
+		    ORDER BY recipeLikeCount DESC
+		)WHERE ROWNUM = 1
+	</select>
+	
+	<select id="nextReadRecipe" parameterType="map" resultType="com.sp.yorizori.recipe.Recipe">
+		SELECT * FROM (
+		    SELECT r.recipeNum, recipeSubject, NVL(recipeLikeCount, 0) recipeLikeCount, r.countryNum countryNum, follower_id, r.userId userId
+		        FROM recipe r
+		        JOIN member m ON m.userId = r.userId
+		        LEFT OUTER JOIN (
+		            SELECT recipeNum, COUNT(*) recipeLikeCount FROM recipeLike
+		            GROUP BY recipeNum 
+		        ) rl ON rl.recipeNum = r.recipeNum
+		        LEFT OUTER JOIN (
+		            SELECT follower_id, following_id FROM follow
+		        ) f ON r.userId = f.following_id
+		    <where>
+				<choose>
+					<when test="isFollow == true">
+						follower_id = #{userId} OR (m.userId = #{userId})
+					</when>
+					<otherwise>
+						r.countryNum = #{userCountryNum} OR (m.userId = #{userId})
+					</otherwise>
+				</choose>	
+				AND (r.recipeNum &lt; #{recipeNum})	             
+             </where>
+		    ORDER BY recipeLikeCount DESC
+		)WHERE ROWNUM = 1
+	</select>
+	
+	<update id="updateHitCount" parameterType="Integer">
+		UPDATE recipe SET recipeHitCount = recipeHitCount+1 WHERE recipeNum = #{recipeNum}
+	</update>
+	
+	<select id="readRecipeingredient" parameterType="Integer" resultType="com.sp.yorizori.recipe.Recipe">
+		SELECT recipeNum, il.ingredientCode ingredientCode, ingredientName, parent
+		    FROM ingredientList il
+		    LEFT OUTER JOIN (
+		        SELECT ingredientCode, ingredientName, parent FROM ingredient i
+		    ) i ON i.ingredientCode = il.ingredientCode
+		WHERE recipeNum = #{recipeNum}
+	</select>
+	
+	<delete id="deleteRecipe" parameterType="Integer">
+		DELETE FROM recipe WHERE recipeNum = #{recipeNum}
+	</delete>
+	
 </mapper>

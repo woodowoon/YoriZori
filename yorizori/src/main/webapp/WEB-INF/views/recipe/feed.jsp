@@ -89,8 +89,6 @@ function ajaxFun(url, method, query, dataType, fn) {
 		</div>
 		
 		<div class="text-area">
-			<p> ${dto.recipeNum} </p>
-			<p> ${dto.userRecipeLike} </p>
 			<c:choose>
 				<c:when test="${dto.userRecipeLike == 0}">
 					<!-- 좋아요X -->

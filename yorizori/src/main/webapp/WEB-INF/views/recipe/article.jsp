@@ -104,19 +104,77 @@ a > i { display: flex; }
 .recipe-detail .editor img {
 	max-height: 400px;
 	display: block;
-	margin: auto;
+	margin: 0 auto;
 }
+img {
+	max-height: 400px;
+	display: block;
+	margin: 0 auto;
+	}
 
 .ck.ck-editor__main>.ck-editor__editable:not(.ck-focused) { border: none; }
-
-
 
 </style>
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/boot-board.css" type="text/css">
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/vendor/ckeditor5/ckeditor.js"></script>
-
 <script type="text/javascript">
+function deleteRecipe() {
+	if(confirm("레시피를 삭제하시겠습니까 ? ")) {
+		let query = "${query}&recipeNum=${dto.recipeNum}";
+		let url = "${pageContext.request.contextPath}/recipe/delete?" + query;
+		location.href = url;
+	}
+}
+
+function ajaxFun(url, method, query, dataType, fn) {
+	$.ajax({
+		type:method,
+		url:url,
+		data:query,
+		dataType:dataType,
+		success:function(data) {
+			fn(data);
+		},
+		beforeSend:function(jqXHR) {
+			jqXHR.setRequestHeader("AJAX", true);
+		},
+		error:function(jqXHR) {
+			if(jqXHR.status === 403) {
+				login();
+				return false;
+			} else if(jqXHR.status === 400) {
+				alert("요청 처리가 실패 했습니다.");
+				return false;
+			}
+			console.log(jqXHR.responseText);
+		}
+	});
+}
+
+$(function() {
+	$(".like").click(function() {
+		let isRecipeLike = "${isRecipeLike}";
+		
+		let url = "${pageContext.request.contextPath}/recipe/insertRecipeLike";
+		let recipeNum = "${dto.recipeNum}";
+		let query = "recipeNum=" + recipeNum + "&isRecipeLike=" + isRecipeLike;
+		
+		const fn = function(data) {
+			let state = data.state;
+			if(state === "true") {
+				location.href="${pageContext.request.contextPath}/recipe/article?${query}&recipeNum=${dto.recipeNum}";
+				
+			} else if(state === "false") {
+				alert("좋아요 실패.");
+			}
+		};
+		
+		ajaxFun(url, "post", query, "json", fn);
+		
+	});
+});
+
 
 </script>
 
@@ -129,9 +187,17 @@ a > i { display: flex; }
 			<li>작성자&nbsp;&nbsp;&nbsp;&nbsp;${dto.nickName}</li>
 			<li>등록일&nbsp;&nbsp;&nbsp;&nbsp;${dto.recipeReg_date}</li>
 			<li>조회수&nbsp;&nbsp;&nbsp;&nbsp;${dto.recipeHitCount}</li>
+			<li>좋아요&nbsp;&nbsp;&nbsp;&nbsp;${dto.recipeLikeCount}개</li>
 		</ul>
 		<div class="icon-container">
-			<a class="ai ai-like"><i class="bi bi-heart"></i></a>
+			<c:choose>
+				<c:when test="${isRecipeLike == false}">
+					<a class="ai ai-like like"><i class="bi bi-heart"></i></a>
+				</c:when>
+				<c:otherwise>
+					<a class="ai ai-like like"><i style="color: red;" class="bi bi-heart-fill"></i></a>
+				</c:otherwise>
+			</c:choose>
 			<a class="ai ai-link"><i class="bi bi-link-45deg"></i></a>
 		</div>
 		
@@ -140,7 +206,14 @@ a > i { display: flex; }
 		</div>
 		
 		<div class="recipe-icon">
-			<i class="bi bi-people-fill"></i>
+			<c:choose>
+				<c:when test="${dto.recipeServing > 1}">
+					<i class="bi bi-people-fill"></i>
+				</c:when>
+				<c:otherwise>
+					<i class="bi bi-person-fill"></i>
+				</c:otherwise>
+			</c:choose>
 			<i class="bi bi-clock-fill"></i>
 			<i class="bi bi-bar-chart-fill"></i>
 		</div>
@@ -154,9 +227,9 @@ a > i { display: flex; }
 			<div>
 				<span><i class="bi bi-record"></i>&nbsp;&nbsp;재료</span>
 				<ul>
-					<li>연어</li>
-					<li>오이</li>
-					<li>토마토</li>
+					<c:forEach var="vo" items="${list}">
+						<li>${vo.ingredientName}</li>
+					</c:forEach>
 				</ul>
 			</div>
 			<div>
@@ -177,8 +250,16 @@ a > i { display: flex; }
 	</div>
 	
 	<div class="writer-container">
+		 
 		<div class="writer-image">
-			<img class="profileImage" src="${pageContext.request.contextPath}/resources/images/profileImage.png">
+			<c:choose>
+				<c:when test="${dto.memberImageName eq null}">
+					<img class="profileImage" src="${pageContext.request.contextPath}/resources/images/profileImage.png">
+				</c:when>
+				<c:otherwise>
+					<img class="profileImage" src="${pageContext.request.contextPath}/uploads/photo/${dto.memberImageName}" style="width: 120px; height: 120px;">
+				</c:otherwise>
+			</c:choose>  
 		</div>
 		<div class="writer-nickName">
 			<a class="writer">${dto.nickName}</a>
@@ -188,15 +269,31 @@ a > i { display: flex; }
 	<div class="prev-next">
 		<div class="prev">
 			<a class="ai ai-left"><i class="bi bi-chevron-left"></i></a>
-			<a class="prev-subject">딸기롤케이크</a>
+			<a class="prev-subject" href="${pageContext.request.contextPath}/recipe/article?${query}&recipeNum=${preReadDto.recipeNum}">${preReadDto.recipeSubject}</a>
+			
 		</div>
 		<div class="list">
-			<button class="btn btn-white" type="button">수정</button>
-			<button class="btn btn-list" type="button">목록</button>
-			<button class="btn btn-white" type="button">삭제</button>
+			<c:choose>
+				<c:when test="${sessionScope.member.userId==dto.userId}">
+					<button class="btn btn-white" type="button">수정</button>
+					<button class="btn btn-list" type="button" onclick="location.href='${pageContext.request.contextPath}/recipe/feed';">목록</button>
+					<button class="btn btn-white" type="button" onclick="deleteRecipe();">삭제</button>	
+				</c:when>
+				<c:when test="${sessionScope.member.role==0}">
+					<button class="btn btn-white" type="button" >신고</button>
+					<button class="btn btn-list" type="button" onclick="location.href='${pageContext.request.contextPath}/recipe/feed';">목록</button>
+					<button class="btn btn-white" type="button" onclick="deleteRecipe();">삭제</button>	
+				</c:when>
+				<c:otherwise>
+					<button class="btn btn-list" type="button" onclick="location.href='${pageContext.request.contextPath}/recipe/feed';">목록</button>
+					<button class="btn btn-white" type="button" >신고</button>	
+				</c:otherwise>
+			</c:choose>  
+			
+			
 		</div>
 		<div class="next">
-			<a class="next-subject">수박계란말이</a>
+			<a class="next-subject" href="${pageContext.request.contextPath}/recipe/article?${query}&recipeNum=${nextReadDto.recipeNum}">${nextReadDto.recipeSubject}</a>
 			<a class="ai ai-right"><i class="bi bi-chevron-right"></i></a>
 		</div>
 	</div>
@@ -224,5 +321,6 @@ a > i { display: flex; }
 		</form>
 				
 		<div id="listReply"></div>
+		
 	</div>
 </div>

@@ -61,6 +61,7 @@ public class RecipeController {
 		int end = current_page * rows;
 		map.put("start", start);
 		map.put("end", end);
+		map.put("dataCount", dataCount);
 		
 		String cp = req.getContextPath();
 		String query = "";
@@ -137,22 +138,34 @@ public class RecipeController {
 		
 		String query = "page=" + page;
 		
+		service.updateHitCount(recipeNum);
 		Recipe dto = service.readRecipe(recipeNum);
+		List<Recipe> list = service.readRecipeingredient(recipeNum);
 		
 		if(dto == null) {
 			return "redirect:/recipe/peed?" + query;
 		}
 		
 		Map<String, Object> map = new HashMap<String, Object>();
+		boolean isFollow = service.isFollow(map);
+		
+		map.put("isFollow", isFollow);
 		map.put("recipeNum", recipeNum);
 		map.put("userId", info.getUserId());
 		map.put("nickName", info.getNickName());
+		map.put("userCountryNum", info.getCountryNum());
+		
+		Recipe preReadDto = service.preReadRecipe(map);
+		Recipe nextReadDto = service.nextReadRecipe(map);
 		
 		boolean isRecipeLike = service.isRecipeLike(map);
 		
+		model.addAttribute("list", list);
 		model.addAttribute("dto", dto);
 		model.addAttribute("page", page);
 		model.addAttribute("query", query);
+		model.addAttribute("preReadDto", preReadDto);
+		model.addAttribute("nextReadDto", nextReadDto);
 		model.addAttribute("isRecipeLike", isRecipeLike);
 		
 		return ".recipe.article";
@@ -173,5 +186,61 @@ public class RecipeController {
 		return model;
 	}
 	
+	@RequestMapping(value = "delete")
+	public String delete(
+			@RequestParam int recipeNum,
+			@RequestParam String page,
+			HttpSession session) throws Exception {
+		
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		String query = "page=" + page;
+		
+		try {
+			
+			service.deleteRecipe(recipeNum, info.getUserId(), info.getRole());
+			
+		} catch (Exception e) {
+			
+		}
+		
+		return "redirect:/recipe/feed?" + query;
+	}
+	
+	
+	@RequestMapping(value = "insertRecipeLike", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> insertRecipeLike (
+			@RequestParam int recipeNum,
+			@RequestParam boolean isRecipeLike,
+			HttpSession session
+			) throws Exception {
+		
+		String state = "true";
+		int recipeLikeCount = 0;
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("recipeNum", recipeNum);
+		map.put("userId", info.getUserId());
+		
+		try {
+			if(isRecipeLike) {
+				service.deleteRecipeLike(map);
+			} else {
+				service.insertRecipeLike(map);
+			}
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		recipeLikeCount = service.RecipeLikeCount(recipeNum);
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("state", state);
+		model.put("recipeLikeCount", recipeLikeCount);
+		
+		return model;
+	}
 	
 }

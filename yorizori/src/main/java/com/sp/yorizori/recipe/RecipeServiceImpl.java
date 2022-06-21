@@ -202,4 +202,73 @@ public class RecipeServiceImpl implements RecipeService {
 		return b;
 	}
 
+	@Override
+	public void updateHitCount(int recipeNum) throws Exception {
+		try {
+			dao.updateData("recipe.updateHitCount", recipeNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	@Override
+	public List<Recipe> readRecipeingredient(int recipeNum) {
+		List<Recipe> list = null;
+		
+		try {
+			list = dao.selectList("recipe.readRecipeingredient", recipeNum);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+	@Override
+	public void updateRecipe(Recipe dto, String pathname) throws Exception {
+		
+	}
+
+	@Override
+	public void deleteRecipe(int recipeNum, String userId, int role) throws Exception {
+		try {
+			Recipe dto = readRecipe(recipeNum);
+			if(dto == null || (role > 0 && ! dto.getUserId().equals(userId))) {
+				return;
+			}
+			
+			dao.deleteData("recipe.deleteRecipe", recipeNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	@Override
+	public Recipe preReadRecipe(Map<String, Object> map) {
+		Recipe dto = null;
+		
+		try {
+			dto = dao.selectOne("recipe.preReadRecipe", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
+
+	@Override
+	public Recipe nextReadRecipe(Map<String, Object> map) {
+		Recipe dto = null;
+		
+		try {
+			dto = dao.selectOne("recipe.nextReadRecipe", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
 }
