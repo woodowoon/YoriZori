@@ -28,6 +28,9 @@ main { background-color: #fff; font-family: 'Noto Sans KR', sans-serif; color: #
 .in-subject > a { display: block; overflow: hidden; text-overflow: ellipsis; line-height: 18px; white-space: nowrap; }
 .in-subject > a:hover, .in-subject > a:active { text-decoration: none; color: #0d6efd; }
 
+.page-item.active .page-link { background-color: #0095f6; border-color: #0095f6; }
+.page-link, .page-link:hover, .page-link:active { color: #0095f6; }
+
 .offcanvas-title { cursor: pointer; }
 .offcanvas-title:hover, .offcanvas-title:active { color: #0d6efd; }
 .offcanvas-start { width: 300px; border-right: none; }
@@ -70,51 +73,32 @@ main { background-color: #fff; font-family: 'Noto Sans KR', sans-serif; color: #
 	</div>
 
 	<ul class="qna-list">
-		
-		<li class="qna">
-			<div class="box">
-				<div class="category">레시피</div>
-				<div class="subject">
-					<div class="in-subject">
-						<i class="bi bi-lock"></i>
-						<a href="#">냥냥 레시피 문의</a>
-					</div>
-				</div>
-				<div class="reg_date">2022.06.18</div>
-				<div class="state">미답변</div>
-			</div>
-		</li>
-		<li class="qna">
-			<div class="box">
-				<div class="category">레시피</div>
-				<div class="subject">
-					<div class="in-subject">
-						<i class="bi bi-lock"></i>
-						<a href="#">냥냥 레시피 문의</a>
-					</div>
-				</div>
-				<div class="reg_date">2022.06.18</div>
-				<div class="state">미답변</div>
-			</div>
-		</li>
-		<li class="qna">
-			<div class="box">
-				<div class="category">레시피</div>
-				<div class="subject">
-					<div class="in-subject">
-						<i class="bi bi-lock"></i>
-						<a href="#">냥냥 레시피 문의</a>
-					</div>
-				</div>
-				<div class="reg_date">2022.06.18</div>
-				<div class="state">미답변</div>
-			</div>
-		</li>
-			
+		<c:choose>
+			<c:when test="${list.size() != 0}">
+				<c:forEach var="dto" items="${list}">
+					<li class="qna">
+						<div class="box">
+							<div class="category">${dto.categoryName}</div>
+							<div class="subject">
+								<div class="in-subject">
+									<i class="bi bi-${dto.privacy == 1 ? 'lock' : 'unlock'}"></i>
+									<a href="${articleUrl}&num=${dto.num}">${dto.subject}</a>
+								</div>
+							</div>
+							<div class="reg_date">${dto.reg_date}</div>
+							<div class="state">${dto.state == true ? "답변" : "미답변"}</div>
+						</div>
+					</li>
+				</c:forEach>
+			</c:when>
+			<c:otherwise>
+				<div style="padding: 50px 0; text-align: center;">등록된 문의가 없습니다.</div>
+			</c:otherwise>
+		</c:choose>	
 	</ul>
 	
 	<div class="page-box">
-		1 2 3
+		${paging}
 	</div>
 	
 	<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">

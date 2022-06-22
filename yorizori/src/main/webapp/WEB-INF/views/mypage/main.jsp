@@ -115,23 +115,23 @@ li { list-style: none; }
 	</div>
 	
 	<div class="myFeed">
-		<c:choose>
-			<c:when test="${list.size() != 0}">
-				<ul class="feed-list clearFix">
+		<ul class="feed-list clearFix">
+			<c:choose>
+				<c:when test="${list.size() != 0}">
 					<c:forEach var="vo" items="${list}">
 						<li>
-							<div class="box">
+							<div class="box" onclick="location.href='${articleUrl}&recipeNum=${vo.recipeNum}'">
 								<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
 								<div class="text">${vo.recipeSubject}</div>
 							</div>
 						</li>
 					</c:forEach>
-				</ul>
-			</c:when>
-			<c:otherwise>
-				<div style="padding: 50px 0; text-align: center;">등록된 레시피가 없습니다.</div>
-			</c:otherwise>
-		</c:choose>
+				</c:when>
+				<c:otherwise>
+					<div style="padding: 50px 0; text-align: center;">등록된 레시피가 없습니다.</div>
+				</c:otherwise>
+			</c:choose>
+		</ul>
 	</div>
 	
 	<div class="page-box">

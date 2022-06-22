@@ -16,7 +16,7 @@
 		DELETE FROM memberImage WHERE userId = #{userId}
 	</delete>
 	
-	<select id="readMypage" parameterType="String" resultType="com.sp.yorizori.mypage.Mypage">
+	<select id="readMypage" parameterType="map" resultType="com.sp.yorizori.mypage.Mypage">
 		SELECT m.userId, nickName, memberImageName, NVL(recipeCount, 0) recipeCount, 
 		    NVL(followerCount ,0) followerCount, NVL(followingCount, 0) followingCount
 		FROM member m
@@ -42,7 +42,7 @@
 		WHERE m.userId = #{userId}
 	</select>
 	
-	<select id="listFollower" parameterType="String" resultType="com.sp.yorizori.mypage.Mypage">
+	<select id="listFollower" parameterType="map" resultType="com.sp.yorizori.mypage.Mypage">
 		SELECT follower_id followId, nickName followNickName, memberImageName followImageName
 		FROM follow f
 		LEFT OUTER JOIN (
@@ -56,7 +56,7 @@
 		WHERE following_id = #{userId}
 	</select>
 	
-	<select id="listFollowing" parameterType="String" resultType="com.sp.yorizori.mypage.Mypage">
+	<select id="listFollowing" parameterType="map" resultType="com.sp.yorizori.mypage.Mypage">
 		SELECT following_id followId, nickName followNickName, memberImageName followImageName
 		FROM follow f
 		LEFT OUTER JOIN (
@@ -80,15 +80,19 @@
 		WHERE userId = #{userId}
 	</select>
 	
-	<select id="listMyrecipe" parameterType="String" resultType="com.sp.yorizori.mypage.Mypage">
-		SELECT r.recipeNum recipeNum, userId, recipeSubject, recipePhotoName
-		FROM recipe r
-		LEFT OUTER JOIN (
-		    SELECT p.recipeNum, recipePhotoName
-		    FROM recipePhoto p
-		) p ON r.recipeNum = p.recipeNum
-		WHERE userId = #{userId}
-		ORDER BY r.recipeNum DESC
+	<select id="listMyrecipe" parameterType="map" resultType="com.sp.yorizori.mypage.Mypage">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+				SELECT r.recipeNum recipeNum, userId, recipeSubject, recipePhotoName
+				FROM recipe r
+				LEFT OUTER JOIN (
+				    SELECT p.recipeNum, recipePhotoName
+				    FROM recipePhoto p
+				) p ON r.recipeNum = p.recipeNum
+				WHERE userId = #{userId}
+				ORDER BY r.recipeNum DESC
+			) tb WHERE ROWNUM &lt;= #{end}
+		) WHERE rnum &gt;= #{start}	
 	</select>
 	
 	<select id="dataCountLike" parameterType="map" resultType="Integer">
@@ -105,18 +109,22 @@
 		WHERE userId = #{userId}
 	</select>
 	
-	<select id="listLike" parameterType="String" resultType="com.sp.yorizori.mypage.Mypage">
-		SELECT l.recipeNum recipeNum, userId, recipeSubject, recipePhotoName
-		FROM recipeLike l
-		LEFT OUTER JOIN (
-		    SELECT r.recipenum, recipeSubject
-		    FROM recipe r
-		) r ON l.recipenum = r.recipenum
-		LEFT OUTER JOIN (
-		    SELECT p.recipeNum, recipePhotoName
-		    FROM recipePhoto p
-		) p ON r.recipeNum = p.recipeNum
-		WHERE userId = #{userId}
+	<select id="listLike" parameterType="map" resultType="com.sp.yorizori.mypage.Mypage">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+				SELECT l.recipeNum recipeNum, userId, recipeSubject, recipePhotoName
+				FROM recipeLike l
+				LEFT OUTER JOIN (
+				    SELECT r.recipenum, recipeSubject
+				    FROM recipe r
+				) r ON l.recipenum = r.recipenum
+				LEFT OUTER JOIN (
+				    SELECT p.recipeNum, recipePhotoName
+				    FROM recipePhoto p
+				) p ON r.recipeNum = p.recipeNum
+				WHERE userId = #{userId}
+			) tb WHERE ROWNUM &lt;= #{end}
+		) WHERE rnum &gt;= #{start}	
 	</select>
 	
 	<select id="dataCountWish" parameterType="map" resultType="Integer">
@@ -133,18 +141,22 @@
 		WHERE userId = #{userId}
 	</select>
 	
-	<select id="listWish" parameterType="String" resultType="com.sp.yorizori.mypage.Mypage">
-		SELECT l.classCode classCode, userId, classSubject, classPhotoName
-		FROM classLike l
-		LEFT OUTER JOIN (
-		    SELECT c.classCode, classSubject
-		    FROM classTable c
-		) c ON l.classCode = c.classCode
-		LEFT OUTER JOIN (
-		    SELECT f.classCode, classPhotoName
-		    FROM classFile f
-		) f ON c.classCode = f.classCode
-		WHERE userId = #{userId}
+	<select id="listWish" parameterType="map" resultType="com.sp.yorizori.mypage.Mypage">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+				SELECT l.classCode classCode, userId, classSubject, classPhotoName
+				FROM classLike l
+				LEFT OUTER JOIN (
+				    SELECT c.classCode, classSubject
+				    FROM classTable c
+				) c ON l.classCode = c.classCode
+				LEFT OUTER JOIN (
+				    SELECT f.classCode, classPhotoName
+				    FROM classFile f
+				) f ON c.classCode = f.classCode
+				WHERE userId = #{userId}
+			) tb WHERE ROWNUM &lt;= #{end}
+		) WHERE rnum &gt;= #{start}	
 	</select>
 	
 	<select id="dataCountFavorite" parameterType="map" resultType="Integer">
@@ -163,19 +175,137 @@
 		WHERE userId = #{userId}
 	</select>
 	
-	<select id="listFavorite" parameterType="String" resultType="com.sp.yorizori.mypage.Mypage">
-		SELECT l.festivalNum, userId, festivalName, festivalPhotoName
-		FROM festivalLike l
-		LEFT OUTER JOIN (
-		    SELECT f.festivalNum, festivalName
-		    FROM festival f
-		) f ON l.festivalNum = f.festivalNum
-		LEFT OUTER JOIN (
-		    SELECT ROWNUM, p.festivalNum, festivalPhotoName
-		    FROM festivalPhoto p
-		    WHERE ROWNUM = 1
-		    ORDER BY festivalPhotoNum ASC
-		) p ON f.festivalNum = p.festivalNum
-		WHERE userId = #{userId}
+	<select id="listFavorite" parameterType="map" resultType="com.sp.yorizori.mypage.Mypage">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+				SELECT l.festivalNum, userId, festivalName, festivalPhotoName
+				FROM festivalLike l
+				LEFT OUTER JOIN (
+				    SELECT f.festivalNum, festivalName
+				    FROM festival f
+				) f ON l.festivalNum = f.festivalNum
+				LEFT OUTER JOIN (
+				    SELECT ROWNUM, p.festivalNum, festivalPhotoName
+				    FROM festivalPhoto p
+				    WHERE ROWNUM = 1
+				    ORDER BY festivalPhotoNum ASC
+				) p ON f.festivalNum = p.festivalNum
+				WHERE userId = #{userId}
+			) tb WHERE ROWNUM &lt;= #{end}
+		) WHERE rnum &gt;= #{start}	
+			
+	</select>
+	
+	<select id="listContest" parameterType="map" resultType="com.sp.yorizori.mypage.MyEvent">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+				SELECT p.contestNum, userId, TO_CHAR(reg_date, 'YYYY-MM-DD') reg_date, subject contestSubject
+				FROM participation p
+				LEFT OUTER JOIN (
+				    SELECT c.contestNum, subject
+				    FROM contest c
+				) c ON p.contestNum = c.contestNum
+				WHERE userId = #{userId}
+			) tb WHERE ROWNUM &lt;= #{end}
+		) WHERE rnum &gt;= #{start}	
+	</select>
+	
+	<select id="dataCountContest" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0) contestCount FROM (
+		    SELECT p.contestNum, userId, reg_date, subject contestSubject
+		    FROM participation p
+		    LEFT OUTER JOIN (
+		        SELECT c.contestNum, subject
+		        FROM contest c
+		    ) c ON p.contestNum = c.contestNum
+		    WHERE userId = #{userId}
+		)
+	</select>
+	
+	<select id="listUsable" parameterType="map" resultType="com.sp.yorizori.mypage.MyEvent">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+				SELECT u.eventNum, userId, orderCode, couponName, discountPrice, 
+					TO_CHAR(createTime, 'YYYY-MM-DD') createTime, TO_CHAR(expireTime, 'YYYY-MM-DD') expireTime 
+				FROM userCoupon u
+				LEFT OUTER JOIN (
+				    SELECT c.eventNum, couponName, discountPrice, createTime, expireTime
+				    FROM coupon c
+				) c ON u.eventNum = c.eventNum
+				WHERE userId = #{userId} AND orderCode IS NULL AND expireTime &lt; SYSDATE
+			) tb WHERE ROWNUM &lt;= #{end}
+		) WHERE rnum &gt;= #{start}	
+	</select>
+	
+	<select id="dataCountUsable" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0) usableCount FROM (
+		    SELECT u.eventNum, userId, orderCode, couponName, discountPrice, createTime, expireTime
+		    FROM userCoupon u
+		    LEFT OUTER JOIN (
+		        SELECT c.eventNum, couponName, discountPrice, createTime, expireTime
+		        FROM coupon c
+		    ) c ON u.eventNum = c.eventNum
+		    WHERE userId = #{userId} AND orderCode IS NULL AND expireTime &lt; SYSDATE
+		)
+	</select>
+	
+	<select id="listUseless" parameterType="map" resultType="com.sp.yorizori.mypage.MyEvent">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+				SELECT u.eventNum, userId, orderCode, couponName, discountPrice, 
+					TO_CHAR(createTime, 'YYYY-MM-DD') createTime, TO_CHAR(expireTime, 'YYYY-MM-DD') expireTime 
+				FROM userCoupon u
+				LEFT OUTER JOIN (
+				    SELECT c.eventNum, couponName, discountPrice, createTime, expireTime
+				    FROM coupon c
+				) c ON u.eventNum = c.eventNum
+				WHERE userId = #{userId} AND (orderCode IS NOT NULL OR expireTime &gt; SYSDATE)
+			) tb WHERE ROWNUM &lt;= #{end}
+		) WHERE rnum &gt;= #{start}	
+	</select>
+	
+	<select id="dataCountUseless" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0) uselessCount FROM (
+		    SELECT u.eventNum, userId, orderCode, couponName, discountPrice, createTime, expireTime 
+		    FROM userCoupon u
+		    LEFT OUTER JOIN (
+		        SELECT c.eventNum, couponName, discountPrice, createTime, expireTime
+		        FROM coupon c
+		    ) c ON u.eventNum = c.eventNum
+		    WHERE userId = #{userId} AND (orderCode IS NOT NULL OR expireTime &gt; SYSDATE)
+		)
+	</select>
+	
+	<select id="listQna" parameterType="map" resultType="com.sp.yorizori.mypage.MyQna">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+				SELECT num, q.categoryNum, categoryName, subject, userId, questionPrivate privacy,
+					TO_CHAR(reg_date, 'YYYY-MM-DD') reg_date, parent
+				FROM qna q
+				LEFT OUTER JOIN (
+				    SELECT c.categoryNum, category categoryName
+				    FROM qnaCategory c
+				) c ON q.categoryNum = c.categoryNum
+				WHERE userId = #{userId} AND parent IS NULL
+			) tb WHERE ROWNUM &lt;= #{end}
+		) WHERE rnum &gt;= #{start}	
+	</select>
+	
+	<select id="dataCountQna" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0) qnaCount FROM (
+		    SELECT num, q.categoryNum, categoryName, subject, userId, reg_date, parent
+		    FROM qna q
+		    LEFT OUTER JOIN (
+		        SELECT c.categoryNum, category categoryName
+		        FROM qnaCategory c
+		    ) c ON q.categoryNum = c.categoryNum
+		    WHERE userId = #{userId} AND parent IS NULL
+		)
+	</select>
+	
+	<select id="answerState" parameterType="Integer" resultType="Integer">
+		SELECT NVL(COUNT(*), 0) answerState
+		FROM qna
+		WHERE parent = #{num}
 	</select>
 </mapper>
