@@ -13,14 +13,19 @@
 	
 	<insert id="insertClass" parameterType="com.sp.yorizori.foodclass.FoodClass">
 		INSERT INTO classTable(classCode, classSubject, price, class_category, classServing, classContent, videoTime, classHitCount, classReg_date, userId)
-			VALUES (classTable_seq.NEXTVAL, #{classSubject}, #{price}, #{category}, #{serving}, #{classContent}, #{videoTime}, 0, SYSDATE, #{userId})
+			VALUES (#{classCode}, #{classSubject}, #{price}, #{category}, #{serving}, #{classContent}, #{videoTime}, 0, SYSDATE, #{userId})
 	</insert>
 	
 	<select id="listClass" parameterType="map" resultType="com.sp.yorizori.foodclass.FoodClass">
 		SELECT * FROM (
 			SELECT ROWNUM rnum, tb.* FROM (
-				SELECT classSubject, userId, price, NVL(followCount, 0) followCount
+				SELECT c.classCode, classSubject, m.nickname, price, 
+				    NVL(followCount, 0) followCount, classPhotoName imageFileName
 				FROM classTable c
+				JOIN member m ON c.userId = m.userId
+				LEFT OUTER JOIN (
+				  SELECT cf.classcode, classPhotoName FROM classFile cf 
+				) cf ON c.classCode = cf.classCode
 				LEFT OUTER JOIN (
 				    SELECT following_id, COUNT(*) followCount 
 				    FROM follow f
@@ -28,6 +33,11 @@
 				    WHERE following_id = m.userId
 				    GROUP BY following_id
 				) f ON c.userId = f.following_id
+				<where>
+					<if test="category!=0">
+						(c.class_Category = #{category} )
+					</if>
+				</where>
 			) tb WHERE ROWNUM &lt;= #{end}
 		) WHERE rnum &gt;= #{start}
 	</select>
@@ -37,8 +47,48 @@
 		FROM classTable
 	</select>
 	
+	
+	<select id="readClass" parameterType="Integer" resultType="com.sp.yorizori.foodclass.FoodClass">
+		SELECT c.classCode, m.nickname, memberImageName, classSubject, price, classContent, classHitcount, 
+		    TO_CHAR(classReg_date, 'YYYY.MM.DD') classReg_date, classServing serving, videoTime, 
+		    classPhotoName imageFileName, previewName previewFileName, fullVideoName videoFileName
+		FROM classTable c
+		JOIN member m ON c.userId = m.userId
+		JOIN classFile cf ON c.classCode = cf.classCode
+		LEFT OUTER JOIN (
+		    SELECT userId, memberImageName FROM memberImage 
+		) mi ON mi.userId = c.userId
+		WHERE c.classCode = #{classCode}
+	</select>
+	
+	<update id="updateHitCount" parameterType="Integer">
+		UPDATE classTable SET classHitcount = classHitCount+1 WHERE classCode = #{classCode}
+	</update>
+	
+	<select id="classLikeCount" resultType="Integer">
+		SELECT NVL(COUNT(*), 0) classLikeCount FROM classLike WHERE classCode = #{classCode}
+	</select>
+	
+	<select id="userClassLike" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0) FROM classLike WHERE classCode = #{classCode} AND userId = #{userId}
+	</select>
+	
+	<insert id="insertClassLike" parameterType="map">
+		INSERT INTO classLike(classCode, userId) VALUES (#{classCode}, #{userId})
+	</insert>
+	
+	<delete id="deleteClassLike" parameterType="map">
+		DELETE FROM classLike WHERE classCode = #{classCode} AND userId = #{userId}
+	</delete>
+	
 	<insert id="insertFile" parameterType="com.sp.yorizori.foodclass.FoodClass">
 		INSERT INTO classFile(classCode, classPhotoName, previewName, fullVideoName)
-			VALUES (#{classCode}, #{imageFileName}, #{previewFileName}, #{videoFileName})
+			VALUES (#{classCode}, #{imageFileName, jdbcType=VARCHAR}, #{previewFileName, jdbcType=VARCHAR}, #{videoFileName, jdbcType=VARCHAR})
 	</insert>
+	
+	<select id="listFile" parameterType="Integer" resultType="com.sp.yorizori.foodclass.FoodClass">
+		SELECT classPhotoName imageFileName, previewName previewFileName, fullVideoName videoFileName
+		FROM classFile
+		WHERE classCode = #{classCode}
+	</select>
 </mapper>

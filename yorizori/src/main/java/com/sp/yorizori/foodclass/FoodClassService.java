@@ -6,11 +6,14 @@ import java.util.Map;
 public interface FoodClassService {
 	public void insertClass(FoodClass dto, String pathname) throws Exception;
 	public List<FoodClass> listClass(Map<String, Object> map);
-	public int dataCount(Map<String, Object> map);
 	public List<FoodClass> classCategory(Map<String, Object> map);
+	public int dataCount(Map<String, Object> map);
+	public FoodClass readClass(int classCode);
+	
+	public void updateHitCount(int classCode) throws Exception;
 	
 	public void insertFile(FoodClass dto) throws Exception;
-	public List<FoodClass> listFile(int num);
+	public List<FoodClass> listFile(int classCode);
 	public FoodClass searchFile(int num);
 	public FoodClass readFile(int fileNum);
 	public void deleteFile(Map<String, Object> map) throws Exception;
@@ -18,5 +21,5 @@ public interface FoodClassService {
 	public void insertClassLike(Map<String, Object> map) throws Exception;
 	public void deleteClassLike(Map<String, Object> map) throws Exception;
 	public int classLikeCount(int num);
-	public boolean userClassLiked(Map<String, Object> map);
+	public boolean userClassLike(Map<String, Object> map);
 }

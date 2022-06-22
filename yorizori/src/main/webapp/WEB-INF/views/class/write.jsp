@@ -35,7 +35,7 @@
 .insertClass .full form .line .img-grid,
 .insertClass .full form .line .preview-grid,
 .insertClass .full form .line .video-grid { display: inline-block; margin-right: 60px; }
-.insertClass .full form .line .videoLength { display: inline-block; width: 120px; margin-left: 20px; }
+.insertClass .full form .line .videoLength { display: inline-block; width: 70px; height: 40px; margin-left: 20px; margin-right: 10px; }
 .insertClass .full form .line input[name=previewFile],
 .insertClass .full form .line input[name=videoFile] { padding-top: 8px; }
 
@@ -118,7 +118,6 @@ function sendOk() {
 	f.action="${pageContext.request.contextPath}/class/write";
 	f.submit();
 }
-
 
 $(function(){
 	var sel_files = [];
@@ -207,11 +206,10 @@ $(function(){
 				<span class="serving-txt">인분</span>
 				<p class="sm-p">카테고리</p>
 				<select name="category">
-					<option value="1" selected="selected">한식</option>
-					<option value="2">중식</option>
-					<option value="3">일식</option>
-					<option value="4">베이킹</option>
-					<option value="5">기타</option>
+					<option>카테고리 선택</option>
+					<c:forEach var="vo" items="${category}">
+						<option value="${vo.class_Category}" ${dto.category==vo.class_Category?"selected='selected'":""}>${vo.classCname}</option>
+					</c:forEach>
 				</select>				
 			</div>
 			<div class="line">
@@ -219,17 +217,19 @@ $(function(){
 				<div class="img-grid">
 					<img src="${pageContext.request.contextPath}/resources/images/file-attach.gif" class="item img-add">
 				</div>
-				<input type="file" name="imageFile" accept="image/*" multiple="multiple" style="display: none;" class="form-control">
+				<input type="file" name="imageFile" accept="image/*"  style="display: none;" class="form-control">
 			</div>
 			<div class="line">
 				<p>미리보기 영상</p>
-				<input type="file" name="previewFile" accept="video/*" multiple="multiple">
+				<input type="file" name="previewFile" accept="video/*" >
 			</div>
 			<div class="line">
 				<p>클래스 영상</p>
-				<input type="file" name="videoFile" accept="video/*" multiple="multiple">
+				<input type="file" name="videoFile" accept="video/*" id="fullVideo">
+				<video id="hiddenArea" style="display: none;"></video>
 				<span>동영상 길이  </span>
-				<input type="text" name="videoTime" readonly="readonly" class="videoLength" value="10">
+				<input type="text" name="videoTime" readonly="readonly" class="videoLength" value="">
+				<span>분</span>
 			</div>
 			<div class="line">
 				<p>클래스 상세내용</p>
@@ -246,6 +246,19 @@ $(function(){
 </div>
 
 <script type="text/javascript">
+var videoFile = document.getElementById("fullVideo");
+var videoArea = document.getElementById("hiddenArea");
+videoFile.addEventListener("change", function(){
+	var video = videoFile.files[0];
+	var inputVideo = URL.createObjectURL(video);
+	videoArea.setAttribute("src", inputVideo);
+});
+
+videoArea.addEventListener('loadedmetadata', function(){
+	let length = videoArea.duration;
+	let minute = Math.floor(length / 60);
+	document.querySelector('input[name=videoTime]').setAttribute('value',minute);
+});
 	ClassicEditor
 		.create( document.querySelector( '.editor' ), {
 			fontFamily: {

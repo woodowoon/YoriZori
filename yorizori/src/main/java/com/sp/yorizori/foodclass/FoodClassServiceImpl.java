@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.sp.yorizori.common.FileManager;
 import com.sp.yorizori.common.dao.CommonDAO;
@@ -24,19 +23,23 @@ public class FoodClassServiceImpl implements FoodClassService {
 			int seq = dao.selectOne("foodClass.classSeq");
 			dto.setClassCode(seq);
 			
-			dao.insertData("foodClass.insertFile", dto);
-			
-			if(! dto.getSelectFile().isEmpty()) {
-				for(MultipartFile mf : dto.getSelectFile()) {
-					String fileName = fileManager.doFileUpload(mf, pathname);
-					if(fileName == null) {
-						continue;
-					}
-				}
-			}
-			
 			dao.insertData("foodClass.insertClass", dto);
 			
+			String saveFilename;
+			if(! dto.getImageFile().isEmpty()) {
+				saveFilename = fileManager.doFileUpload(dto.getImageFile(), pathname);
+				dto.setImageFileName(saveFilename);
+			}
+			if(! dto.getPreviewFile().isEmpty()) {
+				saveFilename = fileManager.doFileUpload(dto.getPreviewFile(), pathname);
+				dto.setPreviewFileName(saveFilename);
+			}
+			if(! dto.getVideoFile().isEmpty()) {
+				saveFilename = fileManager.doFileUpload(dto.getVideoFile(), pathname);
+				dto.setVideoFileName(saveFilename);
+			}
+			
+			insertFile(dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -69,7 +72,31 @@ public class FoodClassServiceImpl implements FoodClassService {
 		
 		return result;
 	}
+	
+	@Override
+	public FoodClass readClass(int classCode) {
+		FoodClass dto = null;
+		
+		try {
+			dto = dao.selectOne("foodClass.readClass", classCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
 
+	@Override
+	public void updateHitCount(int classCode) throws Exception {
+		try {
+			dao.updateData("foodClass.updateHitCount", classCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+	}
+	
 	@Override
 	public void insertFile(FoodClass dto) throws Exception {
 		try {
@@ -82,9 +109,15 @@ public class FoodClassServiceImpl implements FoodClassService {
 	}
 
 	@Override
-	public List<FoodClass> listFile(int num) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<FoodClass> listFile(int classCode) {
+		List<FoodClass> listFile = null;
+		
+		try {
+			listFile = dao.selectList("foodClass.listFile", classCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listFile;
 	}
 
 	@Override
@@ -107,26 +140,49 @@ public class FoodClassServiceImpl implements FoodClassService {
 
 	@Override
 	public void insertClassLike(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
-		
+		try {
+			dao.insertData("foodClass.insertClassLike", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	@Override
 	public void deleteClassLike(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
-		
+		try {
+			dao.deleteData("foodClass.deleteClassLike", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	@Override
 	public int classLikeCount(int num) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = 0;
+		
+		try {
+			result = dao.selectOne("foodClass.classLikeCount");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	@Override
-	public boolean userClassLiked(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean userClassLike(Map<String, Object> map) {
+		boolean b = false;
+		
+		try {
+			int result = dao.selectOne("foodClass.userClassLike", map);
+			if(result > 0) {
+				b = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return b;
 	}
 
 	@Override

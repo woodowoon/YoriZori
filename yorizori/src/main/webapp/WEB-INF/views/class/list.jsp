@@ -39,11 +39,65 @@
 .lecture .lec-list ul li { float: left; list-style: none; }
 .lecture .lec-list ul li > div { width: 274px; margin: 0 20px 50px; }
 
-.lecture .lec-list .text-area { position: relative; font-size: 15px; padding: 10px 2px; }
+.lecture .lec-list .text-area { position: relative; width: 100%; font-size: 15px; padding: 10px 2px; }
+.lecture .lec-list .text-area p:first-child { min-height: 70px; }
 .lecture .lec-list .text-area p:nth-child(2) { font-size: 12px; color: #a2a2a2; border-bottom: 1px solid #f8f8f8; padding: 6px 0; margin-bottom: 10px; }
 .lecture .lec-list .text-area p:last-child { font-size: 15px; font-weight: 700; color: #000; }
-.lecture .lec-list .text-area .classLike { position: absolute; bottom: 12px; right: 3px; width: 28px; }
+.lecture .lec-list .text-area .classLike { position: absolute; bottom: 8px; left: 70px; width: 28px; }
+
+.lecture .page-box { margin-bottom: 30px; }
+.lecture .page-link { padding: 0.375rem 0.75rem; }
+.page-item.active .page-link { background-color: #f44502; border-color: #f44502; }
+.page-link, .page-link:hover, .page-link:active { color: #f44502; }
 </style>
+<script type="text/javascript">
+function ajaxFun(url, method, query, dataType, fn) {
+	$.ajax({
+		type:method,
+		url:url,
+		data:query,
+		dataType:dataType,
+		success:function(data) {
+			fn(data);
+		},
+		beforeSend:function(jqXHR) {
+			jqXHR.setRequestHeader("AJAX", true);
+		},
+		error:function(jqXHR) {
+			if(jqXHR.status === 403) {
+				login();
+				return false;
+			} else if(jqXHR.status === 400) {
+				alert("요청 처리가 실패 했습니다.");
+				return false;
+			}
+			console.log(jqXHR.responseText);
+		}
+	});
+}
+
+$(function() {
+	$(".classLike").click(function(){
+		let userClassLike = "${userClassLike}";
+		
+		let url = "${pageContext.request.contextPath}/class/insertClassLike";
+		let classCode = "${dto.classCode}";
+		let query = "classCode=" + classCode + "&userClassLike=" + userClassLike;
+		
+		const fn = function(data) {
+			let state = data.state;
+			if(state === "true") {
+				location.href="${pageContext.request.contextPath}/class/article?${query}&classCode=${dto.classCode}";
+			} else if(state === "false") {
+				alert("찜하기 실패");
+			}
+		};
+		
+		ajaxFun(url, "post", query, "json", fn);
+		
+	});
+});
+</script>
 
 <div class="lecture">
 	<div class="full">
@@ -56,17 +110,14 @@
 				<source src="${pageContext.request.contextPath}/resources/media/class-intro.mp4" type="video/mp4">
 			</video>
 		</div>
-		<script type="text/javascript">
-			
-		</script>
 		
 		<div class="lec-category">
-			<a href="#" class="lec-cate-0">전체</a>
-			<a href="#" class="lec-cate-1">한식</a>
-			<a href="#" class="lec-cate-2">중식</a>
-			<a href="#" class="lec-cate-3">일식</a>
-			<a href="#" class="lec-cate-4">베이킹</a>
-			<a href="#" class="lec-cate-5">기타</a>
+			<a href="${pageContext.request.contextPath}/class/list?category=0&page=1" class="lec-cate-0">전체</a>
+			<a href="${pageContext.request.contextPath}/class/list?category=1&page=1" class="lec-cate-1">한식</a>
+			<a href="${pageContext.request.contextPath}/class/list?category=2&page=1" class="lec-cate-2">중식</a>
+			<a href="${pageContext.request.contextPath}/class/list?category=3&page=1" class="lec-cate-3">일식</a>
+			<a href="${pageContext.request.contextPath}/class/list?category=4&page=1" class="lec-cate-4">베이킹</a>
+			<a href="${pageContext.request.contextPath}/class/list?category=5&page=1" class="lec-cate-5">기타</a>
 		</div>
 		
 		<div class="lec-list">
@@ -78,22 +129,32 @@
 					<li>
 						<div>
 							<div class="img-area">
-								<a href="${articleUrl}&num=${dto.classCode}">
+								<a href="${articleUrl}&classCode=${dto.classCode}">
 									<img src="${pageContext.request.contextPath}/uploads/class/${dto.imageFileName}">
 								</a>						
 							</div>
 							<div class="text-area">
 								<p>${dto.classSubject}</p>
-								<p>${dto.userId} - 팔로워 (${dto.followCount})</p>
-								<p>${dto.price}원</p>
+								<p>${dto.nickname} - 팔로워 (${dto.followCount})</p>
+								<p><fmt:formatNumber value="${dto.price}" groupingUsed="true"/>원</p>
 								<a href="#" class="classLike">
-									<img src="${pageContext.request.contextPath}/resources/images/heart1.png">
+									<c:choose>
+										<c:when test="${userClassLike == false}">
+											<img src="${pageContext.request.contextPath}/resources/images/heart1.png">
+										</c:when>
+										<c:otherwise>
+											<img src="${pageContext.request.contextPath}/resources/images/heart2.png">
+										</c:otherwise>
+									</c:choose>
 								</a>
 							</div>
 						</div>
 					</li>
 				</c:forEach>
 			</ul>
+		</div>
+		<div class="page-box">
+			${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
 		</div>
 	</div>
 </div>

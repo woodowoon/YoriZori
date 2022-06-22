@@ -1,25 +1,29 @@
 package com.sp.yorizori.foodclass;
 
-import java.util.List;
-
 import org.springframework.web.multipart.MultipartFile;
 
 public class FoodClass {
 	private int rnum;
 	private int classCode;
 	private int category;
+	private int class_Category;
+	private String classCname;
 	private String classSubject;
 	private String classContent;
-	private String reg_date;
+	private String classReg_date;
 	private int classHitcount;
 	private int serving;
 	private int price;
 	private int videoTime;
+	private String nickname;
 	private String userId;
 	private int followCount;
 
-	private List<MultipartFile> selectFile;
+	private MultipartFile imageFile;
+	private MultipartFile previewFile;
+	private MultipartFile videoFile;
 	
+	private String memberImageName;
 	private String imageFileName;
 	private String previewFileName;
 	private String videoFileName;
@@ -42,12 +46,28 @@ public class FoodClass {
 		this.classCode = classCode;
 	}
 
-	public int getClass_category() {
+	public int getCategory() {
 		return category;
 	}
 
-	public void setClass_category(int class_category) {
-		this.category = class_category;
+	public void setCategory(int category) {
+		this.category = category;
+	}
+
+	public int getClass_Category() {
+		return class_Category;
+	}
+
+	public void setClass_Category(int class_Category) {
+		this.class_Category = class_Category;
+	}
+
+	public String getClassCname() {
+		return classCname;
+	}
+
+	public void setClassCname(String classCname) {
+		this.classCname = classCname;
 	}
 
 	public String getClassSubject() {
@@ -66,12 +86,12 @@ public class FoodClass {
 		this.classContent = classContent;
 	}
 
-	public String getReg_date() {
-		return reg_date;
+	public String getclassReg_date() {
+		return classReg_date;
 	}
 
-	public void setReg_date(String reg_date) {
-		this.reg_date = reg_date;
+	public void setclassReg_date(String classReg_date) {
+		this.classReg_date = classReg_date;
 	}
 
 	public int getClassHitcount() {
@@ -106,6 +126,14 @@ public class FoodClass {
 		this.videoTime = videoTime;
 	}
 
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
 	public String getUserId() {
 		return userId;
 	}
@@ -122,12 +150,36 @@ public class FoodClass {
 		this.followCount = followCount;
 	}
 
-	public List<MultipartFile> getSelectFile() {
-		return selectFile;
+	public MultipartFile getImageFile() {
+		return imageFile;
 	}
 
-	public void setSelectFile(List<MultipartFile> selectFile) {
-		this.selectFile = selectFile;
+	public void setImageFile(MultipartFile imageFile) {
+		this.imageFile = imageFile;
+	}
+
+	public MultipartFile getPreviewFile() {
+		return previewFile;
+	}
+
+	public void setPreviewFile(MultipartFile previewFile) {
+		this.previewFile = previewFile;
+	}
+
+	public MultipartFile getVideoFile() {
+		return videoFile;
+	}
+
+	public void setVideoFile(MultipartFile videoFile) {
+		this.videoFile = videoFile;
+	}
+
+	public String getMemberImageName() {
+		return memberImageName;
+	}
+
+	public void setMemberImageName(String memberImageName) {
+		this.memberImageName = memberImageName;
 	}
 
 	public String getImageFileName() {
@@ -161,4 +213,5 @@ public class FoodClass {
 	public void setClassLikeCount(int classLikeCount) {
 		this.classLikeCount = classLikeCount;
 	}
+
 }
