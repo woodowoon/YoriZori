@@ -39,6 +39,8 @@
 .lecture .lec-list ul li { float: left; list-style: none; }
 .lecture .lec-list ul li > div { width: 274px; margin: 0 20px 50px; }
 
+.lecture .lec-list .img-area img { height: 154.13px; }
+
 .lecture .lec-list .text-area { position: relative; width: 100%; font-size: 15px; padding: 10px 2px; }
 .lecture .lec-list .text-area p:first-child { min-height: 70px; }
 .lecture .lec-list .text-area p:nth-child(2) { font-size: 12px; color: #a2a2a2; border-bottom: 1px solid #f8f8f8; padding: 6px 0; margin-bottom: 10px; }

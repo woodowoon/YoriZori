@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sp.yorizori.common.MyUtil;
+import com.sp.yorizori.foodclass.qna.Board;
+import com.sp.yorizori.foodclass.qna.BoardService;
 import com.sp.yorizori.member.SessionInfo;
 
 @Controller("class.foodClassController")
@@ -28,9 +30,8 @@ public class FoodClassController {
 	@Autowired
 	private MyUtil myUtil;
 	
-	// @Autowired
-	// private FileManager fileManager;
-	
+	@Autowired
+	private BoardService qnaService;
 	
 	@RequestMapping(value = "list")
 	public String list(
@@ -95,10 +96,35 @@ public class FoodClassController {
 			@RequestParam int classCode,
 			@RequestParam String page,
 			@RequestParam int category,
+			@RequestParam(value = "page", defaultValue = "1") int current_page,
+			HttpServletRequest req,
 			HttpSession session, Model model) throws Exception {
 		
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		
+		String cp = req.getContextPath();
+
+		int rows = 5;
+		int total_page;
+		int dataCount;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		dataCount = qnaService.dataCount(map);
+		total_page = myUtil.pageCount(rows, dataCount);
+		
+		if (total_page < current_page) {
+			current_page = total_page;
+		}
+
+		int start = (current_page - 1) * rows + 1;
+		int end = current_page * rows;
+		map.put("start", start);
+		map.put("end", end);
+		
+		String listUrl = cp + "/class/article"; // 임시
+		
+		String paging = myUtil.paging(current_page, total_page, listUrl);
 		String query = "category=" + category;
 		query += "&page=" + page;
 		
@@ -108,20 +134,24 @@ public class FoodClassController {
 			return "redirect:/class/list?" + query;
 		}
 		
-		Map<String, Object> map = new HashMap<String, Object>();
-		
 		map.put("category", category);
 		map.put("classCode", classCode);
 		map.put("userId", info.getUserId());
 		map.put("nickname", info.getNickName());
 		
 		boolean userClassLike = service.userClassLike(map);
+		List<Board> qnaList = qnaService.readBoard(map);
 		
 		model.addAttribute("dto", dto);
 		model.addAttribute("query", query);
 		model.addAttribute("page", page);
 		model.addAttribute("category", category);
 		model.addAttribute("userClassLike", userClassLike);
+		model.addAttribute("qnaList", qnaList);
+		model.addAttribute("qnaPage", current_page);
+		model.addAttribute("qnaDataCount", dataCount);
+		model.addAttribute("qnaTotal_page", total_page);
+		model.addAttribute("qnaPaging", paging);
 		
 		return ".class.article";
 	}

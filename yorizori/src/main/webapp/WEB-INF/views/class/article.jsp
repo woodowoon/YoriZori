@@ -49,11 +49,33 @@
 .lec-detail .review button { width: 140px; height: 140px; font-size: 20px; vertical-align: top; border: 1px solid #ccc; border-left: none; border-radius: 4px; background: transparent; margin-left: -3px; }
 
 .lec-detail .classQna form * { display: inline-block; }
-.lec-detail .classQna textarea { resize: none; width: 854px; height: 140px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; padding: 10px 12px; }
-.lec-detail .classQna button { width: 140px; height: 140px; font-size: 20px; vertical-align: top; border: 1px solid #ccc; border-left: none; border-radius: 4px; background: transparent; margin-left: -3px; }
+.lec-detail .classQna form input { display: block; width: 854px; font-size: 16px; border: 1px solid #ccc; border-bottom: none; border-radius: 4px; padding: 10px 12px; margin: 0 0 -1px 131px; }
+.lec-detail .classQna form textarea { resize: none; width: 854px; height: 140px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; padding: 10px 12px; margin-left: 131px; }
+.lec-detail .classQna form button { width: 140px; height: 185px; font-size: 20px; vertical-align: top; border: 1px solid #ccc; border-left: none; border-radius: 4px; background: transparent; margin: -44px 0 0 -3px; }
+.lec-detail .qnaBoard { width: 1000px; margin: 30px auto 15px; }
+.lec-detail .qnaBoard table { width: 100%; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; }
+.lec-detail .qnaBoard table tr:first-child { border-bottom: 1px solid #ccc; }
+.lec-detail .qnaBoard table th,
+.lec-detail .qnaBoard table td { padding: 12px 15px; }
+.lec-detail .qnaBoard .showMore { cursor: pointer; }
+.lec-detail .qnaBoard .showMore:hover { color: #f44502; }
+.lec-detail .qnaBoard .question { display: none; border-top: 1px dashed #ccc; }
+.lec-detail .qnaBoard .question.active { display: table-row; }
+.lec-detail .qnaBoard .answer { display: none; border-bottom: 2px dashed #ccc; }
+.lec-detail .qnaBoard .answer.active { display: table-row; }
+.lec-detail .qnaBoard .question td { border-bottom: 1px dashed #ccc; }
+.lec-detail .qnaBoard .question td:first-child,
+.lec-detail .qnaBoard .answer td:first-child { width: 150px; border-right: 1px dashed #ccc; }
 
 #popup-preview, #popup-video { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2; }
+#popup-preview > div , #popup-video > div { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 1000px; height: 500px; }
 #popup-preview video, #popup-video video { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 900px; height: 500px; }
+#popup-preview #closeBtn, #popup-video #closeBtn { position: absolute; top: 40px; right: 0; font-size: 40px; color: #fff; border: none; background: transparent; }
+
+.lec-detail .page-box { margin-bottom: 30px; }
+.lec-detail .page-link { padding: 0.375rem 0.75rem; }
+.page-item.active .page-link { background-color: #f44502; border-color: #f44502; }
+.page-link, .page-link:hover, .page-link:active { color: #f44502; }
 </style>
 
 <script type="text/javascript">
@@ -102,23 +124,31 @@ $(function() {
 		ajaxFun(url, "post", query, "json", fn);
 	});
 });
+
 $(document).ready(function() {
 	$('#showPreview').click(function(){
-		$("#popup-preview").css('display','block');
+		$('#popup-preview').css('display','block');
 	});
-	$('#popup-preview').click(function(){
-		$(this).find('video').get(0).pause();
-		$(this).css('display','none');	
+	$('#popup-preview #closeBtn').click(function(){
+		$('#popup-preview').find('video').get(0).pause();
+		$('#popup-preview').css('display','none');	
 	});
 	
 	$('#showClass').click(function(){
 		$("#popup-video").css('display','block');
 	});
-	$('#popup-video').click(function(){
-		$(this).find('video').get(0).pause();
-		$(this).css('display','none');	
+	$('#popup-video #closeBtn').click(function(){
+		$('#popup-video').find('video').get(0).pause();
+		$('#popup-video').css('display','none');	
+	});
+	
+	$('.showMore').click(function(){
+		$('.question').toggleClass('active');
+		$('.answer').toggleClass('active');
 	});
 });
+
+
 </script>
 
 <div class="lec-detail">
@@ -160,15 +190,6 @@ $(document).ready(function() {
 			</div>
 		</div>
 	</div>
-	
-	<!-- 
-	<div class="full classPreview">
-		<h3>클래스 미리보기</h3>
-		<div class="videoArea">
-			<iframe width="800" height="450" src="https://www.youtube.com/embed/p-wwxCllgX0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-		</div>
-	</div>
-	 -->
 	 
 	<div class="full classDetail">
 		<h3>클래스 상세정보</h3>
@@ -189,7 +210,6 @@ $(document).ready(function() {
 				<button type="button" id="showClass"><i class="bi bi-play-fill"></i></button>
 			</div>
 		</div>
-		<span>동영상 팝업의 검은 영역을 누르시면 창이 닫힙니다.</span>
 	</div>
 	
 	<div class="full review">
@@ -206,16 +226,61 @@ $(document).ready(function() {
 	<div class="full classQna">
 		<h3>클래스 QnA</h3>
 		<form name="qnaForm" method="post">
-			<textarea placeholder="클래스에 관한 질문을 남겨주세요."></textarea>
+			<input type="text" name="subject" placeholder="제목">
+			<textarea placeholder="클래스에 관한 질문을 남겨주세요." name="classQContent"></textarea>
 			<button type="button" class="">등록</button>
 		</form>
+		<div class="qnaBoard">
+			<table>
+				<tr align="center">
+					<th>작성자</th>
+					<th>클래스 QnA 제목</th>
+					<th>질문일자</th>
+					<th>답변일자</th>
+				</tr>
+			<c:forEach var="qnaDto" items="${qnaList}">
+				<tr align="center">
+					<td>${qnaDto.userId}</td>
+					<td class="showMore">${qnaDto.subject}</td>
+					<td>${qnaDto.regDate}</td>
+					<td>
+						<c:choose>
+							<c:when test="${!empty qnaDto.answerDate}">
+								${qnaDto.answerDate}
+							</c:when>
+							<c:otherwise>
+								답변대기
+							</c:otherwise>
+						</c:choose>
+					</td>
+				</tr>
+				<tr align="center" class="question">
+					<td colspan="1">질문내용</td>
+					<td colspan="3">${qnaDto.classQContent}</td>
+				</tr>
+				<tr align="center" class="answer">
+					<td colspan="1">답변내용</td>
+					<td colspan="3">${qnaDto.answer}</td>
+				</tr>
+			</c:forEach>
+			</table>
+			<div class="page-box">
+				${dataCount == 0 ? "등록된 게시물이 없습니다." : qnaPaging}
+			</div>
+		</div>
 	</div>
 	
 	<div id="popup-preview">
-		<video controls id="pop-video" src="${pageContext.request.contextPath}/uploads/class/${dto.previewFileName}"></video>
+		<div>
+			<video controls id="pop-video" src="${pageContext.request.contextPath}/uploads/class/${dto.previewFileName}"></video>
+			<button type="button" id="closeBtn"><i class="bi bi-x-lg"></i></button>
+		</div>
 	</div>
 	<div id="popup-video">
-		<video controls id="pop-video" src="${pageContext.request.contextPath}/uploads/class/${dto.videoFileName}"></video>
+		<div>
+			<video controls id="pop-video" src="${pageContext.request.contextPath}/uploads/class/${dto.videoFileName}"></video>
+			<button type="button" id="closeBtn"><i class="bi bi-x-lg"></i></button>
+		</div>
 	</div>
 </div>
 
