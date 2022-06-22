@@ -1,6 +1,7 @@
 package com.sp.yorizori.frige;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class FrigeServiceImpl implements FrigeService {
 	}
 
 	@Override
-	public List<Frige> listRecipe() {
+	public List<Frige> listRecipe(Map<String, Object> map) {
 		List<Frige> list = null;
 		
 		try {
@@ -37,6 +38,12 @@ public class FrigeServiceImpl implements FrigeService {
 		}
 		
 		return list;	
+	}
+
+	@Override
+	public int dataCount(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 
