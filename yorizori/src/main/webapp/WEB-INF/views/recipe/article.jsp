@@ -99,6 +99,11 @@ a > i { display: flex; }
 	border-radius: 9999px; padding: 13px 30px; border: 1px solid #f44502;
 }
 
+.btn-black {
+	color: #ffffff; background-color: black; font-size: 14px;
+	border-radius: 9999px; padding: 13px 30px; border: 1px solid #f44502;
+}
+
 .reply { width: 85%; margin: 100px auto; }
 .reply-form .form-control { height: 100px; }
 .reply-desc { font-size: 13px; color: #666666; }
@@ -128,6 +133,19 @@ function deleteRecipe() {
 		let url = "${pageContext.request.contextPath}/recipe/delete?" + query;
 		location.href = url;
 	}
+}
+
+function NotifyOk() {
+	var f = document.recipeNotify;
+	var str;
+	
+	if(! f.reason.value) {
+		f.reason.focus();
+		return;
+	}
+	
+	f.action="${pageContext.request.contextPath}/recipe/notify?page=" + ${page} + "&recipeNum=" + ${dto.recipeNum};
+	f.submit();
 }
 
 function clip(){
@@ -278,7 +296,7 @@ $(function() {
 			</c:choose>  
 		</div>
 		<div class="writer-nickName">
-			<a class="writer">${dto.nickName}</a>
+			<a class="writer" href="${pageContext.request.contextPath}/mypage/main?userId=${dto.userId}">${dto.nickName}</a>
 		</div>
 	</div>
 	
@@ -304,9 +322,19 @@ $(function() {
 				</c:when>
 				<c:otherwise>
 					<button class="btn btn-list" type="button" onclick="location.href='${pageContext.request.contextPath}/recipe/feed';">목록</button>
-					<button type="button" class="btn btn-white btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-					 	신고
-					</button>	
+					<c:choose>
+						<c:when test="${isrecipenotifyPost == false}">
+							<button type="button" class="btn btn-white btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+					 			신고
+							</button>	
+						</c:when>
+						<c:otherwise>
+							<button type="button" class="btn btn-white btn-primary" data-bs-toggle="modal" disabled="disabled">
+					 			신고
+							</button>
+						</c:otherwise>
+					</c:choose>
+					
 				</c:otherwise>
 			</c:choose>  
 			
@@ -352,15 +380,20 @@ $(function() {
 	        <h5 class="modal-title" id="exampleModalLabel">신고</h5>
 	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	      </div>
-	      <div class="modal-body">
-	        <p> 닉네임 : ${dto.nickName} </p>
-	        <p> 신고사유 </p>
-	        <textarea rows="7" cols="63"></textarea>
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-	        <button type="button" class="btn btn-primary">신고</button>
-	      </div>
+	      <form action="" name="recipeNotify">
+		      <div class="modal-body">
+		        <p> 닉네임 : ${dto.nickName} </p>
+		        <p> 레시피 제목 : ${dto.recipeSubject} </p>
+		        <p> 신고사유 </p>
+		        <textarea rows="7" cols="63" name ="reason"></textarea>
+		        <input type="hidden" name="recipeNum" value="${dto.recipeNum}">
+		      </div>
+	      
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+		        <button type="button" class="btn btn-primary" onclick="NotifyOk();">신고</button>
+		      </div>
+	      </form>
 	    </div>
 	  </div>
 	</div>

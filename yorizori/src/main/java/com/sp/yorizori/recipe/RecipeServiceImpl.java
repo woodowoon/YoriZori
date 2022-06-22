@@ -259,7 +259,7 @@ public class RecipeServiceImpl implements RecipeService {
 		Recipe dto = null;
 		
 		try {
-			dto = dao.selectOne("recipe.preReadRecipe", map);
+			// dto = dao.selectOne("recipe.preReadRecipe", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -272,7 +272,7 @@ public class RecipeServiceImpl implements RecipeService {
 		Recipe dto = null;
 		
 		try {
-			dto = dao.selectOne("recipe.nextReadRecipe", map);
+			// dto = dao.selectOne("recipe.nextReadRecipe", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -281,32 +281,91 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 
 	@Override
-	public void updateRecipe(Recipe dto) throws Exception {
+	public void updateRecipe(Recipe dto, String pathname) throws Exception {
+		String saveFilename = fileManager.doFileUpload(dto.getSelectFile(), pathname);
+		
 		try {
+			if(saveFilename != null) {
+				if (dto.getImageFilename().length() != 0) {
+					fileManager.doFileDelete(dto.getImageFilename(), pathname);
+				}
+				
+				dto.setImageFilename(saveFilename);
+			}
+			
 			dao.updateData("recipe.updateRecipe", dto);
+			dao.updateData("recipe.updateRecipePhoto", dto);
+			
+			for (Integer insertingredient : dto.getIngredientCodes()) {
+				dto.setIngredientCode(insertingredient);
+				
+				dao.insertData("recipe.insertingredientList", dto);
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw e;
 		}
 		
 	}
 
 	@Override
-	public void updateRecipePhoto(Recipe dto) throws Exception {
+	public List<Recipe> updateRecipeingredient(int recipeNum) {
+		List<Recipe> list = null;
+		
 		try {
-			dao.updateData("recipe.updateRecipePhoto", dto);
+			list = dao.selectList("recipe.updateRecipeingredient", recipeNum);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+	@Override
+	public void deleteRecipeingredientList(int recipeNum) throws Exception {
+		try {
+			Recipe dto = readRecipe(recipeNum);
+			
+			if(dto == null) {
+				return;
+			}
+			
+			dao.deleteData("recipe.deleteRecipeingredientList", recipeNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
 		}
 	}
 
 	@Override
-	public void updateRecipeingredientList(Recipe dto) throws Exception {
+	public void insertnotifyPost(Notify dto) throws Exception {
 		try {
-			dao.updateData("recipe.updateRecipeingredientList", dto);
+			dao.insertData("recipeNotify.insertnotifyPost", dto);
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw e;
 		}
 	}
 
+	@Override
+	public boolean isrecipenotifyPost(Map<String, Object> map) {
+		boolean b = false;
+		
+		try {
+			
+			int result = dao.selectOne("recipeNotify.isrecipenotifyPost", map);
+			
+			if(result > 0) {
+				return true;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return b;
+	}
 	
 }

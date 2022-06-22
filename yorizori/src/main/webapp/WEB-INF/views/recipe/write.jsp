@@ -209,6 +209,7 @@ button {
     margin-left: 8px;
     list-style: none;
     cursor: pointer;
+    width: 47px;
 }
 
 .field2 dl {
@@ -329,6 +330,15 @@ dl {
 .close { display:inline-block; *display:inline; cursor: pointer;  }
 .close:after { display: inline-block; content: "\00d7"; font-size:15pt; }
 
+.inimage {
+	width: 40px;
+	height: 45px;
+	object-fit: cover;
+}
+
+.write-form p  {
+	font-size: 12px;
+}
 
 </style>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/boot-board.css" type="text/css">
@@ -352,6 +362,7 @@ dl {
 </style>
 
 <script type="text/javascript">
+
 function sendOk() {
 	var f = document.recipeForm;
 	var str;
@@ -379,7 +390,8 @@ function sendOk() {
 		return;
 	}
 	
-	if(! f.selectFile.value) {
+	var mode = "${mode}";
+	if(mode != "update" && f.selectFile.value == "") {
 		
 		f.selectFile.focus();
 		return;
@@ -412,6 +424,7 @@ function sendOk() {
 	f.action="${pageContext.request.contextPath}/recipe/${mode}";
 	f.submit();
 }
+
 </script>
 
 <script type="text/javascript">
@@ -486,13 +499,6 @@ $(function() {
 });
 
 $(function() {
-	var list = "${list}";
-	if(list) {
-		
-	}
-});
-
-$(function() {
 	$("body").on("click", ".big_sort .selected", function() {
 		$(".big_sort .selected").css({"color":"black","background":"#fff", "font-weight":"100"})
 		
@@ -512,7 +518,7 @@ $(function() {
 				let ingredientCode = item.ingredientCode;
 				let ingredientName = item.ingredientName;
 				
-				s = "<li data-id='"+ ingredientCode +"'><img src='${pageContext.request.contextPath}/resources/images/rice.jpg'";
+				s = "<li data-id='"+ ingredientCode +"'><img class='inimage' src='${pageContext.request.contextPath}/resources/images/ingredient/" + ingredientCode + ".PNG'";
 				s += " style='disply:block;'><p style='text-align:center'>" + ingredientName +"</p>";
 				s += "</li>";
 				
@@ -663,7 +669,7 @@ $(function() {
 					                			<li class='content' data-id='${dto.ingredientCode}'> ${dto.ingredientName}
 					                				<span class='close'></span>
 					                			</li>
-												<input type='hidden' name='ingredientCodes' value='ingredientCode'>
+												<input type="hidden" name='ingredientCodes' value='${dto.ingredientCode}'>
 											</div>
 					                	</c:forEach>
 					                </ul>
@@ -713,13 +719,14 @@ $(function() {
 				<table class="table table-borderless">
  					<tr>
 						<td class="text-center">
-							<button type="button" class="btn btn-dark" onclick="sendOk();">${mode=='update'?'수정완료':'등록하기'}&nbsp;<i class="bi bi-check2"></i></button>
+							<button type="button" class="btn btn-dark" onclick="sendOk();">${mode == 'update'?'수정':'등록'}완료&nbsp;<i class="bi bi-check2"></i></button>	
 							<button type="reset" class="btn btn-light">다시입력</button>
-							<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}';">${mode=='update'?'수정취소':'등록취소'}&nbsp;<i class="bi bi-x"></i></button>
+							<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/recipe/feed';">${mode=='update'?'수정취소':'등록취소'}&nbsp;<i class="bi bi-x"></i></button>
 							<c:if test="${mode=='update'}">
-								<input type="hidden" name="" value="">
-								<input type="hidden" name="" value="">
-								<input type="hidden" name="" value="">
+								<input type="hidden" name="recipeNum" value="${dto.recipeNum}">
+								<input type="hidden" name="page" value="${page}">
+								<input type="hidden" name="imageFilename" value="${dto.imageFilename}">
+								
 							</c:if>
 						</td>
 					</tr>

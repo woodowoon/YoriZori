@@ -148,9 +148,9 @@ public class RecipeController {
 		}
 		
 		Map<String, Object> map = new HashMap<String, Object>();
-		boolean isFollow = service.isFollow(map);
+		// boolean isFollow = service.isFollow(map); // 이전글 다음글 짤때를 위해서
 		
-		map.put("isFollow", isFollow);
+		// map.put("isFollow", isFollow);
 		map.put("recipeNum", recipeNum);
 		map.put("userId", info.getUserId());
 		map.put("nickName", info.getNickName());
@@ -160,7 +160,10 @@ public class RecipeController {
 		Recipe nextReadDto = service.nextReadRecipe(map);
 		
 		boolean isRecipeLike = service.isRecipeLike(map);
+		boolean isrecipenotifyPost = service.isrecipenotifyPost(map);
 		
+		
+		model.addAttribute("isrecipenotifyPost", isrecipenotifyPost);
 		model.addAttribute("selist", selist);
 		model.addAttribute("list", list);
 		model.addAttribute("dto", dto);
@@ -232,7 +235,7 @@ public class RecipeController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		Map<String, Object> ingredientMap = new HashMap<String, Object>();
 		
-		List<Recipe> list = service.readRecipeingredient(recipeNum);
+		List<Recipe> list = service.updateRecipeingredient(recipeNum);
 		
 		ingredientMap.put("parent", null);
 		
@@ -250,6 +253,53 @@ public class RecipeController {
 		model.addAttribute("ingredientCategory", ingredientCategory);
 		
 		return ".recipe.write";
+	}
+	
+	@RequestMapping(value = "update", method = RequestMethod.POST)
+	public String update(
+			Recipe dto,
+			HttpSession session
+			) throws Exception {
+		
+		String root = session.getServletContext().getRealPath("/");
+		String path = root + "uploads" + File.separator + "recipe";
+		
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		try {
+			dto.setUserId(info.getUserId());
+			
+			service.deleteRecipeingredientList(dto.getRecipeNum());
+			
+			service.updateRecipe(dto, path);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/recipe/feed";
+	}
+	
+	@RequestMapping(value = "notify")
+	public String insertnotifyPost (
+			@RequestParam int recipeNum,
+			HttpSession session,
+			Model model,
+			Notify dto
+			) throws Exception {
+		
+		SessionInfo info = (SessionInfo) session.getAttribute("member");		
+		
+		try {
+			dto.setUserId(info.getUserId());
+			
+			service.insertnotifyPost(dto);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/recipe/article?page=1&recipeNum=" + recipeNum;
 	}
 	
 	@RequestMapping(value = "insertRecipeLike", method = RequestMethod.POST)

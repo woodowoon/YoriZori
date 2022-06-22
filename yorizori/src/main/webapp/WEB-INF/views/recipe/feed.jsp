@@ -80,7 +80,7 @@ function ajaxFun(url, method, query, dataType, fn) {
 					<img class = "float" src="${pageContext.request.contextPath}/uploads/photo/${dto.memberImageName}" style="width: 30px">
 				</c:otherwise>
 			</c:choose>   
-			<p> ${dto.nickName} </p>
+			<p><a href="${pageContext.request.contextPath}/mypage/main?userId=${dto.userId}"> ${dto.nickName} </a> </p>
 			
 			<div class="img-box">
 				<img class = "float" onclick="href='${articleUrl}?recipeNum=${dto.recipeNum}';" src="${pageContext.request.contextPath}/uploads/recipe/${dto.imageFilename}" style="height: 700px; object-fit: cover;">

@@ -50,6 +50,11 @@
 		INSERT INTO recipePhoto (recipenum, recipephotoName) VALUES (#{recipeNum}, #{imageFilename, jdbcType=VARCHAR})
 	</insert>
 	
+	<!-- 재료 리스트 수정 -->
+	<delete id="deleteRecipeingredientList" parameterType="Integer">
+		DELETE FROM ingredientList WHERE recipeNum = #{recipeNum}
+	</delete>
+	
 	<!-- 레시피 재료 등록 -->
 	<insert id="insertingredientList" parameterType="com.sp.yorizori.recipe.Recipe">
 		INSERT INTO ingredientList (num, recipeNum , ingredientCode) VALUES (ingredientList_seq.NEXTVAL, #{recipeNum}, #{ingredientCode})
@@ -103,7 +108,7 @@
 		SELECT * FROM (
 		    SELECT ROWNUM rnum, tb.* FROM (
 		        SELECT r.recipeNum recipeNum, r.countryNum countryNum, recipeSubject, nickName, memberImageName, imageFilename, 
-		            NVL(recipeLikeCount, 0) recipeLikeCount, follower_id, NVL(userRecipeLike, 0) userRecipeLike
+		            NVL(recipeLikeCount, 0) recipeLikeCount, follower_id, NVL(userRecipeLike, 0) userRecipeLike, r.userId userId
 		            FROM recipe r
 		            JOIN member m ON m.userId = r.userId
 	                LEFT OUTER JOIN (
@@ -190,6 +195,15 @@
 		WHERE recipeNum = #{recipeNum} AND parent = 100
 	</select>
 	
+	<select id="updateRecipeingredient" parameterType="Integer" resultType="com.sp.yorizori.recipe.Recipe">
+		SELECT recipeNum, il.ingredientCode ingredientCode, ingredientName, parent
+		    FROM ingredientList il
+		    LEFT OUTER JOIN (
+		        SELECT ingredientCode, ingredientName, parent FROM ingredient i
+		    ) i ON i.ingredientCode = il.ingredientCode
+		WHERE recipeNum = #{recipeNum}
+	</select>
+	
 	<delete id="deleteRecipe" parameterType="Integer">
 		DELETE FROM recipe WHERE recipeNum = #{recipeNum}
 	</delete>
@@ -211,13 +225,6 @@
 		UPDATE recipePhoto
 		    SET 
 		    recipePhotoName = #{imageFilename, jdbcType=VARCHAR}
-		WHERE recipeNum = #{recipeNum}
-	</update>
-	
-	<update id="updateRecipeingredientList" parameterType="com.sp.yorizori.recipe.Recipe">
-		UPDATE ingredientList
-		    SET 
-		    IngredientCode = #{ingredientCode}
 		WHERE recipeNum = #{recipeNum}
 	</update>
 	

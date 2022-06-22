@@ -28,9 +28,11 @@ public interface RecipeService {
 	// article 재료 리스트
 	public List<Recipe> readRecipeingredient(int recipeNum);
 	public List<Recipe> readRecipeseasoning(int recipeNum);
+	public List<Recipe> updateRecipeingredient(int recipeNum);
 	
 	// 삭제
 	public void deleteRecipe(int recipeNum, String userId, int role) throws Exception;
+	public void deleteRecipeingredientList(int recipeNum) throws Exception;
 	
 	// 카테고리 리스트
 	public List<Recipe> listcaseCategory(Map<String, Object> map);
@@ -39,7 +41,9 @@ public interface RecipeService {
 	public List<Recipe> listingredient(int ingredientCode);
 	
 	// 수정
-	public void updateRecipe(Recipe dto) throws Exception;
-	public void updateRecipePhoto(Recipe dto) throws Exception;
-	public void updateRecipeingredientList(Recipe dto) throws Exception;
+	public void updateRecipe(Recipe dto, String pathname) throws Exception;
+	
+	// 신고
+	public void insertnotifyPost(Notify dto) throws Exception;
+	public boolean isrecipenotifyPost(Map<String, Object> map);
 }
