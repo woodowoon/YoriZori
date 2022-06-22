@@ -35,6 +35,9 @@ main { background-color: #fff; font-family: 'Noto Sans KR', sans-serif; color: #
 dd { margin: 0; position: absolute; left: 26px; bottom: 23px; }
 dd > p { margin: 0; color: #666; line-height: 19px; }
 
+.page-item.active .page-link { background-color: #0095f6; border-color: #0095f6; }
+.page-link, .page-link:hover, .page-link:active { color: #0095f6; }
+
 .offcanvas-title { cursor: pointer; }
 .offcanvas-title:hover, .offcanvas-title:active { color: #0d6efd; }
 .offcanvas-start { width: 300px; border-right: none; }
@@ -52,18 +55,28 @@ dd > p { margin: 0; color: #666; line-height: 19px; }
 
 <script type="text/javascript">
 function usableClick() {
-	document.getElementById('usableDiv').style.display = 'inline-block'
-	document.getElementById('usableTab').className += ' selected';
-	document.getElementById('uselessDiv').style.display = 'none'
-	document.getElementById('uselessTab').className = 'uselessTab';
+	var tab = "usable";
+	location.href = '${pageContext.request.contextPath}/mypage/coupon?tab=' + tab;
 };
 
 function uselessClick() {
-	document.getElementById('uselessDiv').style.display = 'inline-block'
-	document.getElementById('uselessTab').className += ' selected';
-	document.getElementById('usableDiv').style.display = 'none'
-	document.getElementById('usableTab').className = 'usableTab';
+	var tab = "useless";
+	location.href = '${pageContext.request.contextPath}/mypage/coupon?tab=' + tab;
 };
+
+$(function(){
+	if('${tab}' == 'usable') {
+		document.getElementById('usableDiv').style.display = 'inline-block'
+		document.getElementById('usableTab').className += ' selected';
+		document.getElementById('uselessDiv').style.display = 'none'
+		document.getElementById('uselessTab').className = 'uselessTab';
+	} else if('${tab}' == 'useless') {
+		document.getElementById('uselessDiv').style.display = 'inline-block'
+		document.getElementById('uselessTab').className += ' selected';
+		document.getElementById('usableDiv').style.display = 'none'
+		document.getElementById('usableTab').className = 'usableTab';
+	}
+});
 </script>
 
 <div class="mypage">
@@ -89,160 +102,70 @@ function uselessClick() {
 	
 	<div id="usableDiv" class="usableDiv">
 		<ul class="coupon-list">
-		
-			<li>
-				<div class="coupon-box">
-					<dl class="coupon-detail">
-						<dt>
-							<span class="name">냥냥클래스 할인쿠폰</span>
-							<span class="sale">
-								10%
-								<span>할인</span>
-							</span>
-						</dt>
-						<dd>
-							<p>
-								2022.06.18 ~ 2022.07.01
-							</p>
-						</dd>
-					</dl>
-				</div>
-			</li>
-			<li>
-				<div class="coupon-box">
-					<dl class="coupon-detail">
-						<dt>
-							<span class="name">냥냥클래스 할인쿠폰</span>
-							<span class="sale">
-								10%
-								<span>할인</span>
-							</span>
-						</dt>
-						<dd>
-							<p>
-								2022.06.18 ~ 2022.07.01
-							</p>
-						</dd>
-					</dl>
-				</div>
-			</li>
-			<li>
-				<div class="coupon-box">
-					<dl class="coupon-detail">
-						<dt>
-							<span class="name">냥냥클래스 할인쿠폰</span>
-							<span class="sale">
-								10%
-								<span>할인</span>
-							</span>
-						</dt>
-						<dd>
-							<p>
-								2022.06.18 ~ 2022.07.01
-							</p>
-						</dd>
-					</dl>
-				</div>
-			</li>
-			<li>
-				<div class="coupon-box">
-					<dl class="coupon-detail">
-						<dt>
-							<span class="name">냥냥클래스 할인쿠폰</span>
-							<span class="sale">
-								10%
-								<span>할인</span>
-							</span>
-						</dt>
-						<dd>
-							<p>
-								2022.06.18 ~ 2022.07.01
-							</p>
-						</dd>
-					</dl>
-				</div>
-			</li>
-			<li>
-				<div class="coupon-box">
-					<dl class="coupon-detail">
-						<dt>
-							<span class="name">냥냥클래스 할인쿠폰</span>
-							<span class="sale">
-								10%
-								<span>할인</span>
-							</span>
-						</dt>
-						<dd>
-							<p>
-								2022.06.18 ~ 2022.07.01
-							</p>
-						</dd>
-					</dl>
-				</div>
-			</li>
-			
+			<c:choose>
+				<c:when test="${list.size() != 0}">
+					<c:forEach var="dto" items="${list}">
+						<li>
+							<div class="coupon-box">
+								<dl class="coupon-detail">
+									<dt>
+										<span class="name">${dto.couponName}</span>
+										<span class="sale">
+											${dto.discountPrice}원
+											<span>할인</span>
+										</span>
+									</dt>
+									<dd>
+										<p>
+											${dto.createTime} ~ ${dto.expireTime}
+										</p>
+									</dd>
+								</dl>
+							</div>
+						</li>
+					</c:forEach>
+				</c:when>
+				<c:otherwise>
+					<div style="padding: 50px 0; text-align: center;">사용 가능한 쿠폰이 없습니다.</div>
+				</c:otherwise>
+			</c:choose>
 		</ul>
 	</div>
 	
 	<div id="uselessDiv" class="uselessDiv">
 		<ul class="coupon-list">
-		
-			<li>
-				<div class="coupon-box">
-					<dl class="coupon-detail">
-						<dt>
-							<span class="name">냥냥클래스 할인쿠폰</span>
-							<span class="sale">
-								10%
-								<span>할인</span>
-							</span>
-						</dt>
-						<dd>
-							<p>
-								2022.06.18 ~ 2022.07.01
-							</p>
-						</dd>
-					</dl>
-				</div>
-			</li>
-			<li>
-				<div class="coupon-box">
-					<dl class="coupon-detail">
-						<dt>
-							<span class="name">냥냥클래스 할인쿠폰</span>
-							<span class="sale">
-								10%
-								<span>할인</span>
-							</span>
-						</dt>
-						<dd>
-							<p>
-								2022.06.18 ~ 2022.07.01
-							</p>
-						</dd>
-					</dl>
-				</div>
-			</li>
-			<li>
-				<div class="coupon-box">
-					<dl class="coupon-detail">
-						<dt>
-							<span class="name">냥냥클래스 할인쿠폰</span>
-							<span class="sale">
-								10%
-								<span>할인</span>
-							</span>
-						</dt>
-						<dd>
-							<p>
-								2022.06.18 ~ 2022.07.01
-							</p>
-						</dd>
-					</dl>
-				</div>
-			</li>
-			
+			<c:choose>
+				<c:when test="${list.size() != 0}">
+					<c:forEach var="dto" items="${list}">
+						<li>
+							<div class="coupon-box">
+								<dl class="coupon-detail">
+									<dt>
+										<span class="name">${dto.couponName}</span>
+										<span class="sale">
+											${dto.discountPrice}원
+											<span>할인</span>
+										</span>
+									</dt>
+									<dd>
+										<p>
+											${dto.createTime} ~ ${dto.expireTime}
+										</p>
+									</dd>
+								</dl>
+							</div>
+						</li>
+					</c:forEach>
+				</c:when>
+				<c:otherwise>
+					<div style="padding: 50px 0; text-align: center;">사용 종료된 쿠폰이 없습니다.</div>
+				</c:otherwise>
+			</c:choose>
 		</ul>
+	</div>
+	
+	<div class="page-box">
+		${paging}
 	</div>
 	
 	<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">

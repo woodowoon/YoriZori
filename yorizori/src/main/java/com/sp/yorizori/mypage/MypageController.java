@@ -56,9 +56,10 @@ public class MypageController {
 		int end = current_page * rows;
 		map.put("start", start);
 		map.put("end", end);
+		map.put("userId", userId);
 		
 		Mypage dto = service.readMypage(userId);
-		List<Mypage> list = service.listMyrecipe(userId);
+		List<Mypage> list = service.listMyrecipe(map);
 		List<Mypage> listFollower = service.listFollower(userId);
 		List<Mypage> listFollowing = service.listFollowing(userId);
 		
@@ -122,9 +123,10 @@ public class MypageController {
 		int end = current_page * rows;
 		map.put("start", start);
 		map.put("end", end);
+		map.put("userId", info.getUserId());
 		
 		Mypage dto = service.readMypage(info.getUserId());
-		List<Mypage> list = service.listLike(info.getUserId());
+		List<Mypage> list = service.listLike(map);
 		List<Mypage> listFollower = service.listFollower(info.getUserId());
 		List<Mypage> listFollowing = service.listFollowing(info.getUserId());
 		
@@ -171,14 +173,15 @@ public class MypageController {
 		int end = current_page * rows;
 		map.put("start", start);
 		map.put("end", end);
+		map.put("userId", info.getUserId());
 		
 		Mypage dto = service.readMypage(info.getUserId());
-		List<Mypage> list = service.listWish(info.getUserId());
+		List<Mypage> list = service.listWish(map);
 		List<Mypage> listFollower = service.listFollower(info.getUserId());
 		List<Mypage> listFollowing = service.listFollowing(info.getUserId());
 		
-		String listUrl = cp + "/mypage/main";
-		String articleUrl = cp + "/recipe/article?page=1";
+		String listUrl = cp + "/mypage/wish";
+		String articleUrl = cp + "/class/article?category=0&page=1";
 		String paging = myUtil.paging(current_page, total_page, listUrl);
 				
 		model.addAttribute("dto", dto);
@@ -219,14 +222,15 @@ public class MypageController {
 		int end = current_page * rows;
 		map.put("start", start);
 		map.put("end", end);
+		map.put("userId", info.getUserId());
 		
 		Mypage dto = service.readMypage(info.getUserId());
-		List<Mypage> list = service.listFavorite(info.getUserId());
+		List<Mypage> list = service.listFavorite(map);
 		List<Mypage> listFollower = service.listFollower(info.getUserId());
 		List<Mypage> listFollowing = service.listFollowing(info.getUserId());
 		
-		String listUrl = cp + "/mypage/main";
-		String articleUrl = cp + "/recipe/article?page=1";
+		String listUrl = cp + "/mypage/favorite";
+		String articleUrl = cp + "/festival/article?menu=ing&page=1";
 		String paging = myUtil.paging(current_page, total_page, listUrl);
 				
 		model.addAttribute("dto", dto);
@@ -260,19 +264,155 @@ public class MypageController {
 	}
 	
 	@RequestMapping(value = "contest", method = RequestMethod.GET)
-	public String contest() throws Exception {
+	public String contest(
+			@RequestParam(value = "page", defaultValue = "1") int current_page,
+			HttpSession session, HttpServletRequest req, Model model) throws Exception {
+		
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		String cp = req.getContextPath();
+		
+		int rows = 10;
+		int total_page = 0;
+		int dataCountContest = 0;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		dataCountContest = service.dataCountContest(info.getUserId());
+		if (dataCountContest != 0) {
+			total_page = myUtil.pageCount(rows, dataCountContest);
+		}
+		
+		if (total_page < current_page) {
+			current_page = total_page;
+		}
+		
+		int start = (current_page - 1) * rows + 1;
+		int end = current_page * rows;
+		map.put("start", start);
+		map.put("end", end);
+		map.put("userId", info.getUserId());
+		
+		List<MyEvent> list = service.listContest(map);
+		
+		String listUrl = cp + "/mypage/contest";
+		// String articleUrl = cp + "/contest/article?page=1";
+		String paging = myUtil.paging(current_page, total_page, listUrl);
+		
+		model.addAttribute("list", list);
+		// model.addAttribute("articleUrl", articleUrl);
+		model.addAttribute("page", current_page);
+		model.addAttribute("dataCount", dataCountContest);
+		model.addAttribute("total_page", total_page);
+		model.addAttribute("paging", paging);
 		
 		return ".mypage.contest";
 	}
 	
 	@RequestMapping(value = "coupon", method = RequestMethod.GET)
-	public String coupon() throws Exception {
+	public String coupon(
+			@RequestParam(value = "page", defaultValue = "1") int current_page,
+			@RequestParam(defaultValue = "usable") String tab,
+			HttpSession session, HttpServletRequest req, Model model) throws Exception {
+		
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		String cp = req.getContextPath();
+		
+		int rows = 6;
+		int total_page = 0;
+		int dataCount = 0;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		if (tab == "usable") {
+			dataCount = service.dataCountUsable(info.getUserId());
+			if (dataCount != 0) {
+				total_page = myUtil.pageCount(rows, dataCount);
+			}
+		} else {
+			dataCount = service.dataCountUseless(info.getUserId());
+			if (dataCount != 0) {
+				total_page = myUtil.pageCount(rows, dataCount);
+			}
+		}
+		
+		if (total_page < current_page) {
+			current_page = total_page;
+		}
+		
+		int start = (current_page - 1) * rows + 1;
+		int end = current_page * rows;
+		map.put("start", start);
+		map.put("end", end);
+		map.put("userId", info.getUserId());
+		
+		List<MyEvent> list = null;
+		
+		if (tab == "usable") {
+			list = service.listUsable(map);
+		} else {
+			list = service.listUseless(map);
+		}
+		
+		String listUrl = cp + "/mypage/coupon";
+		// String articleUrl = cp + "/coupon/article?page=1";
+		String paging = myUtil.paging(current_page, total_page, listUrl);
+		
+		model.addAttribute("list", list);
+		// model.addAttribute("articleUrl", articleUrl);
+		model.addAttribute("page", current_page);
+		model.addAttribute("dataCount", dataCount);
+		model.addAttribute("total_page", total_page);
+		model.addAttribute("paging", paging);
+		model.addAttribute("tab", tab);
 		
 		return ".mypage.coupon";
 	}
 	
 	@RequestMapping(value = "qna", method = RequestMethod.GET)
-	public String qna() throws Exception {
+	public String qna(
+			@RequestParam(value = "page", defaultValue = "1") int current_page,
+			HttpSession session, HttpServletRequest req, Model model) throws Exception {
+		
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		String cp = req.getContextPath();
+		
+		int rows = 10;
+		int total_page = 0;
+		int dataCount = 0;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		dataCount = service.dataCountQna(info.getUserId());
+		if (dataCount != 0) {
+			total_page = myUtil.pageCount(rows, dataCount);
+		}
+		
+		if (total_page < current_page) {
+			current_page = total_page;
+		}
+		
+		int start = (current_page - 1) * rows + 1;
+		int end = current_page * rows;
+		map.put("start", start);
+		map.put("end", end);
+		map.put("userId", info.getUserId());
+		
+		List<MyQna> list = service.listQna(map);
+		
+		for (MyQna dto : list) {
+			dto.setState(service.answerState(dto.getNum()));
+		}
+		
+		String listUrl = cp + "/mypage/qna";
+		String articleUrl = cp + "/qna/article?page=1";
+		String paging = myUtil.paging(current_page, total_page, listUrl);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("articleUrl", articleUrl);
+		model.addAttribute("page", current_page);
+		model.addAttribute("dataCount", dataCount);
+		model.addAttribute("total_page", total_page);
+		model.addAttribute("paging", paging);
 		
 		return ".mypage.qna";
 	}

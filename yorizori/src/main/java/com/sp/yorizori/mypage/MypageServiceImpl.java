@@ -1,6 +1,7 @@
 package com.sp.yorizori.mypage;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -101,11 +102,11 @@ public class MypageServiceImpl implements MypageService {
 	}
 	
 	@Override
-	public List<Mypage> listMyrecipe(String userId) {
+	public List<Mypage> listMyrecipe(Map<String, Object> map) {
 		List<Mypage> list = null;
 		
 		try {
-			list = dao.selectList("mypage.listMyrecipe", userId);
+			list = dao.selectList("mypage.listMyrecipe", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -113,11 +114,11 @@ public class MypageServiceImpl implements MypageService {
 	}
 
 	@Override
-	public List<Mypage> listLike(String userId) {
+	public List<Mypage> listLike(Map<String, Object> map) {
 		List<Mypage> list = null;
 		
 		try {
-			list = dao.selectList("mypage.listLike", userId);
+			list = dao.selectList("mypage.listLike", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -125,11 +126,11 @@ public class MypageServiceImpl implements MypageService {
 	}
 
 	@Override
-	public List<Mypage> listWish(String userId) {
+	public List<Mypage> listWish(Map<String, Object> map) {
 		List<Mypage> list = null;
 		
 		try {
-			list = dao.selectList("mypage.listWish", userId);
+			list = dao.selectList("mypage.listWish", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -137,11 +138,11 @@ public class MypageServiceImpl implements MypageService {
 	}
 
 	@Override
-	public List<Mypage> listFavorite(String userId) {
+	public List<Mypage> listFavorite(Map<String, Object> map) {
 		List<Mypage> list = null;
 		
 		try {
-			list = dao.selectList("mypage.listFavorite", userId);
+			list = dao.selectList("mypage.listFavorite", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -193,6 +194,118 @@ public class MypageServiceImpl implements MypageService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return result;
+	}
+
+	@Override
+	public int dataCountContest(String userId) {
+		int result = 0;
+		
+		try {
+			result = dao.selectOne("mypage.dataCountContest", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public List<MyEvent> listContest(Map<String, Object> map) {
+		List<MyEvent> list = null;
+		
+		try {
+			list = dao.selectList("mypage.listContest", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public int dataCountUsable(String userId) {
+		int result = 0;
+		
+		try {
+			result = dao.selectOne("mypage.dataCountUsable", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public List<MyEvent> listUsable(Map<String, Object> map) {
+		List<MyEvent> list = null;
+		
+		try {
+			list = dao.selectList("mypage.listUsable", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public int dataCountUseless(String userId) {
+		int result = 0;
+		
+		try {
+			result = dao.selectOne("mypage.dataCountUseless", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public List<MyEvent> listUseless(Map<String, Object> map) {
+		List<MyEvent> list = null;
+		
+		try {
+			list = dao.selectList("mypage.listUseless", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public int dataCountQna(String userId) {
+		int result = 0;
+		
+		try {
+			result = dao.selectOne("mypage.dataCountQna", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public List<MyQna> listQna(Map<String, Object> map) {
+		List<MyQna> list = null;
+		
+		try {
+			list = dao.selectList("mypage.listQna", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public boolean answerState(int num) {
+		boolean result = false;
+		
+		try {
+			int cnt = dao.selectOne("mypage.answerState", num);
+			if (cnt != 0) {
+				result = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return result;
 	}
 }

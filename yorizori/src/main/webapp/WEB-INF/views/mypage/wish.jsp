@@ -107,19 +107,26 @@ li { list-style: none; }
 	
 	<div class="myFeed">
 		<ul class="feed-list clearFix">
-			<c:forEach var="vo" items="${list}">
-				<li>
-					<div class="box">
-						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-						<div class="text">${vo.classSubject}</div>
-					</div>
-				</li>
-			</c:forEach>
+			<c:choose>
+				<c:when test="${list.size() != 0}">
+					<c:forEach var="vo" items="${list}">
+						<li>
+							<div class="box" onclick="location.href='${articleUrl}&classCode=${vo.classCode}'">
+								<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
+								<div class="text">${vo.classSubject}</div>
+							</div>
+						</li>
+					</c:forEach>
+				</c:when>
+				<c:otherwise>
+					<div style="padding: 50px 0; text-align: center;">찜한 클래스가 없습니다.</div>
+				</c:otherwise>
+			</c:choose>
 		</ul>
 	</div>
 	
 	<div class="page-box">
-		${dataCount == 0 ? "등록된 레시피가 없습니다." : paging}
+		${paging}
 	</div>
 	
 	<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">

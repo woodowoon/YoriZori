@@ -25,6 +25,9 @@ main { background-color: #fff; font-family: 'Noto Sans KR', sans-serif; color: #
 .in-subject > a { display: block; overflow: hidden; text-overflow: ellipsis; line-height: 18px; white-space: nowrap; }
 .in-subject > a:hover, .in-subject > a:active { text-decoration: none; color: #0d6efd; }
 
+.page-item.active .page-link { background-color: #0095f6; border-color: #0095f6; }
+.page-link, .page-link:hover, .page-link:active { color: #0095f6; }
+
 .offcanvas-title { cursor: pointer; }
 .offcanvas-title:hover, .offcanvas-title:active { color: #0d6efd; }
 .offcanvas-start { width: 300px; border-right: none; }
@@ -64,23 +67,30 @@ main { background-color: #fff; font-family: 'Noto Sans KR', sans-serif; color: #
 	</div>
 
 	<ul class="contest-list">
-		
-		<li class="contest">
-			<div class="box">
-				<div class="subject">
-					<div class="in-subject">
-						<a href="#">냥냥 레시피 문의</a>
-					</div>
-				</div>
-				<div class="user">김유저</div>
-				<div class="reg_date">2022.06.18</div>
-			</div>
-		</li>
-			
+		<c:choose>
+			<c:when test="${list.size() != 0}">
+				<c:forEach var="dto" items="${list}">
+					<li class="contest">
+						<div class="box">
+							<div class="subject">
+								<div class="in-subject">
+									<a href="#">${dto.contestSubject}</a>
+								</div>
+							</div>
+							<div class="user">${dto.userId}</div>
+							<div class="reg_date">${dto.reg_date}</div>
+						</div>
+					</li>
+				</c:forEach>
+			</c:when>
+			<c:otherwise>
+				<div style="padding: 50px 0; text-align: center;">참여한 공모전이 없습니다.</div>
+			</c:otherwise>
+		</c:choose>
 	</ul>
 	
 	<div class="page-box">
-		1 2 3
+		${paging}
 	</div>
 	
 	<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
