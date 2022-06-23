@@ -88,6 +88,7 @@
     font-size: 100%;
     position: relative;
     width: 100%;
+	min-height: 600px;    
 }
 
 .pager-wr recipe {
@@ -201,7 +202,7 @@
     text-overflow: ellipsis;
 }
 
-li {
+.month_recipe_list li {
     -webkit-font-smoothing: antialiased;
     font-family: 'Noto Sans', sans-serif;
     color: #000000;
@@ -244,6 +245,14 @@ li {
     padding-bottom: 100%;
 }
 
+.recipe_list_thumb img {
+    vertical-align: middle;
+    object-fit: cover;
+    width: 578px;
+    height: 600px;
+    border-radius: 18px;
+}
+
 
 
 </style>
@@ -266,33 +275,22 @@ li {
 			<div class="recipe_btm">
 				<div class="inwrap">
 					<div class="month_recipe_list">
+					<c:forEach var="dto" items="${list}">
 						<ul>
 								<li>
-									<a href="#n" onclick="javascript:show('57');" title="레시피보기">
+									<a href="${pageContext.request.contextPath}/recipe/article?page=1&recipeNum=${dto.recipeNum}" onclick="" title="레시피보기">
 										<div class="recipe_list_thumb">
-											<img class="lazy loaded" src="${pageContext.request.contextPath}/uploads/recipe/${dto.imageFilename}" onerror="this.src='/share/cmm/img/no-img.png'" data-ll-status="loaded">
+											<img class="lazy loaded" src="${pageContext.request.contextPath}/uploads/recipe/${dto.imageFilename}" data-ll-status="loaded">
 										</div>
 										<div class="recipe_list_txtbox">
 											<span class="nickName">${dto.nickName}</span>
 											<span class="recipeSubject">${dto.recipeSubject}</span>
 										</div>
 									</a>
-								</li>			
+								</li>			 
 						</ul>
+						</c:forEach>
 						
-						<ul>
-								<li>
-									<a href="#n" onclick="javascript:show('57');" title="레시피보기">
-										<div class="recipe_list_thumb">
-											<img class="lazy loaded" src="${pageContext.request.contextPath}/resources/images/frige.png" onerror="this.src='/share/cmm/img/no-img.png'" data-ll-status="loaded">
-										</div>
-										<div class="recipe_list_txtbox">
-											<span class="nickName">작성자</span>
-											<span class="recipeSubject">레시피제목</span>
-										</div>
-									</a>
-								</li>			
-						</ul>
 					</div>
 				
 						</div>

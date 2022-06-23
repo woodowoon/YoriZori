@@ -12,7 +12,7 @@ img {
 
 .body-container {
 	max-width: 1300px;
-}
+} 
 
 tr {
 	border-bottom-style: solid;

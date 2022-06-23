@@ -14,9 +14,9 @@
 	<select id="listIngredient" resultType="com.sp.yorizori.frige.Frige">
 		SELECT ingredientCode, ingredientName, NVL(parent, 0) parent, ingredimageName
 		FROM ingredient
+		WHERE parent != 0
 		ORDER BY ingredientCode
 	</select>
-	
 
 	<insert id="insertRecipe" parameterType="com.sp.yorizori.frige.Frige">
 		INSERT INTO recipe (recipeNum, caseNum, countryNum, recipeSubject, recipeHitcount, TO_CHAR(recipeReg_date, 'YYYY-MM-DD') recipeReg_date, recipeServing, recipeLevel, 
@@ -30,37 +30,35 @@
 		INSERT INTO recipePhoto (recipeNum, recipephotoName) VALUES (#{recipeNum}, #{imageFilename, jdbcType=VARCHAR})
 	</insert>
 	
-	<!-- 
-	<select id="listRecipe" resultType="com.sp.yorizori.frige.Frige">
-	SELECT recipeNum, recipeSubject, recipeReg_date, recipeServing, recipeLevel, 
-   			 recipeContent, recipeTime,userId, active
-	FROM recipe
-	ORDER BY recipeNum
+
+	<select id="dataCount" resultType="Integer" parameterType="map">
+		SELECT COUNT(*)
+		FROM recipe r
+        JOIN ingredientList il ON r.recipeNum = il.recipeNum
+		JOIN member m ON m.userId = r.userId
+		WHERE ingredientCode IN
+			<foreach collection="list" item="ingredientCode" separator="," open="(" close=")">
+				#{ingredientCode}
+			</foreach>
 	</select>
-	
-	<insert id="listRecipePhoto" parameterType="com.sp.yorizori.frige.Frige">
-	SELECT recipeNum, recipephotoName
-	FROM recipePhoto
-	ORDER BY recipeNum
-	</insert>
-	 -->
-	 
-	<select id="listRecipe" resultType="com.sp.yorizori.frige.Frige">
-	SELECT * FROM (
-		    SELECT ROWNUM rnum, tb.* FROM (
-		        SELECT r.recipeNum, r.userId, recipeSubject, recipePhotoName, 
-		            nickName
-		        FROM recipe r
-		        LEFT OUTER JOIN (
-		            SELECT p.recipeNum, recipePhotoName
-		            FROM recipePhoto p
-		        ) p ON r.recipeNum = p.recipeNum
-		        LEFT OUTER JOIN (
-		            SELECT m.userId, nickName
-		            FROM member m
-		        ) m ON r.userId = m.userId
-		    ) tb WHERE ROWNUM &lt;= 100
-		) WHERE rnum &gt;= 1 ORDER BY rnum ASC
+ 
+	<select id="listRecipe" parameterType="map" resultType="com.sp.yorizori.frige.Frige">
+        SELECT r.recipeNum, r.userId, recipeSubject, ingredientCode, recipePhotoName imageFilename, 
+            nickName
+        FROM recipe r
+        JOIN ingredientList il ON r.recipeNum = il.recipeNum
+        LEFT OUTER JOIN (
+            SELECT p.recipeNum, recipePhotoName
+            FROM recipePhoto p
+        ) p ON r.recipeNum = p.recipeNum
+        LEFT OUTER JOIN (
+            SELECT m.userId, nickName
+            FROM member m
+        ) m ON r.userId = m.userId
+		WHERE ingredientCode IN
+			<foreach collection="list" item="ingredientCode" separator="," open="(" close=")">
+				#{ingredientCode}
+			</foreach>
 		</select>
 	
 	
