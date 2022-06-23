@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sp.yorizori.common.MyUtil;
+import com.sp.yorizori.foodclass.qna.Board;
+import com.sp.yorizori.foodclass.qna.BoardService;
 import com.sp.yorizori.member.SessionInfo;
 
-@Controller("class.foodClassController")
+@Controller("foodclass.foodClassController")
 @RequestMapping("/class/*")
 public class FoodClassController {
 	@Autowired
@@ -28,25 +30,26 @@ public class FoodClassController {
 	@Autowired
 	private MyUtil myUtil;
 	
-	// @Autowired
-	// private FileManager fileManager;
-	
+	@Autowired
+	private BoardService qnaService;
 	
 	@RequestMapping(value = "list")
 	public String list(
 			@RequestParam(value = "page", defaultValue = "1") int current_page,
 			@RequestParam(value = "category", defaultValue = "0") int category,
-			HttpServletRequest req, Model model) throws Exception {
+			HttpServletRequest req, HttpSession session, Model model) throws Exception {
 		
 		String cp = req.getContextPath();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		
-		int rows = 5;
+		int rows = 16;
 		int total_page = 0;
 		int dataCount = 0;
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		boolean userClassLike = service.userClassLike(map);
 		
+		map.put("userId", info.getUserId());
 		map.put("category", category);
 		map.put("userClassLike", userClassLike);
 		
@@ -95,20 +98,17 @@ public class FoodClassController {
 			@RequestParam int classCode,
 			@RequestParam String page,
 			@RequestParam int category,
+			HttpServletRequest req,
 			HttpSession session, Model model) throws Exception {
 		
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		
+		Map<String, Object> map = new HashMap<String, Object>();
+				
 		String query = "category=" + category;
 		query += "&page=" + page;
 		
 		service.updateHitCount(classCode);
-		FoodClass dto = service.readClass(classCode);
-		if(dto == null) {
-			return "redirect:/class/list?" + query;
-		}
-		
-		Map<String, Object> map = new HashMap<String, Object>();
 		
 		map.put("category", category);
 		map.put("classCode", classCode);
@@ -116,6 +116,10 @@ public class FoodClassController {
 		map.put("nickname", info.getNickName());
 		
 		boolean userClassLike = service.userClassLike(map);
+		FoodClass dto = service.readClass(classCode);
+		if(dto == null) {
+			return "redirect:/class/list?" + query;
+		}
 		
 		model.addAttribute("dto", dto);
 		model.addAttribute("query", query);
@@ -189,6 +193,72 @@ public class FoodClassController {
 		model.put("state", state);
 		model.put("classLikeCount", classLikeCount);
 		
+		return model;
+	}
+	
+	@RequestMapping(value = "qnaList")
+	@ResponseBody
+	public Map<String, Object> qnaList(
+			@RequestParam int classCode,
+			@RequestParam(value = "pageNo", defaultValue = "1") int current_page,
+			HttpSession session
+			) throws Exception {
+		
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		int rows = 5;
+		int dataCount = qnaService.dataCount(map);
+		int total_page = myUtil.pageCount(rows, dataCount);
+		
+		if (current_page > total_page) {
+			current_page = total_page;
+		}
+
+		int start = (current_page - 1) * rows + 1;
+		int end = current_page * rows;
+		map.put("start", start);
+		map.put("end", end);
+		
+		map.put("classCode", classCode);
+		map.put("userId", info.getUserId());
+		map.put("nickname", info.getNickName());
+		
+		List<Board> list = qnaService.readBoard(map);
+		for(Board dto : list) {
+			if(dto.getAnswer() != null) {
+				dto.setAnswer(dto.getAnswer().replaceAll("\n", "<br>"));
+			}
+			dto.setClassQContent(dto.getClassQContent().replaceAll("\n", "<br>"));
+		}
+		String paging = myUtil.pagingMethod(current_page, total_page, "listPage");
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		
+		model.put("dataCount", dataCount);
+		model.put("pageNo", current_page);
+		model.put("paging", paging);
+		model.put("list", list);
+		
+		return model; 
+	}
+	
+	@RequestMapping(value = "qnaInsert", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> qnaInsert(Board dto, HttpSession session) throws Exception {
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		String state = "true";
+		try {
+			dto.setUserId(info.getUserId());
+			qnaService.insertBoard(dto);
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("state", state);
 		return model;
 	}
 }

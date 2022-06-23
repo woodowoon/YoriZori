@@ -19,20 +19,26 @@
 	<select id="listClass" parameterType="map" resultType="com.sp.yorizori.foodclass.FoodClass">
 		SELECT * FROM (
 			SELECT ROWNUM rnum, tb.* FROM (
-				SELECT c.classCode, classSubject, m.nickname, price, 
-				    NVL(followCount, 0) followCount, classPhotoName imageFileName
-				FROM classTable c
-				JOIN member m ON c.userId = m.userId
-				LEFT OUTER JOIN (
-				  SELECT cf.classcode, classPhotoName FROM classFile cf 
-				) cf ON c.classCode = cf.classCode
-				LEFT OUTER JOIN (
-				    SELECT following_id, COUNT(*) followCount 
-				    FROM follow f
-				    JOIN member m ON f.following_id=m.userId
-				    WHERE following_id = m.userId
-				    GROUP BY following_id
-				) f ON c.userId = f.following_id
+		        SELECT c.classCode, classSubject, m.nickname, price, 
+		            NVL(followCount, 0) followCount, classPhotoName imageFileName, NVL(userClassLike, 0) userClassLike
+		        FROM classTable c
+		        JOIN member m ON c.userId = m.userId
+		        LEFT OUTER JOIN (
+		          SELECT cf.classcode, classPhotoName FROM classFile cf 
+		        ) cf ON c.classCode = cf.classCode
+		        LEFT OUTER JOIN (
+		            SELECT following_id, COUNT(*) followCount 
+		            FROM follow f
+		            JOIN member m ON f.following_id=m.userId
+		            WHERE following_id = m.userId
+		            GROUP BY following_id
+		        ) f ON c.userId = f.following_id
+		        LEFT OUTER JOIN (
+		            SELECT l.classCode, COUNT(*) userClassLike
+		            FROM classLike l
+		            WHERE l.userId = #{userId}
+		            GROUP BY l.classCode
+		        ) l ON c.classCode = l.classCode
 				<where>
 					<if test="category!=0">
 						(c.class_Category = #{category} )

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.sp.yorizori.common.FileManager;
 import com.sp.yorizori.common.dao.CommonDAO;
 
-@Service("foodClass.foodClassService")
+@Service("foodclass.foodClassService")
 public class FoodClassServiceImpl implements FoodClassService {
 	@Autowired
 	private CommonDAO dao;

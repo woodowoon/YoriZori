@@ -22,4 +22,6 @@ public interface FoodClassService {
 	public void deleteClassLike(Map<String, Object> map) throws Exception;
 	public int classLikeCount(int num);
 	public boolean userClassLike(Map<String, Object> map);
+	
+	
 }
