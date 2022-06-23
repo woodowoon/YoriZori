@@ -16,7 +16,12 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Override
 	public void insertBoard(Board dto) throws Exception {
-		// TODO Auto-generated method stub
+		try {
+			dao.insertData("classQna.insertBoard", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 		
 	}
 

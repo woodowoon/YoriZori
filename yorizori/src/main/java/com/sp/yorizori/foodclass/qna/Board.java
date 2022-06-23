@@ -3,6 +3,7 @@ package com.sp.yorizori.foodclass.qna;
 public class Board {
 	private int rnum;
 	private int num;
+	private int classCode;
 	private int privacy;
 	private String subject;
 	private String classQContent;
@@ -10,8 +11,8 @@ public class Board {
 	private String answer;
 	private String answerDate;
 	private String userId;
+	private String nickname;
 	
-	private Integer parent;
 	private int isAnswer;
 	
 	public int getRnum() {
@@ -26,6 +27,12 @@ public class Board {
 	public void setNum(int num) {
 		this.num = num;
 	}
+	public int getClassCode() {
+		return classCode;
+	}
+	public void setClassCode(int classCode) {
+		this.classCode = classCode;
+	}	
 	public int getPrivacy() {
 		return privacy;
 	}
@@ -68,11 +75,11 @@ public class Board {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public Integer getParent() {
-		return parent;
+	public String getNickname() {
+		return nickname;
 	}
-	public void setParent(Integer parent) {
-		this.parent = parent;
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}	
 	public int getIsAnswer() {
 		return isAnswer;

@@ -49,7 +49,9 @@
 .lec-detail .review button { width: 140px; height: 140px; font-size: 20px; vertical-align: top; border: 1px solid #ccc; border-left: none; border-radius: 4px; background: transparent; margin-left: -3px; }
 
 .lec-detail .classQna form * { display: inline-block; }
-.lec-detail .classQna form input { display: block; width: 854px; font-size: 16px; border: 1px solid #ccc; border-bottom: none; border-radius: 4px; padding: 10px 12px; margin: 0 0 -1px 131px; }
+.lec-detail .classQna form input { width: 620px; font-size: 16px; border: 1px solid #ccc; border-bottom: none; border-radius: 4px; padding: 10px 12px; margin: 0 0 -1px 131px; }
+.lec-detail .classQna form .radio-area { border: 1px solid #ccc; border-radius: 4px; border-left: none; border-bottom: none; padding: 13px 11px 8px 6px; margin: 0px 0 0 -4px; }
+.lec-detail .classQna form .radio-area * { width: 52px; vertical-align: middle; margin: 0; }
 .lec-detail .classQna form textarea { resize: none; width: 854px; height: 140px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; padding: 10px 12px; margin-left: 131px; }
 .lec-detail .classQna form button { width: 140px; height: 185px; font-size: 20px; vertical-align: top; border: 1px solid #ccc; border-left: none; border-radius: 4px; background: transparent; margin: -44px 0 0 -3px; }
 .lec-detail .qnaBoard { width: 1000px; margin: 30px auto 15px; }
@@ -72,7 +74,7 @@
 #popup-preview video, #popup-video video { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 900px; height: 500px; }
 #popup-preview #closeBtn, #popup-video #closeBtn { position: absolute; top: 40px; right: 0; font-size: 40px; color: #fff; border: none; background: transparent; }
 
-.lec-detail .page-box { margin-bottom: 30px; }
+.lec-detail .page-box { margin: 30px 0; }
 .lec-detail .page-link { padding: 0.375rem 0.75rem; }
 .page-item.active .page-link { background-color: #f44502; border-color: #f44502; }
 .page-link, .page-link:hover, .page-link:active { color: #f44502; }
@@ -125,29 +127,90 @@ $(function() {
 	});
 });
 
-$(document).ready(function() {
-	$('#showPreview').click(function(){
-		$('#popup-preview').css('display','block');
-	});
-	$('#popup-preview #closeBtn').click(function(){
-		$('#popup-preview').find('video').get(0).pause();
-		$('#popup-preview').css('display','none');	
-	});
-	
-	$('#showClass').click(function(){
-		$("#popup-video").css('display','block');
-	});
-	$('#popup-video #closeBtn').click(function(){
-		$('#popup-video').find('video').get(0).pause();
-		$('#popup-video').css('display','none');	
-	});
-	
-	$('.showMore').click(function(){
-		$('.question').toggleClass('active');
-		$('.answer').toggleClass('active');
-	});
+$(function(){
+	listPage(1);
 });
 
+function listPage(page) {
+	let url = "${pageContext.request.contextPath}/class/qnaList";
+	let query = "pageNo=" + page + "&classCode=${dto.classCode}";
+	
+	const fn = function(data) {
+		printQna(data);
+	};
+	ajaxFun(url, "get", query, "json", fn);
+}
+
+function printQna(data) {
+	let dataCount = data.dataCount;
+	let pageNo = data.pageNo;
+	let total_page = data.total_page;
+	
+	let out = "";
+	for(let idx = 0; idx < data.list.length; idx++) {
+		let userId = data.list[idx].userId;
+		let nickname = data.list[idx].nickname;
+		let subject = data.list[idx].subject;
+		let regDate = data.list[idx].regDate;
+		let answerDate = data.list[idx].answerDate;
+		let content = data.list[idx].classQContent;
+		let answer = data.list[idx].answer;
+		
+		out += "<tr align='center'>";
+		out += "	<td width='150px'>" + nickname + "</<td>";
+		out += "	<td class='showMore'>" + subject + "</td>";
+		out += "	<td>" + regDate + "</td>";
+		if(answerDate === null) {
+			out += "<td>답변대기</td>";
+		} else {
+			out += "<td>" + answerDate + "</td>";
+		}
+		out += "</tr>";
+		out += "<tr align='center' class='question'>";
+		out += "	<td colspan='1'>질문내용</td>";
+		out += "	<td colspan='3'>" + content + "</td>";
+		out += "</tr>";
+		out += "</tr>";
+		out += "<tr align='center' class='answer'>";
+		out += "	<td colspan='1'>답변내용</td>";
+		if(answer === null) {
+			out += "<td>답변대기</td>";
+		} else {
+			out += "	<td colspan='3'>" + answer + "</td>";
+		}
+		out += "</tr>";
+	}
+	
+	$(".qnaBody").append(out);
+}
+
+$(function(){
+	$(".qnaSend").click(function(){
+		let subject = $("#classQSubject").val().trim();
+		let content = $("#classQContent").val().trim();
+		
+		if(! subject) {
+			$("#classQSubject").focus();
+			return false;
+		}
+		if(! content) {
+			$("#classQContent").focus();
+			return false;
+		}
+		
+		let url = "${pageContext.request.contextPath}/class/qnaInsert";
+		let query = "subject=" + encodeURIComponent(content) + "&classQContent=" + encodeURIComponent(content);
+		
+		const fn = function(data) {
+			$("#classQSubject").val("");
+			$("#classQContent").val("");
+			$(".qnaBody").empty();
+			listPage(1);
+		};
+		
+		ajaxFun(url, "post", query, "json", fn);
+	});
+});
 
 </script>
 
@@ -226,46 +289,32 @@ $(document).ready(function() {
 	<div class="full classQna">
 		<h3>클래스 QnA</h3>
 		<form name="qnaForm" method="post">
-			<input type="text" name="subject" placeholder="제목">
-			<textarea placeholder="클래스에 관한 질문을 남겨주세요." name="classQContent"></textarea>
-			<button type="button" class="">등록</button>
+			<input type="text" name="classQSubject" placeholder="제목" id="classQSubject">
+			<div class="radio-area">
+				<input type="radio" name="privacy" id="privacy1" value="0" checked="checked">
+				<label for="private1">공개</label>
+				<input type="radio" name="privacy" id="privacy2" value="1">
+				<label for="private1">비공개</label>
+			</div>
+			<textarea placeholder="클래스에 관한 질문을 남겨주세요." name="classQContent" id="classQContent"></textarea>
+			<button type="button" class="qnaSend">등록</button>
 		</form>
 		<div class="qnaBoard">
 			<table>
-				<tr align="center">
-					<th>작성자</th>
-					<th>클래스 QnA 제목</th>
-					<th>질문일자</th>
-					<th>답변일자</th>
-				</tr>
-			<c:forEach var="qnaDto" items="${qnaList}">
-				<tr align="center">
-					<td>${qnaDto.userId}</td>
-					<td class="showMore">${qnaDto.subject}</td>
-					<td>${qnaDto.regDate}</td>
-					<td>
-						<c:choose>
-							<c:when test="${!empty qnaDto.answerDate}">
-								${qnaDto.answerDate}
-							</c:when>
-							<c:otherwise>
-								답변대기
-							</c:otherwise>
-						</c:choose>
-					</td>
-				</tr>
-				<tr align="center" class="question">
-					<td colspan="1">질문내용</td>
-					<td colspan="3">${qnaDto.classQContent}</td>
-				</tr>
-				<tr align="center" class="answer">
-					<td colspan="1">답변내용</td>
-					<td colspan="3">${qnaDto.answer}</td>
-				</tr>
-			</c:forEach>
+				<thead>
+					<tr align="center">
+						<th>작성자</th>
+						<th>클래스 QnA 제목</th>
+						<th>질문일자</th>
+						<th>답변일자</th>
+					</tr>
+				</thead>
+				<tbody class="qnaBody">
+
+				</tbody>
 			</table>
 			<div class="page-box">
-				${dataCount == 0 ? "등록된 게시물이 없습니다." : qnaPaging}
+				${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
 			</div>
 		</div>
 	</div>
@@ -284,4 +333,27 @@ $(document).ready(function() {
 	</div>
 </div>
 
-
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#showPreview').click(function(){
+		$('#popup-preview').css('display','block');
+	});
+	$('#popup-preview #closeBtn').click(function(){
+		$('#popup-preview').find('video').get(0).pause();
+		$('#popup-preview').css('display','none');	
+	});
+	
+	$('#showClass').click(function(){
+		$("#popup-video").css('display','block');
+	});
+	$('#popup-video #closeBtn').click(function(){
+		$('#popup-video').find('video').get(0).pause();
+		$('#popup-video').css('display','none');	
+	});
+	
+	$(document).on("click", ".showMore", function(){
+		$('.question').toggleClass('active');
+		$('.answer').toggleClass('active');
+	});
+});
+</script>
