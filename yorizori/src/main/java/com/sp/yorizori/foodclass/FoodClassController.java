@@ -227,7 +227,9 @@ public class FoodClassController {
 		
 		List<Board> list = qnaService.readBoard(map);
 		for(Board dto : list) {
-			dto.setAnswer(dto.getAnswer().replaceAll("\n", "<br>"));
+			if(dto.getAnswer() != null) {
+				dto.setAnswer(dto.getAnswer().replaceAll("\n", "<br>"));
+			}
 			dto.setClassQContent(dto.getClassQContent().replaceAll("\n", "<br>"));
 		}
 		String paging = myUtil.pagingMethod(current_page, total_page, "listPage");

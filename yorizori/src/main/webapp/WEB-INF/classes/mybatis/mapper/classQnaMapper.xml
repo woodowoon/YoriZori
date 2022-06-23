@@ -14,7 +14,7 @@
 	<select id="readBoard" parameterType="map" resultType="com.sp.yorizori.foodclass.qna.Board">
 		SELECT * FROM (
 			SELECT ROWNUM rnum, tb.* FROM (
-				SELECT classQNum, q.userId, m.nickname, subject, classQContent, 
+				SELECT classQNum, classCode, q.userId, m.nickname, subject, classQContent, 
 					TO_CHAR(regDate, 'YYYY-MM-DD') regDate,  
 					TO_CHAR(answerDate, 'YYYY-MM-DD') answerDate, answer
 				FROM classQna q

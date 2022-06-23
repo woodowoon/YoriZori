@@ -56,7 +56,7 @@
 .lec-detail .classQna form button { width: 140px; height: 185px; font-size: 20px; vertical-align: top; border: 1px solid #ccc; border-left: none; border-radius: 4px; background: transparent; margin: -44px 0 0 -3px; }
 .lec-detail .qnaBoard { width: 1000px; margin: 30px auto 15px; }
 .lec-detail .qnaBoard table { width: 100%; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; }
-.lec-detail .qnaBoard table tr:first-child { border-bottom: 1px solid #ccc; }
+.lec-detail .qnaBoard table th { border-bottom: 1px solid #ccc; }
 .lec-detail .qnaBoard table th,
 .lec-detail .qnaBoard table td { padding: 12px 15px; }
 .lec-detail .qnaBoard .showMore { cursor: pointer; }
@@ -160,7 +160,7 @@ function printQna(data) {
 		out += "	<td width='150px'>" + nickname + "</<td>";
 		out += "	<td class='showMore'>" + subject + "</td>";
 		out += "	<td>" + regDate + "</td>";
-		if(answerDate === null) {
+		if(! answerDate) {
 			out += "<td>답변대기</td>";
 		} else {
 			out += "<td>" + answerDate + "</td>";
@@ -173,8 +173,8 @@ function printQna(data) {
 		out += "</tr>";
 		out += "<tr align='center' class='answer'>";
 		out += "	<td colspan='1'>답변내용</td>";
-		if(answer === null) {
-			out += "<td>답변대기</td>";
+		if(! answer) {
+			out += "<td colspan='3'>답변대기</td>";
 		} else {
 			out += "	<td colspan='3'>" + answer + "</td>";
 		}
@@ -200,7 +200,7 @@ $(function(){
 		}
 		
 		let url = "${pageContext.request.contextPath}/class/qnaInsert";
-		let query = "subject=" + encodeURIComponent(content) + "&classQContent=" + encodeURIComponent(content);
+		let query = "classCode=${dto.classCode}&subject=" + encodeURIComponent(content) + "&classQContent=" + encodeURIComponent(content);
 		
 		const fn = function(data) {
 			$("#classQSubject").val("");
@@ -353,8 +353,8 @@ $(document).ready(function() {
 	});
 	
 	$(document).on("click", ".showMore", function(){
-		$('.question').toggleClass('active');
-		$('.answer').toggleClass('active');
+		$(this).parent().next().toggleClass('active');
+		$(this).parent().next().next().toggleClass('active');
 	});
 });
 </script>
