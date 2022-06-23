@@ -230,7 +230,6 @@ public class FoodClassController {
 			dto.setAnswer(dto.getAnswer().replaceAll("\n", "<br>"));
 			dto.setClassQContent(dto.getClassQContent().replaceAll("\n", "<br>"));
 		}
-		
 		String paging = myUtil.pagingMethod(current_page, total_page, "listPage");
 		
 		Map<String, Object> model = new HashMap<String, Object>();

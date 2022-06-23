@@ -12,7 +12,6 @@ public class Board {
 	private String answerDate;
 	private String userId;
 	private String nickname;
-	
 	private int isAnswer;
 	
 	public int getRnum() {

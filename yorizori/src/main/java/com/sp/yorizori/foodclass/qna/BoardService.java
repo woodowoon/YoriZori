@@ -12,4 +12,5 @@ public interface BoardService {
 	public void updateBoard(Board dto) throws Exception;
 	public void deleteQuestion(int num) throws Exception;
 	public void deleteAnswer(int num) throws Exception;
+	
 }

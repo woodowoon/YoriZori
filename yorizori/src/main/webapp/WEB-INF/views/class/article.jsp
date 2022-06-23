@@ -184,6 +184,7 @@ function printQna(data) {
 	$(".qnaBody").append(out);
 }
 
+
 $(function(){
 	$(".qnaSend").click(function(){
 		let subject = $("#classQSubject").val().trim();

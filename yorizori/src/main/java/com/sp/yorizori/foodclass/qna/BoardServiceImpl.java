@@ -22,7 +22,6 @@ public class BoardServiceImpl implements BoardService {
 			e.printStackTrace();
 			throw e;
 		}
-		
 	}
 
 	@Override
