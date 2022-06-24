@@ -38,7 +38,7 @@ function sendOk() {
 		return;
 	}
 
-	f.action = "${pageContext.request.contextPath}/mypage/${mode}";
+	f.action = "${pageContext.request.contextPath}/member/pwd";
 	f.submit();
 }
 </script>
@@ -65,6 +65,7 @@ function sendOk() {
                 <div class="btn-div">
                 	<button type="button" class="btn btn-list" onclick="sendOk();">확인</button>
                 	<button type="button" class="btn btn-white" onclick="location.href='${pageContext.request.contextPath}/mypage/main?userId=${sessionScope.member.userId}'">취소</button>
+               		<input type="hidden" name="mode" value="${mode}">
                 </div>
 			</form>
 

@@ -368,7 +368,7 @@ public class RecipeController {
 		
 		for(Reply dto : listReply) {
 			dto.setCommentContent(dto.getCommentContent().replaceAll("\n", "<br>"));
-		}
+		}		
 		
 		// AJAX 용 페이징
 		String paging = myUtil.pagingMethod(current_page, total_page, "listPage");
@@ -454,5 +454,29 @@ public class RecipeController {
 		
 		return model;
 	}
+	
+	// 댓글 신고
+	@RequestMapping(value = "replynotify")
+	public String insertnotifyReply (
+			@RequestParam int recipeNum,
+			@RequestParam int recipeCommentNum,
+			HttpSession session,
+			Model model,
+			Notify dto
+			) throws Exception {
+		
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		try {
+			dto.setUserId(info.getUserId());
+			
+			service.insertnotifyReply(dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/recipe/article?page=1&recipeNum=" + recipeNum;
+	}
+	
 		
 }

@@ -46,6 +46,7 @@ public interface RecipeService {
 	// 신고
 	public void insertnotifyPost(Notify dto) throws Exception;
 	public boolean isrecipenotifyPost(Map<String, Object> map);
+	public void insertnotifyReply(Notify dto) throws Exception;
 	
 	// 댓글
 	public void insertReply(Reply dto) throws Exception;

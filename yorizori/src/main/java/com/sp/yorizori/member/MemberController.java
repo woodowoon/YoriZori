@@ -208,6 +208,55 @@ public class MemberController {
 		return ".member.pwd";
 	}
 	
+	@RequestMapping(value = "pwd", method = RequestMethod.POST)
+	public String pwdSubmit(@RequestParam String userPwd,
+			@RequestParam String mode, 
+			final RedirectAttributes reAttr,
+			HttpSession session,
+			Model model) {
+		
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		Member dto = service.readMember(info.getUserId());
+		
+		if(dto == null) {
+			session.invalidate();
+			return "redirect:/";
+		}
+		
+		if(! dto.getUserPwd().equals(userPwd)) {
+			if (mode.equals("update")) {
+				model.addAttribute("mode", "update");
+			} else {
+				model.addAttribute("mode", "dropout");
+			}
+			model.addAttribute("message", "패스워드가 일치하지 않습니다.");
+			return ".member.pwd";
+		}
+		
+		if(mode.equals("dropout")) {
+			try {
+				service.deleteMember(info.getUserId());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			session.removeAttribute("member");
+			session.invalidate();
+			
+			StringBuilder sb = new StringBuilder();
+			sb.append(dto.getUserName() + "님의 회원 탈퇴 처리가 정상적으로 처리되었습니다.<br>");
+			sb.append("메인화면으로 이동 하시기 바랍니다.<br>");
+
+			reAttr.addFlashAttribute("title", "회원 탈퇴");
+			reAttr.addFlashAttribute("message", sb.toString());
+			
+			return "redirect:/";
+		}
+		
+		return "redirect:/";
+	}
+	
 	@RequestMapping(value = "update")
 	public String memberUpdate() {
 		

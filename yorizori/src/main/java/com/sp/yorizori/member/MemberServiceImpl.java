@@ -131,12 +131,9 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public void deleteMember(Map<String, Object> map) throws Exception {
+	public void deleteMember(String userId) throws Exception {
 		try {
-			map.put("role", 0);
-			updateRole(map);
-
-			dao.deleteData("member.deleteMember", map);
+			dao.updateData("member.deleteMember", userId);
 
 		} catch (Exception e) {
 			e.printStackTrace();

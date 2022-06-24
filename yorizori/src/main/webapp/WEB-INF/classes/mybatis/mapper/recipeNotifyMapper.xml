@@ -11,4 +11,12 @@
 	<select id="isrecipenotifyPost" parameterType="map" resultType="Integer">
 		SELECT NVL(COUNT(*), 0) FROM notifyPost WHERE recipeNum = #{recipeNum} AND userId = #{userId}
 	</select>
+	
+	<!-- 댓글 신고 -->
+	<insert id="insertnotifyReply" parameterType="com.sp.yorizori.recipe.Notify">
+		INSERT INTO notifyReply 
+		(recipeNum, recipeCommentNum, userId, reason, notify_date) 
+			VALUES 
+		(#{recipeNum}, #{recipeCommentNum}, #{userId}, #{reason}, SYSDATE)
+	</insert>
 </mapper>

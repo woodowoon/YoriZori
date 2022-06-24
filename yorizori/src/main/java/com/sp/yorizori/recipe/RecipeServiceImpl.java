@@ -439,5 +439,16 @@ public class RecipeServiceImpl implements RecipeService {
 		
 		return result;
 	}
+
+	@Override
+	public void insertnotifyReply(Notify dto) throws Exception {
+		try {
+			dao.insertData("recipeNotify.insertnotifyReply", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+	}
 	
 }

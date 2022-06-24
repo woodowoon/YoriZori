@@ -6,7 +6,7 @@
 	<select id="loginMember" parameterType="String" resultType="com.sp.yorizori.member.Member">
 		SELECT userId, userName, userPwd, nickName, role, countryNum
 		FROM member
-		WHERE userId = #{userId}
+		WHERE userId = #{userId} AND enabled != 0
 	</select>
 
 	<update id="updateLastLogin" parameterType="String">
@@ -50,16 +50,13 @@
 		SELECT * FROM dual     
     </update>
 	
+	<!-- 회원정보 읽기 -->
 	<select id="readMember" parameterType="String" resultType="com.sp.yorizori.member.Member">
-		SELECT role, m.userId, userName, nickName, userPwd, enabled,
-			register_date, modify_date, last_login,
-			TO_CHAR(birth, 'YYYY-MM-DD') birth, email, tel, 
-			zip, addr1, addr2
-		FROM member m
-		<!--   
-		JOIN member1 m1 ON m.memberIdx = m1.memberIdx 
-		LEFT OUTER JOIN member2 m2 ON m1.userId = m2.userId
-		-->
+		SELECT m.userId, userPwd, nickName, userName, tel, birth, addr1, addr2, email,
+			countryNum, zip, modify_date, memberImageName FROM member m
+			LEFT OUTER JOIN (
+				SELECT userId, memberImageName FROM memberImage mi
+			) mi ON m.userId = mi.userId 
 		WHERE m.userId = #{userId}
 	</select>
 	
@@ -68,9 +65,11 @@
 		
     </update>
     
+    <!-- 회원 사진 -->
+    
     <!-- 회원 탈퇴(상태값만 변경)  -->    
-    <update id="deleteMember" parameterType="map">
-		
+    <update id="deleteMember" parameterType="String">
+		UPDATE member SET enabled = 0 WHERE userId = #{userId}
     </update>
     
 </mapper>

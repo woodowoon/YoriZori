@@ -3,6 +3,32 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<script type="text/javascript">
+function NotifyOk() {
+	alert("댓글 신고");
+}
+
+function NotifyOk() {
+	var f = document.recipeReplyNotify;
+	var str;
+	
+	let recipeNum = $(this).attr("data-recipeNum");
+	let replyNum = $(this).attr("data-replyNum");
+	
+	console.log(recipeNum + replyNum)
+	
+	if(! f.reason.value) {
+		f.reason.focus();
+		return;
+	}
+	
+	// f.action="${pageContext.request.contextPath}/recipe/notify?page=" + ${page} + "&recipeNum=" + ${dto.recipeNum} ;
+	// f.submit();
+}
+
+
+</script>
+
 <style type="text/css">
 main {
 	background-color: #f7f8fb;
@@ -48,7 +74,7 @@ main {
 							</c:when>
 							<c:otherwise>
 								
-								<div class='notifyReplyAnswer reply-menu-item'>신고</div>
+								<div class='notifyReplyAnswer reply-menu-item' data-bs-toggle="modal" data-bs-target="#exampleModal1">신고</div>
 								<div class='hideReply reply-menu-item'>숨김</div>
 							</c:otherwise>
 						</c:choose>
@@ -79,8 +105,40 @@ main {
 		            </div>
 				</td>
 		    </tr>
+		    
+		    <!-- Modal -->
+			<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-dialog-centered">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			      
+		       <h5 class="modal-title" id="exampleModalLabel">댓글 신고</h5>
+		       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			      </div>
+			      <form name="recipeReplyNotify">
+				      <div class="modal-body">
+				        <p> 닉네임 : ${vo.nickName} </p>
+				        <p> 댓글 내용 : ${vo.commentContent} </p>
+				        <p> 신고사유 </p>
+				        <textarea rows="7" cols="63" name ="reason"></textarea>
+				        <input type="hidden" name="recipeNum" value="${vo.recipeNum}">
+				        <input type="hidden" name="recipeCommentNum" value="${vo.recipeCommentNum}">
+				      </div>
+			      
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+				        <button type="button" class="btn btn-primary" onclick="NotifyOk();" data-recipeNum="${vo.recipeNum}" data-replyNum = "${vo.recipeCommentNum}">신고</button>
+				      </div>
+			      </form>
+			    </div>
+			  </div>
+			</div>
+		    
 		 </c:forEach>
+		 
 	</table>
+
+
 
 
 <div class="page-box">
