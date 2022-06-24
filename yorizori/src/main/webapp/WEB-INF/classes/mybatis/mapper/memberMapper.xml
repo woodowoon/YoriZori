@@ -62,62 +62,15 @@
 		-->
 		WHERE m.userId = #{userId}
 	</select>
-
-	<select id="readMember2" parameterType="Long" resultType="com.sp.yorizori.member.Member">
-		SELECT role, enabled, 
-			NVL(m.userId, 'guest') userId, NVL(userName, '손님') nickName, userPwd, 
-			register_date, modify_date, last_login,
-			TO_CHAR(birth, 'YYYY-MM-DD') birth, email, tel,
-			zip, addr1, addr2
-		FROM member m
-		<!--  
-		LEFT OUTER JOIN member1 m1 ON m.memberIdx = m1.memberIdx
-		LEFT OUTER JOIN member2 m2 ON m1.userId = m2.userId
-		
-		WHERE m.memberIdx = #{memberIdx}
-		-->
-	</select>
 	
     <!-- 회원정보 수정  --> 
-    <update id="updateRole" parameterType="map">
-		UPDATE member SET role = #{role}
-		WHERE userId=#{userId}
-		<!--  
-		WHERE memberIdx=#{memberIdx}
-		-->
-    </update>
-
-    <update id="updateMemberEnabled" parameterType="map">
-		UPDATE member SET enabled=#{enabled} WHERE userId=#{userId}
-    </update>
-    
     <update id="updateMember" parameterType="com.sp.yorizori.member.Member">
-		UPDATE member SET userPwd=#{userPwd}, modify_date=SYSDATE, email=#{email, jdbcType=VARCHAR}, 
-			tel=#{tel, jdbcType=VARCHAR}, birth=#{birth, jdbcType=VARCHAR},
-			zip=#{zip, jdbcType=VARCHAR},
-			addr1=#{addr1, jdbcType=VARCHAR}, addr2=#{addr2, jdbcType=VARCHAR}
-		WHERE userId=#{userId}
+		
     </update>
     
-	<!--  
-    <update id="updateMember2" parameterType="com.sp.yorizori.member.Member">
-		UPDATE member2 SET email=#{email, jdbcType=VARCHAR}, 
-			tel=#{tel, jdbcType=VARCHAR}, birth=#{birth, jdbcType=VARCHAR},
-			zip=#{zip, jdbcType=VARCHAR},
-			addr1=#{addr1, jdbcType=VARCHAR}, addr2=#{addr2, jdbcType=VARCHAR}
-		WHERE userId=#{userId}
+    <!-- 회원 탈퇴(상태값만 변경)  -->    
+    <update id="deleteMember" parameterType="map">
+		
     </update>
-    -->
-
-    <!-- member 테이블 정보 삭제  -->    
-    <delete id="deleteMember" parameterType="String">
-		DELETE FROM member WHERE userId=#{userId}
-    </delete>
     
-    <!--  
-    <delete id="deleteMember2" parameterType="String">
-		DELETE FROM member2 WHERE userId=#{userId}
-    </delete>
-	-->
-	
 </mapper>

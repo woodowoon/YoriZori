@@ -119,13 +119,11 @@ a > i { display: flex; }
 	margin: 0 auto;
 }
 
-
 .ck.ck-editor__main>.ck-editor__editable:not(.ck-focused) { border: none; }
 
 </style>
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/boot-board.css" type="text/css">
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/vendor/ckeditor5/ckeditor.js"></script>
 <script type="text/javascript">
 function deleteRecipe() {
 	if(confirm("레시피를 삭제하시겠습니까 ? ")) {
@@ -184,6 +182,192 @@ function ajaxFun(url, method, query, dataType, fn) {
 		}
 	});
 }
+
+$(function() {
+	listPage(1);
+});
+
+function listPage(page) {
+	let url = "${pageContext.request.contextPath}/recipe/listReply";
+	let query = "recipeNum=${dto.recipeNum}&pageNo="+page;
+	let selector = "#listReply"
+	
+	const fn = function(data){
+		$(selector).html(data);
+	};
+	ajaxFun(url, "get", query, "html", fn);
+}
+
+// 댓글 등록
+$(function(){
+	$(".btnSendReply").click(function(){
+		let recipeNum = "${dto.recipeNum}";
+		const $tb = $(this).closest("table");
+
+		let content = $tb.find("textarea").val().trim();
+		if(! content) {
+			$tb.find("textarea").focus();
+			return false;
+		}
+		content = encodeURIComponent(content);
+		
+		let url = "${pageContext.request.contextPath}/recipe/insertReply";
+		let query = "recipeNum=" + recipeNum + "&commentContent=" + content + "&parentCommentNum=0";
+		
+		const fn = function(data){
+			$tb.find("textarea").val("");
+			
+			let state = data.state;
+			if(state === "true") {
+				listPage(1);
+			} else if(state === "false") {
+				alert("댓글을 추가 하지 못했습니다.");
+			}
+		};
+		
+		ajaxFun(url, "post", query, "json", fn);
+	});
+});
+
+$(function(){
+	$("body").on("click", ".reply-dropdown", function(){
+		const $menu = $(this).next(".reply-menu");
+		if($menu.is(':visible')) {
+			$menu.fadeOut(100);
+		} else {
+			$(".reply-menu").hide();
+			$menu.fadeIn(100);
+
+			let pos = $(this).offset();
+			$menu.offset( {left:pos.left-70, top:pos.top+20} );
+		}
+	});
+	$("body").on("click", function() {
+		if($(event.target.parentNode).hasClass("reply-dropdown")) {
+			return false;
+		}
+		$(".reply-menu").hide();
+	});
+});
+
+$(function(){
+	$("body").on("click", ".deleteReply", function(){
+		if(! confirm("댓글 삭제하시겠습니까 ? ")) {
+		    return false;
+		}
+		
+		let recipeCommentNum = $(this).attr("data-replyNum");
+		let page = $(this).attr("data-pageNo");
+		
+		let url = "${pageContext.request.contextPath}/recipe/deleteReply";
+		let query = "recipeCommentNum="+recipeCommentNum;
+		
+		const fn = function(data){
+			listPage(page);
+		};
+		
+		ajaxFun(url, "post", query, "json", fn);
+	});
+});
+
+function listReplyAnswer(answer) {
+	let url = "${pageContext.request.contextPath}/recipe/listReplyAnswer";
+	let query = "parentCommentNum=" + answer;
+	let selector = "#listReplyAnswer" + answer;
+	
+	const fn = function(data){
+		$(selector).html(data);
+	};
+	ajaxFun(url, "get", query, "html", fn);
+}
+
+
+function countReplyAnswer(answer) {
+	let url = "${pageContext.request.contextPath}/recipe/countReplyAnswer";
+	let query = "parentCommentNum=" + answer;
+	
+	const fn = function(data){
+		let count = data.count;
+		let selector = "#answerCount"+answer;
+		$(selector).html(count);
+	};
+	
+	ajaxFun(url, "post", query, "json", fn);
+}
+
+
+$(function(){
+	$("body").on("click", ".btnReplyAnswerLayout", function(){
+		const $trReplyAnswer = $(this).closest("tr").next();
+		
+		let isVisible = $trReplyAnswer.is(':visible');
+		let replyNum = $(this).attr("data-replyNum");
+			
+		if(isVisible) {
+			$trReplyAnswer.hide();
+		} else {
+			$trReplyAnswer.show();
+            
+			// 답글 리스트
+			listReplyAnswer(replyNum);
+			
+			// 답글 개수
+			countReplyAnswer(replyNum);
+		}
+	});
+	
+});
+
+$(function(){
+	$("body").on("click", ".btnSendReplyAnswer", function(){
+		let num = "${dto.recipeNum}";
+		let replyNum = $(this).attr("data-replyNum");
+		const $td = $(this).closest("td");
+		
+		let content = $td.find("textarea").val().trim();
+		if(! content) {
+			$td.find("textarea").focus();
+			return false;
+		}
+		content = encodeURIComponent(content);
+		
+		let url = "${pageContext.request.contextPath}/recipe/insertReply";
+		let query = "recipeNum=" + num + "&commentContent=" + content + "&parentCommentNum=" + replyNum;
+		
+		const fn = function(data){
+			$td.find("textarea").val("");
+			
+			var state = data.state;
+			if(state === "true") {
+				listReplyAnswer(replyNum);
+				countReplyAnswer(replyNum);
+			}
+		};
+		
+		ajaxFun(url, "post", query, "json", fn);
+	});
+});
+
+$(function(){
+	$("body").on("click", ".deleteReplyAnswer", function(){
+		if(! confirm("댓글을 삭제하시겠습니까 ? ")) {
+		    return false;
+		}
+		
+		let replyNum = $(this).attr("data-replyNum");
+		let answer = $(this).attr("data-answer");
+		
+		let url = "${pageContext.request.contextPath}/recipe/deleteReply";
+		let query = "recipeCommentNum=" + replyNum;
+		
+		const fn = function(data){
+			listReplyAnswer(answer);
+			countReplyAnswer(answer);
+		};
+		
+		ajaxFun(url, "post", query, "json", fn);
+	});
+});
 
 $(function() {
 	$(".like").click(function() {
@@ -251,6 +435,7 @@ $(function() {
 			<i class="bi bi-bar-chart-fill"></i>
 		</div>
 		<div class="recipe-info">
+		
 			<span>${dto.recipeServing}인분</span>
 			<span>${dto.recipeTime}분</span>
 			<span>난이도 ${dto.recipeLevel}</span>
@@ -348,26 +533,25 @@ $(function() {
 		    
 			
 	<div class="reply">
-		<form name="replyForm" method="post">	
+		<form name="replyForm" method="post">
+			<div class='form-header'>
+				<span class="bold">댓글</span><span> - 타인을 비방하거나 개인정보를 유출하는 글의 게시를 삼가해 주세요.</span>
+			</div>
+			
 			<table class="table table-borderless reply-form">
 				<tr>
-					<td colspan="2">
-						<textarea class='form-control' name="content">
-							
-						</textarea>
+					<td>
+						<textarea class='form-control' name="content"></textarea>
 					</td>
 				</tr>
 				<tr>
-					<td>
-						<p class="reply-desc">* 욕설, 상업적인 내용, 특정인이나 특정 종교 및 특정사안을 비방하는 내용 등은 예고 없이 삭제될 수 있습니다.</p>
-					</td>
-					<td align='right'>
-						<button type='button' class='btn btnReply'>댓글 달기</button>
-					</td>
-				</tr>
+				   <td align='right'>
+				        <button type='button' class='btn btnReply btnSendReply'>댓글 등록</button>
+				    </td>
+				 </tr>
 			</table>
 		</form>
-				
+		
 		<div id="listReply"></div>
 		
 	</div>
@@ -377,10 +561,11 @@ $(function() {
 	  <div class="modal-dialog modal-dialog-centered">
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <h5 class="modal-title" id="exampleModalLabel">신고</h5>
-	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      
+       <h5 class="modal-title" id="exampleModalLabel">신고</h5>
+       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	      </div>
-	      <form action="" name="recipeNotify">
+	      <form name="recipeNotify">
 		      <div class="modal-body">
 		        <p> 닉네임 : ${dto.nickName} </p>
 		        <p> 레시피 제목 : ${dto.recipeSubject} </p>

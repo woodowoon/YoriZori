@@ -33,6 +33,17 @@ main {
 .feed .img-box img:hover {
 	filter: brightness(70%);
 }
+
+.page-box { margin-bottom: 30px; }
+
+.like {
+	display: flex;
+}
+
+.like span{
+	line-height: 33px;
+    margin-left: 10px;
+}
 </style>
 
 
@@ -63,7 +74,35 @@ function ajaxFun(url, method, query, dataType, fn) {
 	});
 }
 
-
+$(function() {
+	$(".like").click(function() {
+		let userRecipeLike = $(this).attr("data-userRecipeLike");
+		let isRecipeLike;
+		
+		if(userRecipeLike > 0) {
+			isRecipeLike = true;
+		} else {
+			isRecipeLike = false;
+		}
+		
+		let url = "${pageContext.request.contextPath}/recipe/insertRecipeLike";
+		let recipeNum = $(this).attr("data-recipeNum");
+		let query = "recipeNum=" + recipeNum + "&isRecipeLike=" + isRecipeLike;
+		
+		const fn = function(data) {
+			let state = data.state;
+			if(state === "true") {
+				location.href="${pageContext.request.contextPath}/recipe/feed";
+				
+			} else if(state === "false") {
+				alert("좋아요 실패.");
+			}
+		};
+		
+		ajaxFun(url, "post", query, "json", fn);
+		
+	});
+});
 
 
 </script>
@@ -80,10 +119,13 @@ function ajaxFun(url, method, query, dataType, fn) {
 					<img class = "float" src="${pageContext.request.contextPath}/uploads/photo/${dto.memberImageName}" style="width: 30px">
 				</c:otherwise>
 			</c:choose>   
-			<p><a href="${pageContext.request.contextPath}/mypage/main?userId=${dto.userId}"> ${dto.nickName} </a> </p>
+			<p>
+			<a href="${pageContext.request.contextPath}/mypage/main?userId=${dto.userId}"> ${dto.nickName} </a> </p>
 			
 			<div class="img-box">
-				<img class = "float" onclick="href='${articleUrl}?recipeNum=${dto.recipeNum}';" src="${pageContext.request.contextPath}/uploads/recipe/${dto.imageFilename}" style="height: 700px; object-fit: cover;">
+				<a href="${articleUrl}recipeNum=${dto.recipeNum}">
+					<img class = "float" src="${pageContext.request.contextPath}/uploads/recipe/${dto.imageFilename}" style="height: 700px; object-fit: cover;">
+				</a>
 			</div>
 			
 		</div>
@@ -92,14 +134,19 @@ function ajaxFun(url, method, query, dataType, fn) {
 			<c:choose>
 				<c:when test="${dto.userRecipeLike == 0}">
 					<!-- 좋아요X -->
-					<i style="color: #5D5D5D; font-size: 1.5rem;" class="bi bi-heart"></i>  
+					<div class ="like" data-recipeNum="${dto.recipeNum}" data-userRecipeLike="${dto.userRecipeLike}">
+						<i style="color: #5D5D5D; font-size: 1.5rem;" class="bi bi-heart"></i>
+						<span>좋아요 ${dto.recipeLikeCount}개</span>
+					</div>
 				</c:when>
 				<c:otherwise>
 					<!-- 좋아요O -->
-					<i style="color: red; font-size: 1.4rem;" class="bi bi-heart-fill"></i>
+					<div class ="like" data-recipeNum="${dto.recipeNum}" data-userRecipeLike="${dto.userRecipeLike}">
+						<i style="color: red; font-size: 1.4rem;" class="bi bi-heart-fill"></i>
+						<span>좋아요 ${dto.recipeLikeCount}개</span>
+					</div>
 				</c:otherwise>
 			</c:choose>
-				<span>좋아요 ${dto.recipeLikeCount}개</span>
 			<a href="${articleUrl}recipeNum=${dto.recipeNum}">${dto.recipeSubject}</a>
 			<div class="likes">
 				

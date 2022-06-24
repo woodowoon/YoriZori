@@ -337,4 +337,122 @@ public class RecipeController {
 		return model;
 	}
 	
+	// 댓글 리스트
+	@RequestMapping(value = "listReply") 
+	public String listReply(
+			@RequestParam int recipeNum,
+			@RequestParam(value = "pageNo", defaultValue = "1") int current_page,
+			Model model
+			) throws Exception {
+		
+		int rows = 5;
+		int total_page = 0;
+		int dataCount = 0;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("recipeNum", recipeNum);
+		
+		dataCount = service.replyCount(map);
+		total_page = myUtil.pageCount(rows, dataCount);
+		
+		if(current_page > total_page) {
+			current_page = total_page;
+		}
+		
+		int start = (current_page - 1) * rows + 1;
+		int end = current_page * rows;
+		map.put("start", start);
+		map.put("end", end);
+		
+		List<Reply> listReply = service.listReply(map);
+		
+		for(Reply dto : listReply) {
+			dto.setCommentContent(dto.getCommentContent().replaceAll("\n", "<br>"));
+		}
+		
+		// AJAX 용 페이징
+		String paging = myUtil.pagingMethod(current_page, total_page, "listPage");
+		
+		model.addAttribute("listReply", listReply);
+		model.addAttribute("paging", paging);
+		model.addAttribute("pageNo", current_page);
+		model.addAttribute("replyCount", dataCount);
+		model.addAttribute("total_page", total_page);
+		
+		return "recipe/reply";
+	}
+			
+	
+	// 댓글, 답글 등록
+	// AJAX
+	@RequestMapping(value = "insertReply", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> insertReply(
+			Reply dto,
+			HttpSession session) {
+		
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		String state = "true";
+		
+		try {
+			dto.setUserId(info.getUserId());
+			dto.setNickName(info.getNickName());
+			service.insertReply(dto);
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("state", state);
+		
+		return model;
+	}
+	
+	@RequestMapping(value = "deleteReply", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> deleteReply(@RequestParam Map<String, Object> paramMap) {
+		String state = "true";
+		
+		try {
+			service.deleteReply(paramMap);
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("state", state);
+		
+		return map;
+	}
+	
+	@RequestMapping(value = "listReplyAnswer")
+	public String listReplyAnswer(
+			@RequestParam int parentCommentNum, Model model
+			) throws Exception {
+		
+		List<Reply> listReplyAnswer = service.listReplyAnswer(parentCommentNum);
+		
+		for(Reply dto : listReplyAnswer) {
+			dto.setCommentContent(dto.getCommentContent().replaceAll("\n", "<br>"));
+		}
+		
+		model.addAttribute("listReplyAnswer", listReplyAnswer);
+		
+		return "recipe/listReplyAnswer";
+	}
+	
+	@RequestMapping(value = "countReplyAnswer")
+	@ResponseBody
+	public Map<String, Object> countReplyAnswer(
+			@RequestParam(value = "parentCommentNum") int parentCommentNum) {
+		
+		int count = service.replyAnswerCount(parentCommentNum);
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("count", count);
+		
+		return model;
+	}
+		
 }

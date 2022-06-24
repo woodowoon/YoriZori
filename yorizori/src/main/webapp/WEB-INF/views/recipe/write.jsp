@@ -500,7 +500,7 @@ $(function() {
 
 $(function() {
 	$("body").on("click", ".big_sort .selected", function() {
-		$(".big_sort .selected").css({"color":"black","background":"#fff", "font-weight":"100"})
+		$(".big_sort .selected").css({"color":"black","background":"#fff", "font-weight":"100"});
 		
 		$(this).css("background-color", "#f8f9fa");
 		$(this).css({"font-weight":"700"});

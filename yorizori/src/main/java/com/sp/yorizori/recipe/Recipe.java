@@ -53,6 +53,8 @@ public class Recipe {
 	private int recipeLikeCount;
 	private String follwer_id;
 	
+	private int replyCount;
+	
 	public int getRecipeNum() {
 		return recipeNum;
 	}
@@ -214,6 +216,12 @@ public class Recipe {
 	}
 	public void setRecipeReg_date(String recipeReg_date) {
 		this.recipeReg_date = recipeReg_date;
+	}
+	public int getReplyCount() {
+		return replyCount;
+	}
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
 	}
 	
 }

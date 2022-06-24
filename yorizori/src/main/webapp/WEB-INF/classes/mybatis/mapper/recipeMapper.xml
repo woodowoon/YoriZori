@@ -147,7 +147,9 @@
 	<select id="readRecipe" parameterType="Integer" resultType="com.sp.yorizori.recipe.Recipe">
 		SELECT r.recipeNum recipeNum, caseNum, countryNum, recipeSubject, recipeHitCount, 
 			TO_CHAR(recipeReg_date, 'YYYY-MM-DD') recipeReg_date, recipeServing, imageFilename,
-	       	recipeTime, recipeLevel, recipeContent, r.userId userId, nickName, memberImageName, NVL(recipeLikeCount, 0) recipeLikeCount
+	       	recipeTime, recipeLevel, recipeContent, r.userId userId, nickName, 
+	       	memberImageName, NVL(recipeLikeCount, 0) recipeLikeCount,
+	        NVL(replyCount, 0) replyCount
 	    		FROM recipe r
 		    LEFT OUTER JOIN (
 		        SELECT recipeNum, COUNT(*) recipeLikeCount FROM recipeLike rl
@@ -159,6 +161,11 @@
 		    LEFT OUTER JOIN (
 	             SELECT recipeNum, recipePhotoName imageFilename FROM recipePhoto
 	        ) rp ON r.recipeNum = rp.recipeNum
+	        LEFT OUTER JOIN (
+	             SELECT recipeNum, COUNT(*) replyCount FROM recipeComment
+	             WHERE parentCommentNum = 0
+	             GROUP BY recipeNum
+	        ) rc ON r.recipeNum = rc.recipeNum
 		    LEFT OUTER JOIN (
 		        SELECT userId, nickName FROM member m
 		    ) m ON m.userId = r.userId
@@ -227,5 +234,63 @@
 		    recipePhotoName = #{imageFilename, jdbcType=VARCHAR}
 		WHERE recipeNum = #{recipeNum}
 	</update>
+	
+	<!-- 댓글 -->
+	<insert id="insertReply" parameterType="com.sp.yorizori.recipe.Reply">
+		INSERT INTO recipeComment (recipeCommentNum, commentContent, commentReg_date, parentCommentNum, recipeNum, userId)
+			VALUES
+		(recipeComment_seq.NEXTVAL, #{commentContent}, SYSDATE, #{parentCommentNum}, #{recipeNum}, #{userId})
+	</insert>
+	
+	<select id="replyCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0) FROM recipeComment
+		WHERE recipeNum = #{recipeNum} AND parentCommentNum=0
+	</select>
+	
+	<!-- 댓글 리스트 -->
+	<select id="listReply" parameterType="map" resultType="com.sp.yorizori.recipe.Reply">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+		        SELECT rc.recipeCommentNum, rc.userId, m.nickName, 
+		            rc.recipeNum, commentContent, commentReg_date, NVL(answerCount, 0) answerCount
+		            
+		        FROM recipeComment rc
+		        JOIN member m ON rc.userId = m.userId
+		        
+		        LEFT OUTER JOIN (
+		            SELECT a.parentCommentNum, COUNT(*) answerCount
+		            FROM recipeComment a
+		            group by a.parentCommentNum
+		        ) a ON rc.recipeCommentNum = a.parentCommentNum 
+		        
+		        WHERE rc.recipeNum = #{recipeNum} AND rc.parentCommentNum = 0
+		       
+		        ORDER BY rc.recipeCommentNum DESC
+		    ) tb WHERE ROWNUM &lt;= #{end}
+		) WHERE rnum &gt;= #{start}
+	</select>
+	
+	<delete id="deleteReply" parameterType="map">
+		DELETE FROM recipeComment
+		WHERE recipeCommentNum = #{recipeCommentNum}
+		<if test="mode=='reply'">
+			OR answer=#{recipeCommentNum}
+		</if>
+	</delete>
+	
+	<select id="listReplyAnswer" parameterType="Integer" resultType="com.sp.yorizori.recipe.Reply">
+		SELECT recipeCommentNum, rc.userId, m.nickName, recipeNum, commentContent, commentReg_date, parentCommentNum
+			FROM recipeComment rc
+			JOIN member m ON rc.userId = m.userId
+		WHERE parentCommentNum = #{parentCommentNum}
+		ORDER BY recipeCommentNum DESC
+	</select>
+	
+	<select id="replyAnswerCount" parameterType="Integer" resultType="Integer">
+		SELECT NVL(COUNT(*), 0) 
+			FROM recipeComment 
+		WHERE parentCommentNum = #{parentCommentNum}
+	</select>
+	
 	
 </mapper>

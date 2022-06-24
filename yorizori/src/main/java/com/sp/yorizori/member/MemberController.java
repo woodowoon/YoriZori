@@ -135,93 +135,6 @@ public class MemberController {
 		
 		return "redirect:/";
 	}
-	
-	@RequestMapping(value = "pwd", method = RequestMethod.GET)
-	public String pwdForm(String dropout, Model model) {
-
-		if (dropout == null) {
-			model.addAttribute("mode", "update");
-		} else {
-			model.addAttribute("mode", "dropout");
-		}
-
-		return ".member.pwd";
-	}
-
-	@RequestMapping(value = "pwd", method = RequestMethod.POST)
-	public String pwdSubmit(@RequestParam String userPwd,
-			@RequestParam String mode, 
-			final RedirectAttributes reAttr,
-			HttpSession session,
-			Model model) {
-
-		SessionInfo info = (SessionInfo) session.getAttribute("member");
-
-		Member dto = service.readMember(info.getUserId());
-		if (dto == null) {
-			session.invalidate();
-			return "redirect:/";
-		}
-
-		if (!dto.getUserPwd().equals(userPwd)) {
-			if (mode.equals("update")) {
-				model.addAttribute("mode", "update");
-			} else {
-				model.addAttribute("mode", "dropout");
-			}
-			model.addAttribute("message", "패스워드가 일치하지 않습니다.");
-			return ".member.pwd";
-		}
-
-		if (mode.equals("dropout")) {
-			// 게시판 테이블등 자료 삭제
-
-			// 회원탈퇴 처리
-			/*
-			 * Map<String, Object> map = new HashMap<>();
-			 * map.put("memberIdx", info.getMemberIdx());
-			 * map.put("userId", info.getUserId());
-			 */
-
-			// 세션 정보 삭제
-			session.removeAttribute("member");
-			session.invalidate();
-
-			StringBuilder sb = new StringBuilder();
-			sb.append(dto.getUserName() + "님의 회원 탈퇴 처리가 정상적으로 처리되었습니다.<br>");
-			sb.append("메인화면으로 이동 하시기 바랍니다.<br>");
-
-			reAttr.addFlashAttribute("title", "회원 탈퇴");
-			reAttr.addFlashAttribute("message", sb.toString());
-
-			return "redirect:/member/complete";
-		}
-
-		// 회원정보수정폼
-		model.addAttribute("dto", dto);
-		model.addAttribute("mode", "update");
-		return ".member.member";
-	}
-
-	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public String updateSubmit(Member dto,
-			final RedirectAttributes reAttr,
-			Model model) {
-
-		try {
-			service.updateMember(dto);
-		} catch (Exception e) {
-		}
-
-		StringBuilder sb = new StringBuilder();
-		sb.append(dto.getUserName() + "님의 회원정보가 정상적으로 변경되었습니다.<br>");
-		sb.append("메인화면으로 이동 하시기 바랍니다.<br>");
-
-		reAttr.addFlashAttribute("title", "회원 정보 수정");
-		reAttr.addFlashAttribute("message", sb.toString());
-
-		return "redirect:/member/complete";
-	}
 
 	// @ResponseBody : 자바 객체를 HTTP 응답 몸체로 전송(AJAX에서 JSON 전송 등에 사용)
 	@RequestMapping(value = "userIdCheck", method = RequestMethod.POST)
@@ -282,4 +195,23 @@ public class MemberController {
 	public String noAuthorized(Model model) {
 		return ".member.noAuthorized";
 	}
+	
+	@RequestMapping(value = "pwd", method = RequestMethod.GET)
+	public String pwdForm(String dropout, Model model) {
+
+		if (dropout == null) {
+			model.addAttribute("mode", "update");
+		} else {
+			model.addAttribute("mode", "dropout");
+		}
+
+		return ".member.pwd";
+	}
+	
+	@RequestMapping(value = "Updatemember")
+	public String memberUpdate() {
+		
+		return ".member.modify";
+	}
+	
 }

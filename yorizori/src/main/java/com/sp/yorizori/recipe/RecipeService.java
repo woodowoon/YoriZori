@@ -46,4 +46,15 @@ public interface RecipeService {
 	// 신고
 	public void insertnotifyPost(Notify dto) throws Exception;
 	public boolean isrecipenotifyPost(Map<String, Object> map);
+	
+	// 댓글
+	public void insertReply(Reply dto) throws Exception;
+	public int replyCount(Map<String, Object> map);
+	public List<Reply> listReply(Map<String, Object> map);
+	public void deleteReply(Map<String, Object> map) throws Exception;
+	
+	public List<Reply> listReplyAnswer(int answer);
+	public int replyAnswerCount(int answer);
+	
+	
 }

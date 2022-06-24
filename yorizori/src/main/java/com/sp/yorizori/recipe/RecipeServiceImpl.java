@@ -367,5 +367,77 @@ public class RecipeServiceImpl implements RecipeService {
 		
 		return b;
 	}
+
+	@Override
+	public void insertReply(Reply dto) throws Exception {
+		try {
+			dao.insertData("recipe.insertReply", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	@Override
+	public int replyCount(Map<String, Object> map) {
+		int result = 0;
+		
+		try {
+			result = dao.selectOne("recipe.replyCount", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	@Override
+	public List<Reply> listReply(Map<String, Object> map) {
+		
+		List<Reply> list = null;
+		
+		try {
+			list = dao.selectList("recipe.listReply", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+	@Override
+	public void deleteReply(Map<String, Object> map) throws Exception {
+		try {
+			dao.deleteData("recipe.deleteReply", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public List<Reply> listReplyAnswer(int answer) {
+		List<Reply> list = null;
+		
+		try {
+			list = dao.selectList("recipe.listReplyAnswer", answer);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+	@Override
+	public int replyAnswerCount(int answer) {
+		int result = 0;
+		
+		try {
+			result = dao.selectOne("recipe.replyAnswerCount", answer);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 	
 }
