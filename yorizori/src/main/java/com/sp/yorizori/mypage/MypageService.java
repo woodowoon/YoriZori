@@ -6,6 +6,7 @@ import java.util.Map;
 public interface MypageService {
 	public void insertFollow(Map<String, Object> map) throws Exception;
 	public void deleteFollow(Map<String, Object> map) throws Exception;
+	public boolean searchFollow(Map<String, Object> map);
 	
 	public Mypage readMypage(Map<String, Object> map);
 	public List<Mypage> listFollower(String userId);
@@ -34,4 +35,9 @@ public interface MypageService {
 	public int dataCountQna(String userId);
 	public List<MyQna> listQna(Map<String, Object> map);
 	public boolean answerState(int num);
+	
+	public int dataCountOrder(String userId);
+	public List<MyClass> listOrder(Map<String, Object> map);
+	
+	public void insertReview(MyClass dto) throws Exception;
 }

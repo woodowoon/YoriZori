@@ -11,6 +11,10 @@
 		DELETE FROM follow WHERE follower_id = #{sessionId} AND following_id = #{userId}
 	</delete>
 	
+	<select id="searchFollow" parameterType="map" resultType="Integer">
+		SELECT COUNT(*) FROM follow WHERE follower_id = #{sessionId} AND following_id = #{userId}
+	</select>
+	
 	<select id="readMypage" parameterType="map" resultType="com.sp.yorizori.mypage.Mypage">
 		SELECT m.userId, nickName, memberImageName, NVL(recipeCount, 0) recipeCount, 
 		    NVL(followerCount ,0) followerCount, NVL(followingCount, 0) followingCount, 
@@ -310,4 +314,47 @@
 		FROM qna
 		WHERE parent = #{num}
 	</select>
+	
+	<select id="listOrder" parameterType="map" resultType="com.sp.yorizori.mypage.MyClass">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+				SELECT d.classCode, d.orderCode, price, TO_CHAR(orderEnroll, 'YYYY-MM-DD') orderRegDate, userId, classSubject, classPhotoName
+				FROM orderDetail d
+				LEFT OUTER JOIN (
+				    SELECT o.orderCode, orderEnroll, userId
+				    FROM ordering o
+				) o ON d.orderCode = o.orderCode
+				LEFT OUTER JOIN (
+				    SELECT c.classCode, classSubject
+				    FROM classTable c
+				) c ON d.classCode = c.classCode
+				LEFT OUTER JOIN (
+				    SELECT f.classCode, classPhotoName
+				    FROM classFile f
+				) f ON d.classCode = f.classCode
+				WHERE userId = #{userId}
+			) tb WHERE ROWNUM &lt;= #{end}
+		) WHERE rnum &gt;= #{start}
+	</select>
+	
+	<select id="dataCountOrder" parameterType="map" resultType="Integer">
+		SELECT COUNT(*) orderCount FROM (
+		    SELECT d.classCode, d.orderCode, price, orderEnroll, userId, classSubject
+		    FROM orderDetail d
+		    LEFT OUTER JOIN (
+		        SELECT o.orderCode, orderEnroll, userId
+		        FROM ordering o
+		    ) o ON d.orderCode = o.orderCode
+		    LEFT OUTER JOIN (
+		        SELECT c.classCode, classSubject
+		        FROM classTable c
+		    ) c ON d.classCode = c.classCode
+		    WHERE userId = #{userId}
+		)
+	</select>
+	
+	<insert id="insertReview" parameterType="com.sp.yorizori.mypage.MyClass">
+		INSERT INTO review(reviewNum, reviewContent, reviewStar, classCode, orderCode)
+		VALUES (review_seq.NEXTVAL, #{reviewContent}, #{reviewStar}, #{classCode}, #{orderCode})
+	</insert>
 </mapper>

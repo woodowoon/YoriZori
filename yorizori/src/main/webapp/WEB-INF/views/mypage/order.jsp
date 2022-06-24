@@ -41,7 +41,52 @@ main { background-color: #fff; font-family: 'Noto Sans KR', sans-serif; color: #
 .accordion-body > a:hover, a:active { color: #0d6efd; }
 .btn-primary { padding: 3px 10px; font-size: 20px; background-color: #0095f6; border-color: #0095f6; }
 .btn-primary:focus, .btn-primary:hover { background-color: #0095f6; border-color: #0095f6; box-shadow: 0 0 0 0; }
+.modal-footer > .btn-primary { font-size: 1rem; padding: .375rem .75rem; }
+
+.star-rating { 
+	display: flex; flex-direction: row-reverse; font-size: 2.25rem; line-height: 2.5rem; 
+	justify-content: space-around; padding: 0 0.2em; text-align: center; width: 5em; margin-left: 143px;
+}
+.star-rating input {
+  display: none;
+}
+.star-rating label {
+  -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: 2.3px;
+  -webkit-text-stroke-color: #2b2a29;
+  cursor: pointer;
+}
+.star-rating :checked ~ label {
+  -webkit-text-fill-color: gold;
+}
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  -webkit-text-fill-color: #fff58c;
+}
 </style>
+
+<script type="text/javascript">
+function reviewOk() {
+	const f = document.reviewForm;
+	
+   	f.action = "${pageContext.request.contextPath}/mypage/review";
+    f.submit();
+}
+
+function mark(star) {
+	f.star.value = star;
+}
+
+$(function(){
+	$("body").on("click", ".btn-review", function(){
+		let classCode = $(this).attr("data-class");
+		let orderCode = $(this).attr("data-order");
+
+		$('#classCode').val(classCode);
+		$('#orderCode').val(orderCode);
+	});
+});
+</script>
 
 <div class="mypage">
 	<div class="nav-mypage">
@@ -56,63 +101,29 @@ main { background-color: #fff; font-family: 'Noto Sans KR', sans-serif; color: #
 	</div>
 
 	<ul class="order-list">
-		
-		<li class="order">
-			<div class="box">
-				<div class="order-img">
-					<a>
-						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-					</a>
+		<c:forEach var="dto" items="${list}">
+			<li class="order">
+				<div class="box">
+					<div class="order-img">
+						<a>
+							<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
+						</a>
+					</div>
+					<div class="order-info">
+						<p>구매일자 : ${dto.orderRegDate}</p>
+						<a>${dto.classSubject}</a>
+					</div>
+					<div class="order-btn">
+						<button type="button" class="btn-review" data-bs-toggle="modal" data-bs-target="#exampleModal" data-order="${dto.orderCode}" data-class="${dto.classCode}">리뷰쓰기</button>
+						<button type="button">환불하기</button>
+					</div>
 				</div>
-				<div class="order-info">
-					<p>구매일자 : 22.06.17</p>
-					<a>냥냥 클래스</a>
-				</div>
-				<div class="order-btn">
-					<button type="button">리뷰쓰기</button>
-					<button type="button">환불하기</button>
-				</div>
-			</div>
-		</li>
-		<li class="order">
-			<div class="box">
-				<div class="order-img">
-					<a>
-						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-					</a>
-				</div>
-				<div class="order-info">
-					<p>구매일자 : 22.06.17</p>
-					<a>냥냥 클래스</a>
-				</div>
-				<div class="order-btn">
-					<button type="button">리뷰쓰기</button>
-					<button type="button">환불하기</button>
-				</div>
-			</div>
-		</li>
-		<li class="order">
-			<div class="box">
-				<div class="order-img">
-					<a>
-						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-					</a>
-				</div>
-				<div class="order-info">
-					<p>구매일자 : 22.06.17</p>
-					<a>냥냥 클래스</a>
-				</div>
-				<div class="order-btn">
-					<button type="button">리뷰쓰기</button>
-					<button type="button">환불하기</button>
-				</div>
-			</div>
-		</li>
-			
+			</li>
+		</c:forEach>
 	</ul>
 	
 	<div class="page-box">
-		1 2 3
+		${paging}
 	</div>
 	
 	<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
@@ -190,6 +201,45 @@ main { background-color: #fff; font-family: 'Noto Sans KR', sans-serif; color: #
 				      		<a href="${pageContext.request.contextPath}/mypage/qna">1:1 문의</a>
 				      	</div>
 				    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">클래스 리뷰</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+	        		<form name="reviewForm" method="post">
+	        			<div class="star-rating mb-3">
+            				<input type="radio" id="5-stars" name="reviewStar" value="5" onclick="mark(5)"/>
+							<label for="5-stars" class="star pr-4">★</label>
+							<input type="radio" id="4-stars" name="reviewStar" value="4" onclick="mark(4)"/>
+							<label for="4-stars" class="star">★</label>
+							<input type="radio" id="3-stars" name="reviewStar" value="3" onclick="mark(3)"/>
+							<label for="3-stars" class="star">★</label>
+							<input type="radio" id="2-stars" name="reviewStar" value="2" onclick="mark(2)"/>
+							<label for="2-stars" class="star">★</label>
+							<input type="radio" id="1-star" name="reviewStar" value="1" onclick="mark(1)"/>
+							<label for="1-star" class="star">★</label>
+          				</div>
+          				<input type="hidden" name="star"/>
+          				<input type="hidden" name="orderCode" id="orderCode"/>
+          				<input type="hidden" name="classCode" id="classCode"/>
+          				
+						<div class="mb-3">
+							<label for="reviewContent" class="col-form-label">리뷰 내용</label>
+							<textarea class="form-control" id="reviewContent" name="reviewContent"></textarea>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+					<button type="button" class="btn btn-primary" onclick="reviewOk();">작성 완료</button>
 				</div>
 			</div>
 		</div>

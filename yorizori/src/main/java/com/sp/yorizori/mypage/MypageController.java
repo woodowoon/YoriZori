@@ -82,27 +82,38 @@ public class MypageController {
 	
 	@RequestMapping(value = "follow", method = RequestMethod.POST)
 	@ResponseBody
-	public String follow(@RequestParam String userId, 
+	public Map<String, Object> follow(@RequestParam String userId, 
 			@RequestParam String sessionId) throws Exception {
 		
 		String state = "true";
+		boolean followState = false;
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("userId", userId);
 		map.put("sessionId", sessionId);
 		
+		followState = service.searchFollow(map);
+		
 		try {
-			service.insertFollow(map);
+			if (followState) {
+				state = "followed";
+			} else {
+				service.insertFollow(map);
+			}
 		} catch (Exception e) {
 			state = "false";
 		}
 		
-		return state;
+		Map<String, Object> model = new HashMap<String, Object>();
+		
+		model.put("state", state);
+		
+		return model;
 	}
 	
 	@RequestMapping(value = "unfollow", method = RequestMethod.POST)
 	@ResponseBody
-	public String unfollow(@RequestParam String userId, 
+	public Map<String, Object> unfollow(@RequestParam String userId, 
 			@RequestParam String sessionId) throws Exception {
 		
 		String state = "true";
@@ -117,7 +128,11 @@ public class MypageController {
 			state = "false";
 		}
 		
-		return state;
+		Map<String, Object> model = new HashMap<String, Object>();
+		
+		model.put("state", state);
+		
+		return model;
 	}
 	
 	@RequestMapping(value = "like", method = RequestMethod.GET)
@@ -273,9 +288,58 @@ public class MypageController {
 	}
 	
 	@RequestMapping(value = "order", method = RequestMethod.GET)
-	public String order() throws Exception {
+	public String order(@RequestParam(value = "page", defaultValue = "1") int current_page,
+			HttpSession session, HttpServletRequest req, Model model) throws Exception {
+		
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		String cp = req.getContextPath();
+		
+		int rows = 3;
+		int total_page = 0;
+		int dataCountOrder = 0;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		dataCountOrder = service.dataCountOrder(info.getUserId());
+		if (dataCountOrder != 0) {
+			total_page = myUtil.pageCount(rows, dataCountOrder);
+		}
+		
+		if (total_page < current_page) {
+			current_page = total_page;
+		}
+		
+		int start = (current_page - 1) * rows + 1;
+		int end = current_page * rows;
+		map.put("start", start);
+		map.put("end", end);
+		map.put("userId", info.getUserId());
+		
+		List<MyClass> list = service.listOrder(map);
+		
+		String listUrl = cp + "/mypage/order";
+		String articleUrl = cp + "/class/article?category=0&page=1";
+		String paging = myUtil.paging(current_page, total_page, listUrl);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("articleUrl", articleUrl);
+		model.addAttribute("page", current_page);
+		model.addAttribute("dataCount", dataCountOrder);
+		model.addAttribute("total_page", total_page);
+		model.addAttribute("paging", paging);
 		
 		return ".mypage.order";
+	}
+	
+	@RequestMapping(value = "review", method = RequestMethod.POST)
+	public String reviewSubmit(MyClass dto, HttpSession session) throws Exception {
+		
+		try {
+			service.insertReview(dto);
+		} catch (Exception e) {
+		}
+		
+		return "redirect:/mypage/order";
 	}
 	
 	@RequestMapping(value = "refund", method = RequestMethod.GET)

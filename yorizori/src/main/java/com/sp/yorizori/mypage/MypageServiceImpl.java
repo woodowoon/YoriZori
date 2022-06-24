@@ -32,6 +32,22 @@ public class MypageServiceImpl implements MypageService {
 			throw e;
 		}
 	}
+	
+	@Override
+	public boolean searchFollow(Map<String, Object> map) {
+		boolean result = false;
+		
+		try {
+			int cnt = dao.selectOne("mypage.searchFollow", map);
+			if (cnt != 0) {
+				result = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 
 	@Override
 	public Mypage readMypage(Map<String, Object> map) {
@@ -276,5 +292,39 @@ public class MypageServiceImpl implements MypageService {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public int dataCountOrder(String userId) {
+		int result = 0;
+		
+		try {
+			result = dao.selectOne("mypage.dataCountOrder", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public List<MyClass> listOrder(Map<String, Object> map) {
+		List<MyClass> list = null;
+		
+		try {
+			list = dao.selectList("mypage.listOrder", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public void insertReview(MyClass dto) throws Exception {
+		try {
+			dao.insertData("mypage.insertReview", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 }

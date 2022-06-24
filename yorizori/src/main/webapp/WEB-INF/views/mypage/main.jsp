@@ -100,7 +100,7 @@ function ajaxFun(url, method, query, dataType, fn) {
 }
 
 $(function(){
-	$(".btn-follow").click(function(){
+	$("body").on("click", ".btn-follow", function(){
 		let userId = "${dto.userId}";
 		let sessionId = "${sessionScope.member.userId}";
 		let url = "${pageContext.request.contextPath}/mypage/follow";
@@ -111,7 +111,10 @@ $(function(){
 			
 			if (state === "true") {
 				$(".btn-follow").css({"background" : "#fff", "color" : "#0095f6"});
+				$(".btn-follow").text("팔로잉");
 				$(".btn-follow").removeClass("btn-follow").addClass("btn-following");
+			} else if (state === "followed") {
+				alert("이미 팔로우 상태입니다.");
 			} else if (state === "false") {
 				alert("팔로우 처리를 실패했습니다.");
 			}
@@ -122,17 +125,19 @@ $(function(){
 });
 
 $(function(){
-	$(".btn-following").click(function(){
+	$("body").on("click", ".btn-following", function(){
 		let userId = "${dto.userId}";
 		let sessionId = "${sessionScope.member.userId}";
 		let url = "${pageContext.request.contextPath}/mypage/unfollow";
 		let query = "userId=" + userId + "&sessionId=" + sessionId;
 		
 		const fn = function(data){
-			let state = data;
+			let state = data.state;
 			
 			if (state === "true") {
 				$(".btn-following").css({"background" : "#0095f6", "color" : "#fff"});
+				$(".btn-following").text("팔로우");
+				$(".btn-following").removeClass("btn-following").addClass("btn-follow");
 			} else if (state === "false") {
 				alert("팔로우 취소 처리를 실패했습니다.");
 			}
@@ -143,21 +148,50 @@ $(function(){
 });
 
 $(function(){
-	$(".modal-body").on("click", ".btn-sm-following", function(){
+	$("body").on("click", ".btn-sm-following", function(){
 		
 		let userId = $(this).attr("data-userId");
 		let sessionId = "${sessionScope.member.userId}";
+		let className = "." + userId;
 		
 		let url = "${pageContext.request.contextPath}/mypage/unfollow";
 		let query = "userId=" + userId + "&sessionId=" + sessionId;
 		
 		const fn = function(data){
-			let state = data;
+			let state = data.state;
 			
 			if (state === "true") {
-				document.getElementById('btn-sm-following').className = 'btn-sm-follow';
+				$(className).css({"background" : "#0095f6", "color" : "#fff"});
+				$(className).text("팔로우");
+				$(className).attr("class","btn-sm-follow " + userId);
 			} else if (state === "false") {
 				alert("팔로우 취소 처리를 실패했습니다.");
+			}
+		};
+		
+		ajaxFun(url, "post", query, "json", fn);
+	});
+});
+
+$(function(){
+	$("body").on("click", ".btn-sm-follow", function(){
+		
+		let userId = $(this).attr("data-userId");
+		let sessionId = "${sessionScope.member.userId}";
+		let className = "." + userId;
+		
+		let url = "${pageContext.request.contextPath}/mypage/follow";
+		let query = "userId=" + userId + "&sessionId=" + sessionId;
+		
+		const fn = function(data){
+			let state = data.state;
+			
+			if (state === "true") {
+				$(className).css({"background" : "#fff", "color" : "#0095f6"});
+				$(className).text("팔로잉");
+				$(className).attr("class","btn-sm-following " + userId);
+			} else if (state === "false") {
+				alert("팔로우 처리를 실패했습니다.");
 			}
 		};
 		
@@ -203,7 +237,7 @@ $(function(){
 					<button class="btn-modify" type="button" onclick="location.href='${pageContext.request.contextPath}/member/pwd'">프로필 수정</button>
 				</c:when>
 				<c:otherwise>
-					<button class="btn-${dto.userFollowed=='1'?'following':'follow'}" type="button">${dto.userFollowed=='1'?'팔로잉':'팔로우'}</button>
+					<button class="btn-${dto.userFollowed=='0'?'follow':'following'}" type="button">${dto.userFollowed=='0'?'팔로우':'팔로잉'}</button>
 				</c:otherwise>
 			</c:choose>
 		</div>
@@ -355,7 +389,7 @@ $(function(){
 								<div></div>
 								${vo.followNickName}
 								<c:if test="${dto.userId == sessionScope.member.userId}">
-									<button class="btn-sm-following" type="button" data-userId="${vo.followId}">팔로잉</button>
+									<button class="btn-sm-following ${vo.followId}" type="button" data-userId="${vo.followId}">팔로잉</button>
 								</c:if>
 							</li>
 						</c:forEach>
