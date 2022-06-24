@@ -208,10 +208,12 @@ public class MemberController {
 		return ".member.pwd";
 	}
 	
-	@RequestMapping(value = "Updatemember")
+	@RequestMapping(value = "update")
 	public String memberUpdate() {
 		
 		return ".member.modify";
 	}
+	
+	
 	
 }
