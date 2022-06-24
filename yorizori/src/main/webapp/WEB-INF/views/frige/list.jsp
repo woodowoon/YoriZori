@@ -391,6 +391,7 @@ img {
 			</div>
 			<div class="recipe_btm">
 				<div class="inwrap">
+				<div><h3>조건에 맞는 레시피가 <strong>${dataCount}</strong>개 있습니다.</h3></div>
 					<div class="month_recipe_list">
 					<c:forEach var="dto" items="${list}">
 						<ul>
