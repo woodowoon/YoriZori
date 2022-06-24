@@ -53,20 +53,22 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public void updateBoard(Board dto) throws Exception {
-		// TODO Auto-generated method stub
-		
+		try {
+			dao.updateData("classQna.insertAnswer", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
-
+	
 	@Override
-	public void deleteQuestion(int num) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteAnswer(int num) throws Exception {
-		// TODO Auto-generated method stub
-		
+	public void deleteQuestion(Map<String, Object> map) throws Exception {
+		try {
+			dao.deleteData("classQna.deleteQuestion", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 }

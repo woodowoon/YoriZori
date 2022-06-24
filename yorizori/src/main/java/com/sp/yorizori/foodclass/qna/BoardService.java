@@ -10,7 +10,6 @@ public interface BoardService {
 	public List<Board> readBoard(Map<String, Object> map);
 	
 	public void updateBoard(Board dto) throws Exception;
-	public void deleteQuestion(int num) throws Exception;
-	public void deleteAnswer(int num) throws Exception;
+	public void deleteQuestion(Map<String, Object> map) throws Exception;
 	
 }

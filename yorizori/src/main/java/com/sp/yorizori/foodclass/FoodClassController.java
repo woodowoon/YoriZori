@@ -208,6 +208,10 @@ public class FoodClassController {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
+		map.put("classCode", classCode);
+		map.put("userId", info.getUserId());
+		map.put("nickname", info.getNickName());
+		
 		int rows = 5;
 		int dataCount = qnaService.dataCount(map);
 		int total_page = myUtil.pageCount(rows, dataCount);
@@ -221,9 +225,7 @@ public class FoodClassController {
 		map.put("start", start);
 		map.put("end", end);
 		
-		map.put("classCode", classCode);
-		map.put("userId", info.getUserId());
-		map.put("nickname", info.getNickName());
+		FoodClass classDto = service.readClass(classCode);
 		
 		List<Board> list = qnaService.readBoard(map);
 		for(Board dto : list) {
@@ -237,9 +239,10 @@ public class FoodClassController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		
 		model.put("dataCount", dataCount);
-		model.put("pageNo", current_page);
+		model.put("page", current_page);
 		model.put("paging", paging);
 		model.put("list", list);
+		model.put("dto", classDto);
 		
 		return model; 
 	}
@@ -258,6 +261,47 @@ public class FoodClassController {
 		}
 		
 		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("state", state);
+		return model;
+	}
+	
+	@RequestMapping(value = "insertAnswer", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> insertAnswer(
+			Board dto,
+			HttpSession session) throws Exception {
+		
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		String state = "true";
+		try {
+			qnaService.updateBoard(dto);
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("state", state);
+		
+		return model;
+	}
+	
+	@RequestMapping(value = "deleteQuestion", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> deleteQuestion(@RequestParam int classQNum, HttpSession session) throws Exception {
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		String state = "true";
+		
+		try {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("classQNum", classQNum);
+			map.put("userId", info.getUserId());
+			qnaService.deleteQuestion(map);
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		Map<String, Object> model = new HashMap<>();
 		model.put("state", state);
 		return model;
 	}

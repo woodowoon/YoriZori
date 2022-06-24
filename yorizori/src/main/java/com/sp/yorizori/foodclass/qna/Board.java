@@ -2,7 +2,7 @@ package com.sp.yorizori.foodclass.qna;
 
 public class Board {
 	private int rnum;
-	private int num;
+	private int classQNum;
 	private int classCode;
 	private int privacy;
 	private String subject;
@@ -20,11 +20,11 @@ public class Board {
 	public void setRnum(int rnum) {
 		this.rnum = rnum;
 	}
-	public int getNum() {
-		return num;
+	public int getClassQNum() {
+		return classQNum;
 	}
-	public void setNum(int num) {
-		this.num = num;
+	public void setClassQNum(int classQNum) {
+		this.classQNum = classQNum;
 	}
 	public int getClassCode() {
 		return classCode;

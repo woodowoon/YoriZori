@@ -55,7 +55,7 @@
 	
 	
 	<select id="readClass" parameterType="Integer" resultType="com.sp.yorizori.foodclass.FoodClass">
-		SELECT c.classCode, m.nickname, memberImageName, classSubject, price, classContent, classHitcount, 
+		SELECT c.classCode, c.userId, m.nickname, memberImageName, classSubject, price, classContent, classHitcount, 
 		    TO_CHAR(classReg_date, 'YYYY.MM.DD') classReg_date, classServing serving, videoTime, 
 		    classPhotoName imageFileName, previewName previewFileName, fullVideoName videoFileName
 		FROM classTable c

@@ -55,19 +55,28 @@
 .lec-detail .classQna form textarea { resize: none; width: 854px; height: 140px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; padding: 10px 12px; margin-left: 131px; }
 .lec-detail .classQna form button { width: 140px; height: 185px; font-size: 20px; vertical-align: top; border: 1px solid #ccc; border-left: none; border-radius: 4px; background: transparent; margin: -44px 0 0 -3px; }
 .lec-detail .qnaBoard { width: 1000px; margin: 30px auto 15px; }
-.lec-detail .qnaBoard table { width: 100%; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; }
-.lec-detail .qnaBoard table th { border-bottom: 1px solid #ccc; }
-.lec-detail .qnaBoard table th,
-.lec-detail .qnaBoard table td { padding: 12px 15px; }
+.lec-detail .qnaBoard .qnaList { width: 100%; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; }
+.lec-detail .qnaBoard .qnaList span:nth-child(2) { width: 600px; }
+.lec-detail .qnaBoard .qnaList span:nth-child(3),
+.lec-detail .qnaBoard .qnaList span:last-child { width: 120px; }
+.lec-detail .qnaBoard .qnaInfo span:nth-child(2) { width: 600px; }
+.lec-detail .qnaBoard .qnaInfo span:nth-child(3),
+.lec-detail .qnaBoard .qnaInfo span:last-child { width: 120px; }
+.lec-detail .qnaBoard .qnaList span,
+.lec-detail .qnaBoard .qnaBody span { display: inline-block; text-align: center; padding: 12px 15px; }
 .lec-detail .qnaBoard .showMore { cursor: pointer; }
 .lec-detail .qnaBoard .showMore:hover { color: #f44502; }
 .lec-detail .qnaBoard .question { display: none; border-top: 1px dashed #ccc; }
-.lec-detail .qnaBoard .question.active { display: table-row; }
+.lec-detail .qnaBoard .question.active { display: block; }
 .lec-detail .qnaBoard .answer { display: none; border-bottom: 2px dashed #ccc; }
-.lec-detail .qnaBoard .answer.active { display: table-row; }
-.lec-detail .qnaBoard .question td { border-bottom: 1px dashed #ccc; }
-.lec-detail .qnaBoard .question td:first-child,
-.lec-detail .qnaBoard .answer td:first-child { width: 150px; border-right: 1px dashed #ccc; }
+.lec-detail .qnaBoard .answer.active { display: block; }
+.lec-detail .qnaBoard .question span { border-bottom: 1px dashed #ccc; }
+.lec-detail .qnaBoard .question span:first-child,
+.lec-detail .qnaBoard .answer span:first-child { width: 150px; border-right: 1px dashed #ccc; }
+.lec-detail .qnaBoard .deleteQ { cursor: pointer; }
+.lec-detail .qnaBoard form[name="qnaAnswer"] { display: inline-block; }
+.lec-detail .qnaBoard form[name="qnaAnswer"] textarea { width: 695px; vertical-align: bottom; margin: 14px 0 0 10px; }
+.lec-detail .qnaBoard form[name="qnaAnswer"] button { height: 140px; vertical-align: bottom; }
 
 #popup-preview, #popup-video { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2; }
 #popup-preview > div , #popup-video > div { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 1000px; height: 500px; }
@@ -145,10 +154,13 @@ function printQna(data) {
 	let dataCount = data.dataCount;
 	let pageNo = data.pageNo;
 	let total_page = data.total_page;
+	let paging = data.paging;
 	
 	let out = "";
 	for(let idx = 0; idx < data.list.length; idx++) {
+		let classQNum = data.list[idx].classQNum;
 		let userId = data.list[idx].userId;
+		let privacy = data.list[idx].privacy;
 		let nickname = data.list[idx].nickname;
 		let subject = data.list[idx].subject;
 		let regDate = data.list[idx].regDate;
@@ -156,40 +168,100 @@ function printQna(data) {
 		let content = data.list[idx].classQContent;
 		let answer = data.list[idx].answer;
 		
-		out += "<tr align='center'>";
-		out += "	<td width='150px'>" + nickname + "</<td>";
-		out += "	<td class='showMore'>" + subject + "</td>";
-		out += "	<td>" + regDate + "</td>";
-		if(! answerDate) {
-			out += "<td>답변대기</td>";
+		out += "<div class='qnaInfo'>";
+		if(privacy === 1) {
+			if('${sessionScope.member.userId}' == userId || '${sessionScope.member.userId}' == '${dto.userId}') {
+				out += "	<span style='width:150px;'>" + nickname + "</span>";
+				out += "	<span class='showMore'>" + subject + "</span>";
+				out += "	<span>" + regDate + "</span>";		
+				if(! answerDate) {
+					out += "<span>답변대기</span>";
+				} else {
+					out += "<span>" + answerDate + "</span>";
+				}
+				out += "</div>";
+				out += "<div class='question'>";
+				out += "	<span style='width:150px;'>질문내용</span>";
+				if('${sessionScope.member.userId}' == userId) {
+					out += "	<span style='width:799px;'>" + content + "</span>";
+					out += "	<span class='deleteQ'><i class='bi bi-trash'></i></span>";
+				} else {
+					out += "	<span style='width:840px;'>" + content + "</span>";
+				}
+				out += "</div>";
+				out += "<div class='answer' data-num='" + classQNum + "'>";
+				if(! answer) {
+					if('${sessionScope.member.userId}' == '${dto.userId}') {
+						out += "<span style='width:150px; height:168px; vertical-align:top;'>답변내용</span>";
+						out += "<form name='qnaAnswer' method='post'>";
+						out += "	<textarea name='answer' id='answer' placeholder='답변을 입력해주세요.'></textarea>";
+						out += "	<button type='button' class='answerSend'>등록</button>";
+						out += "</form>";
+					} else {
+						out += "	<span style='width:150px;'>답변내용</span>";
+						out += "<span style='width:840px;'>답변대기</span>";
+					}
+				} else {
+					out += "	<span style='width:150px;'>답변내용</span>";
+					out += "	<span style='width:840px;'>" + answer + "</span>";
+				}
+				out += "</div>";				
+			} else {
+				out += "<div class='qnaInfo'>"
+				out += "<span style='width:150px;'>" + nickname + "</span>";
+				out += "<span style='width:840px;'>비공개 질문입니다.</span>";
+				out += "</div>";
+			}
 		} else {
-			out += "<td>" + answerDate + "</td>";
+			out += "	<span style='width:150px;'>" + nickname + "</span>";
+			out += "	<span class='showMore'>" + subject + "</span>";
+			out += "	<span>" + regDate + "</span>";
+			if(! answerDate) {
+				out += "<span>답변대기</span>";
+			} else {
+				out += "<span>" + answerDate + "</span>";
+			}
+			out += "</div>";
+			out += "<div class='question'>";
+			out += "	<span style='width:150px;'>질문내용</span>";
+			if('${sessionScope.member.userId}' == userId) {
+				out += "	<span style='width:799px;'>" + content + "</span>";
+				out += "	<span class='deleteQ'><i class='bi bi-trash'></i></span>";
+			} else {
+				out += "	<span style='width:840px;'>" + content + "</span>";
+			}
+			out += "</div>";
+			out += "<div class='answer' data-num='" + classQNum + "'>";
+			if(! answer) {
+				if('${sessionScope.member.userId}' == '${dto.userId}') {
+					out += "<span style='width:150px; height:168px; vertical-align:top;'>답변내용</span>";
+					out += "<form name='qnaAnswer' method='post'>";
+					out += "	<textarea name='answer' id='answer' placeholder='답변을 입력해주세요.'></textarea>";
+					out += "	<button type='button' class='answerSend'>등록</button>";
+					out += "</form>";
+				} else {
+					out += "<span style='width:150px;'>답변내용</span>";
+					out += "<span style='width:840px;'>답변대기</span>";
+				}
+			} else {
+				out += "<span style='width:150px;'>답변내용</span>";
+				out += "	<span style='width:840px;'>" + answer + "</span>";
+			}
+			out += "</div>";
 		}
-		out += "</tr>";
-		out += "<tr align='center' class='question'>";
-		out += "	<td colspan='1'>질문내용</td>";
-		out += "	<td colspan='3'>" + content + "</td>";
-		out += "</tr>";
-		out += "</tr>";
-		out += "<tr align='center' class='answer'>";
-		out += "	<td colspan='1'>답변내용</td>";
-		if(! answer) {
-			out += "<td colspan='3'>답변대기</td>";
-		} else {
-			out += "	<td colspan='3'>" + answer + "</td>";
-		}
-		out += "</tr>";
 	}
 	
-	$(".qnaBody").append(out);
+	$(".qnaBody").html(out);
+	
+	out = dataCount == 0 ? '등록된 Q&A 가 없습니다.' : paging;
+	$(".page-box").html(out);
 }
-
 
 $(function(){
 	$(".qnaSend").click(function(){
 		let subject = $("#classQSubject").val().trim();
 		let content = $("#classQContent").val().trim();
-		
+		let privacy = $("input[name='privacy']:checked").val();
 		if(! subject) {
 			$("#classQSubject").focus();
 			return false;
@@ -200,13 +272,55 @@ $(function(){
 		}
 		
 		let url = "${pageContext.request.contextPath}/class/qnaInsert";
-		let query = "classCode=${dto.classCode}&subject=" + encodeURIComponent(content) + "&classQContent=" + encodeURIComponent(content);
-		
+		let query = "classCode=${dto.classCode}&privacy=" + privacy + "&subject=" + encodeURIComponent(subject) + "&classQContent=" + encodeURIComponent(content);
 		const fn = function(data) {
 			$("#classQSubject").val("");
 			$("#classQContent").val("");
 			$(".qnaBody").empty();
 			listPage(1);
+		};
+		
+		ajaxFun(url, "post", query, "json", fn);
+	});
+});
+
+$(function(){
+	$(document).on("click", ".answerSend", function(){
+		let answer = $("#answer").val().trim();
+		let qNum = $(this).parent().parent().attr('data-num');
+		let pageNo = $(".active .page-link").text();
+
+		if(! answer) {
+			$("#answer").focus();
+			return false;
+		}
+		
+		let url = "${pageContext.request.contextPath}/class/insertAnswer";
+		let query = "classCode=${dto.classCode}&classQNum=" + qNum + "&answer=" + encodeURIComponent(answer);
+		const fn = function(data) {
+			$("#answer").val("");
+			$(".qnaBody").empty();
+			listPage(pageNo);
+		};
+		
+		ajaxFun(url, "post", query, "json", fn);
+	});
+});
+
+$(function(){
+	$(document).on("click", ".deleteQ", function(){
+		if(! confirm("질문을 삭제하시겠습니까 ? ")) {
+			return false;
+		}
+		
+		let classQNum = $(this).parent().next().attr('data-num');
+		let pageNo = $(".active .page-link").text();
+		
+		let url = "${pageContext.request.contextPath}/class/deleteQuestion";
+		let query = "classQNum=" + classQNum;
+		
+		const fn = function(data) {
+			listPage(pageNo);
 		};
 		
 		ajaxFun(url, "post", query, "json", fn);
@@ -293,29 +407,25 @@ $(function(){
 			<input type="text" name="classQSubject" placeholder="제목" id="classQSubject">
 			<div class="radio-area">
 				<input type="radio" name="privacy" id="privacy1" value="0" checked="checked">
-				<label for="private1">공개</label>
+				<label for="privacy1">공개</label>
 				<input type="radio" name="privacy" id="privacy2" value="1">
-				<label for="private1">비공개</label>
+				<label for="privacy1">비공개</label>
 			</div>
 			<textarea placeholder="클래스에 관한 질문을 남겨주세요." name="classQContent" id="classQContent"></textarea>
 			<button type="button" class="qnaSend">등록</button>
 		</form>
 		<div class="qnaBoard">
-			<table>
-				<thead>
-					<tr align="center">
-						<th>작성자</th>
-						<th>클래스 QnA 제목</th>
-						<th>질문일자</th>
-						<th>답변일자</th>
-					</tr>
-				</thead>
-				<tbody class="qnaBody">
-
-				</tbody>
-			</table>
+			<div class="qnaList">
+				<span style="width: 150px;">작성자</span>
+				<span>클래스 QnA 제목</span>
+				<span>질문일자</span>
+				<span>답변일자</span>
+			</div>
+	
+			<div class="qnaBody">
+			</div>
+	
 			<div class="page-box">
-				${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
 			</div>
 		</div>
 	</div>
