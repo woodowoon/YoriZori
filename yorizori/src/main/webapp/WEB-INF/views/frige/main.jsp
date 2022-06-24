@@ -10,6 +10,25 @@ img {
 	width: 10%;
 }
 
+.sort li a.selected img {
+    opacity: 0.5;
+}
+
+.sort li a img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.sort li a strong {
+    position: absolute;
+    top: 65px;
+    left: 5px;
+    right: 5px;
+    text-align: center;
+    line-height: 1;
+}
+
 .body-container {
 	max-width: 1300px;
 } 
@@ -22,9 +41,7 @@ tr {
 	width: 400px;
 	float: left;
 	padding-top: 0px;
-}
-
-.field1 {
+	display: contents;
 	position: relative;
 }
 
@@ -52,18 +69,41 @@ fieldset {
 }
 
 sort {
-	width: 190px;
-    margin-right: 9px;
+    -webkit-text-size-adjust: none;
+    color: #2a2a2a;
+    margin: 0;
+    font-size: 100%;
+    list-style: none;
+    width: 396px;
+    padding: 10px 13px;
+    font-family: Microsoft YaHei,'NS';
     box-sizing: border-box;
-    padding-left: 0px;
-
+    height: 270px;
+    border: 1px solid #a73f40;
+    background: #fff;
+    float: left;
+    overflow-x: hidden;
+    overflow-y: visible;
+  
 }
 
 .sort a {
-    color: #5d5758;
-    display: inline-block;
-    line-height: 44px;
-    padding-left: 18px;    
+    -webkit-text-size-adjust: none;
+    list-style: none;
+    border: 0;
+    outline: none;
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    display: block;
+    position: relative;
+    width: 70px;
+    height: 95px;
+    text-align: center;
+    color: #e66768;
+    font-family: Microsoft YaHei,'NSL';
+    font-size: 13px;  
 
 }
 
@@ -74,7 +114,7 @@ sort {
 }
 
 .field2 dt {
-    height: 59px;
+    height: 57px;
     font-size: 20px;
     padding: 10px 15px;
     font-family: Microsoft YaHei,'NSL';
@@ -94,12 +134,13 @@ sort {
 }
 
 .field2 dd {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 12px 16px;
-    background-color: #fff;
+    display: contents;
+    height: 220px;
+    border-radius: 5px;
+    border: 1px solid #5d5758;
+    background: #fff;
+    color: #5d5758;
+    font-size: 15px;
 }
 
 ol, ul {
@@ -115,7 +156,8 @@ ol, ul {
 
 
 ul {
-	display: block;
+	display: flex;
+	flex-wrap: wrap;
     list-style-type: disc;
     margin-block-start: 1em;
     margin-block-end: 1em;
@@ -192,8 +234,8 @@ dl {
     line-height: 1em;
     color: #fff;
     text-align: center;
-    margin-right: 0;	
-}
+    margin-right: 0;
+}	
 
 </style>
 
@@ -238,8 +280,8 @@ function ajaxFun(url, method, query, dataType, fn) {
 
 
 $(function() {
-	// 재료 클릭 -> 선택된 재료칸으로 이동
-	$("body").on("click", ".sort span", function() {
+	// 재료 클릭 -> 재료칸으로 이동
+	$("body").on("click", ".sort li", function() {
 		var ingredientCode = $(this).attr("data-id");
 		var ingredientName = $(this).text();
 		var s;
@@ -256,7 +298,7 @@ $(function() {
 		if( flag ) {
 			return false;
 		}
-		
+
 		s = "<div class='ingredient'><li class='content' data-id='" + ingredientCode + "'>" + ingredientName + " <span class='close'></span></li>"
 		s += "<input type='hidden' name='ingredientCodes' value='"+ ingredientCode +"'></div>";
 		
@@ -268,7 +310,6 @@ $(function() {
 
 </script>
 
-<!-- 디자인 다시 수정하기 -->
 
 <div class="container">
 	<div class="body-container">	
@@ -288,15 +329,21 @@ $(function() {
 							<div class="row g-3">
  
 						  	<input name="utf8" type="hidden">
-								<fieldset class="field1" >		     		            			
-						         <span class="sort">
-						            	<c:forEach var="vo" items="${list}">						                 
-						                 	<span data-id="${vo.ingredientCode}">
-						                 	<a class="selected">${vo.ingredientName}</a>
-						                 	</span>
-						                 	
-						                 </c:forEach>          
-						            </span>					     
+								<fieldset class="field1" >	
+							<ul class="sort">
+								<c:forEach var="vo" items="${list}">
+								<li data-id="${vo.ingredientCode}">
+									<a ingre_id="71" href="javascript:;">
+										<em></em>
+										<img src="${pageContext.request.contextPath}/resources/images/frige.png" alt="20">
+										<span>
+						                <strong><a class="selected">${vo.ingredientName}</a></strong>
+						                </span>
+									</a>
+							 	</li>
+  								</c:forEach> 
+    						</ul>         
+						    			     
 					          	</fieldset> 
  
 					        
@@ -322,8 +369,8 @@ $(function() {
 			</form>
 			
 		<div class="col text-end">	
-		<button type="button" class="btn btn-light" onclick="sendOk();">검색</button>
-		<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/frige/main';">다시선택</button>
+		<button type="button" class="btn btn-light" onclick="sendOk();" style="padding: 10px; border-radius: 12px; background: #f44502; line-height: 1em; color: #fff;">검색</button>
+		<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/frige/main';" style="padding: 10px; border-radius: 12px; background: #f44502; line-height: 1em; color: #fff;">다시선택</button>
 		</div>
 
 	    </div>

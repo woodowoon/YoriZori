@@ -253,22 +253,139 @@
     border-radius: 18px;
 }
 
+.recipe_box recipe_infotxt {
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Noto Sans', sans-serif;
+    color: #000000;
+    letter-spacing: -0.03em;
+    word-break: keep-all;
+    margin: 0;
+    -webkit-text-size-adjust: none;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    float: left;
+    position: relative;
+    width: calc(100% - 640px);
+    height: 640px;
+    min-height: 360px;
+    padding: 100px 50px 50px 50px;
+    background: #ffffff;
+    box-sizing: border-box;
+    text-align: center;
+}
 
+.recipe_tit {
+    letter-spacing: -0.03em;
+    text-align: center;
+    display: block;
+    width: 235px;
+    padding: 15px 20px;
+    border: 1px solid #f44502;
+    border-radius: 9999px;
+    font-size: 1.8rem;
+    line-height: 1em;
+    color: #f44502;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.btit {
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Noto Sans', sans-serif;
+    word-break: keep-all;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    -webkit-text-size-adjust: none;
+    border: 0;
+    outline: 0;
+    margin-top: 30px;
+    font-size: 4.4rem;
+    font-weight: 700;
+    line-height: 1.2em;
+    color: #000000;
+    letter-spacing: -1px;
+}
+
+.stxt {
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Noto Sans', sans-serif;
+    letter-spacing: -0.03em;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    -webkit-text-size-adjust: none;
+    border: 0;
+    outline: 0;
+    margin-top: 30px;
+    height: 124px;
+    font-size: 1.8rem;
+    font-weight: 400;
+    line-height: 1.8em;
+    color: #777777;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+}
+
+.recipe_top {
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Noto Sans', sans-serif;
+    color: #000000;
+    letter-spacing: -0.03em;
+    word-break: keep-all;
+    margin: 0;
+    -webkit-text-size-adjust: none;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    position: relative;
+    width: 100%;
+    padding: 60px 0 54px 0;
+    background: #f7f8fb;
+    box-sizing: border-box;
+}
+
+.recipe_box recipe_thumb {
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Noto Sans', sans-serif;
+    color: #000000;
+    letter-spacing: -0.03em;
+    word-break: keep-all;
+    margin: 0;
+    padding: 0;
+    -webkit-text-size-adjust: none;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    float: left;
+    position: relative;
+    width: 640px;
+    background-color: #ffeee4;
+}
+
+img {
+	border-radius: 20px;
+	
+}
 
 </style>
 
 <div class="contents">
 			<div class="recipe_top">
 				<div class="inwrap">
-					<div class="month_recipe_box">
-						<div class="recipe_box recipe_thumb">
+					<div class="month_recipe_box" style="display: -webkit-inline-box;">
+					<div class="recipe_box recipe_thumb">
+					
+							<span><img src="${pageContext.request.contextPath}/resources/images/frige-title.jpg" alt="20"></span>
 						</div>
-						<div class="recipe_box recipe_infotxt">
-								<h3 class="btit">조건에 맞는 레시피가 <strong>${dataCount}</strong>개 있습니다.</h3>
-								<div class="stxt"><p>조건에 맞는 레시피로 냉장고 파먹기 ~.╰(*°▽°*)╯<br></p><p>간단한 재료로 만드는 요리조리 레시피 ⭐</p>
-								<p>요리조리 레시피로 만드는 맛있는 한상</p><p>한 그릇 뚝딱(●'◡'●)</p><p><br></p></div>
+					 <div class="recipe_box recipe_infotxt" style="padding: 30px;">
+							<div class="recipe_tit">이달의 레시피</div>
 							
-						</div>
+								<h3 class="btit">매콤한 닭볶음탕</h3>
+								<div class="stxt"><p>스트레스 풀릴 땐 매운게 최고╰(*°▽°*)╯<br></p><p>양념에 푹 잠긴 닭다리를 한입에⭐<p><br></p></div>
+						</div>					
 					</div>
 				</div>
 			</div>
