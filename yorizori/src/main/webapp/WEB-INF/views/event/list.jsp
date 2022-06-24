@@ -3,146 +3,100 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+
 <style type="text/css">
-* {
-	padding: 0; margin: 0;
-	box-sizing: border-box;
-}
+main { background-color: #f7f8fb; font-family: 'Noto Sans KR', sans-serif; color: #000000; letter-spacing: -0.03em; padding: 60px 0; }
 
-.event {
-    font-size: 24px;
-    font-weight: bold;
-    color: rgb(26, 26, 26);
-    line-height: 34px;
-    letter-spacing: -0.4px;
-    margin: 30px auto;
-}
+.e-container { background: #fff; border-radius: 24px; padding: 35px 0; width: 1320px; margin: 0 auto; }
 
-.category {
-	position: relative;
-    overflow: hidden;
-    flex: 0 0 auto;
-    -webkit-box-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    align-items: center;
-    color: rgb(26, 26, 26);
-    cursor: pointer;
-    font-size : 25px;
-}
+.event-title { width: 100%; font-size: 25px; font-weight: 700; margin-bottom: 35px; list-style: none; display: flex; justify-content: center; }
+.event-title .end-li { padding-left: 50px;}
 
-span {
-    padding-left: 16px;
-    padding-right: 16px;
-    border-radius: 20px;
-    background-color: #E7E7E7;
-    line-height: 34px;
-    letter-spacing: -0.4px;
-    margin: 30px auto;
-	width: 980px;
-}
+.event-list { list-style: none; display: flex; width: 95%; margin: 0 auto 50px auto; padding-left: 0; }
+.event-list > li { font-size: 16px; width: 33.3%; text-align: center; border-bottom: 1px solid #dadada; border-top: 1px solid #dadada; }
+.event-list > li > a { display: block; height: 64px; }
+.event-list > li > a:hover, .event-list > li > a:active { text-decoration: none; color: #f44502; }
+.event-list > li > a > span { line-height: 60px; }
 
-body {
-	font-size: 14px;
-	font-family: "Malgun Gothic", "맑은 고딕", NanumGothic, 나눔고딕, 돋움, sans-serif;
-	display: flex;
-    align-items: flex-start;
-    flex-direction: column;
-}
+.event-container { width: 95%; margin: 0 auto; }
+.event-list { list-style: none; display: flex; padding-left: 0; }
+.event-list li:nth-child(1) { margin-left: 0; }
+.event-list > li { margin: 0 0 20px 24px; width: calc(25% - 18px); }
 
-main {
-	margin: 30px auto;
-	width: 980px;
-	min-height: 500px;
-}
+.event-box { border: 1px solid #dadada; text-align: center; width: 400px; }
+.event-img { margin-bottom: 20px; width: 400px; height: 300px; overflow: hidden;}
+.event-img > a > img { max-width: 100%; min-height: 100%; }
+.event-info { letter-spacing: 0; margin: 0 10px; }
+.event-title { font-size: 20px; font-weight: 500; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+.event-title > a { text-decoration: none; color: #000; }
+.event-desc { font-size: 16px; font-weight: 300; }
 
-.item-container {
-	width: 100%;
-	display: grid;
-	grid-template-rows: repeat(3, 1fr);
-	grid-template-columns: repeat(3, 270px);
-	gap: 10px; 
-}
+.btn-container { width: 90%; margin: 0 auto; text-align: right; }
+.btn-write { color: #ffffff; background-color: #f44502; font-size: 25px; border-radius: 300px; padding: 10px 20px; }
 
-.item {
-	cursor: pointer;
-	border: 1px solid #eee;
-	height: 280px;
-	
-	display: flex;
-	flex-direction:column;
-	justify-content: space-between;
-}
-
-.item:hover {
-	border: 1px solid #ccc;
-}
-
-.item-thumb img {
-	display: block;
-	width: 100%;
-	height: 179px;
-}
-
-.item-desc {
-	margin: 10px;
-}
-
-.item-desc .title {
-	font-size: 17px;
-	font-weight: 700;
-	letter-spacing: -1px;
-	height: 45px;
-}
-.item-desc .date {
-	font-size: 12px;
-	font-weight: 500;
-}
-
+.page-item.active .page-link { background-color: #f44502; border-color: #f44502; }
+.page-link, .page-link:hover, .page-link:active { color: #f44502; }
 </style>
 
-<body>
-	<div class="event">
-	<h2>이벤트</h2>
+<script type="text/javascript">
+
+$(function(){
+	if('${menu}' == 'ing') {
+		$(".ing-li").css("border-bottom","2px solid #f44502");
+	} else if('${menu}' == 'end') {
+		$(".end-li").css("border-bottom","2px solid #f44502");
+});
+
+</script>
+
+<div class="e-container">
+	
+	<ul class="event-title">
+		<li class="ing-li"><a href="${pageContext.request.contextPath}/event/list?menu=ing"><span>진행중인 이벤트</span></a></li>
+		<li class="end-li"><a href="${pageContext.request.contextPath}/event/list?menu=end"><span>종료된 이벤트</span></a></li>
+	</ul>
+	
+	<div class="event-container">
+		<c:forEach var="dto" items="${list}" varStatus="status" step="4">
+			<ul class="event-list">
+				<c:forEach var="dto" items="${list}" begin="${status.index}" end="${status.index+3}">
+					<li>
+						<div class="event-box">
+							<div class="event-img">
+								<a href="${articleUrl}&num=${dto.eventNum}">
+									<c:choose>
+										<c:when test="${dto.fileName != null}">
+											<img src="${pageContext.request.contextPath}/uploads/event/${dto.fileName}">
+										</c:when>
+										<c:otherwise>
+											<img src="${pageContext.request.contextPath}/resources/images/noimage.png">
+										</c:otherwise>
+									</c:choose>
+								</a>
+							</div>
+							<div class="event-info">
+								<p class="event-title"><a href="${articleUrl}&num=${dto.subject}">${dto.subject}</a></p>
+								<p class="event-desc">${dto.startTime} ~ ${dto.expireTime}</p>
+							</div>
+						</div>
+					</li>
+				</c:forEach>
+			</ul>
+		</c:forEach>
 	</div>
 	
-	<div class='category'>
-	<p><span>전체</span>
-	<span>진행중인이벤트</span>
-	<span>종료된이벤트</span>
-	<span>공모전</span>
-	<span>공모전발표</span></p>
+	<div class="btn-container">
+		<c:if test="${sessionScope.member.role == 0}">
+			<button type="button" class="btn btn-write" onclick="location.href='${pageContext.request.contextPath}/event/write';">
+				<i class="icofont-plus-square"></i>
+			</button>
+		</c:if>
+	</div>
 	
+	<div class="page-box">
+		${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
 	</div>
-
-<main>
-	<div class="item-container">
-		<div class="item">
-			<div class="item-thumb">
-				<img src="${pageContext.request.contextPath}/resources/images/salad.jpg">
-			</div>
-			
-			<div class="item-desc">
-				<p class="title">카카오페이로 결제하면 최대 1 만원 추가할인 !</p>
-				<p class="date">22.06.03(금) ~ 22.06.03(목)</p>
-			</div>
-		</div>
-		
-		<div class="item">
-			<div class="item-thumb">
-				<img src=""> 
-			</div>
-			<div class="item-desc">
-				<p class="title">${dto.subject}</p>
-				<p class="date">${dto.content}</p>
-			</div>
-		</div>
-		
-		<div class="page-box">
-		 ${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
-		</div>
-		
-	</div>
-</main>
-
-</body>   
+</div>

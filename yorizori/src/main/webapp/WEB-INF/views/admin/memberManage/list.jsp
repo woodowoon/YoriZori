@@ -5,7 +5,7 @@
 
 <style type="text/css">
 .body-main {
-	max-width: 850px;
+	max-width: 1000px;
 }
 </style>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/tabs.css" type="text/css">
@@ -174,9 +174,9 @@ function selectStateChange() {
 				<table class="table table-border table-list">
 					<thead>
 						<tr> 
-							<th class="wx-60">번호</th>
+							<th class="wx-80">번호</th>
 							<th class="wx-100">아이디</th>
-							<th class="wx-100">닉네임</th>
+							<th class="wx-120">닉네임</th>
 							<th class="wx-120">생년월일</th>
 							<th class="wx-140">전화번호</th>
 							<th class="wx-80">상태</th>
@@ -206,7 +206,7 @@ function selectStateChange() {
 				<table class="table">
 					<tr>
 						<td align="left" width="100">
-							<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/admin/memberManage/memberlist">새로고침</button>
+							<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/admin/memberManage/memberList';">새로고침</button>
 						</td>
 						<td align="center">
 							<form name="searchForm" action="${pageContext.request.contextPath}/admin/memberManage/memberList" method="post">
