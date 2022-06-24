@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sp.yorizori.common.FileManager;
 import com.sp.yorizori.common.dao.CommonDAO;
 
 @Service("mypage.mypageService")
@@ -14,17 +13,10 @@ public class MypageServiceImpl implements MypageService {
 	@Autowired
 	private CommonDAO dao;
 	
-	@Autowired
-	private FileManager fileManager;
-	
 	@Override
-	public void insertMemberImage(Mypage dto, String pathname) throws Exception {
+	public void insertFollow(Map<String, Object> map) throws Exception {
 		try {
-			String memberImageName = fileManager.doFileUpload(dto.getSelectFile(), pathname);
-			if (memberImageName != null) {
-				dto.setMemberImageName(memberImageName);
-				dao.insertData("mypage.insertMemberImage", dto);
-			}
+				dao.insertData("mypage.insertFollow", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -32,32 +24,9 @@ public class MypageServiceImpl implements MypageService {
 	}
 
 	@Override
-	public void updateMemberImage(Mypage dto, String pathname) throws Exception {
+	public void deleteFollow(Map<String, Object> map) throws Exception {
 		try {
-			String memberImageName = fileManager.doFileUpload(dto.getSelectFile(), pathname);
-			
-			if (memberImageName != null) {
-				if (dto.getMemberImageName().length() != 0) {
-					fileManager.doFileDelete(dto.getMemberImageName(), pathname);
-				}
-				
-				dto.setMemberImageName(memberImageName);
-			}
-			dao.updateData("mypage.updateMemberImage", dto);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-	} 
-
-	@Override
-	public void deleteMemberImage(String userId, String pathname) throws Exception {
-		try {
-			if (pathname != null) {
-				fileManager.doFileDelete(pathname);
-			}
-			
-			dao.deleteData("mypage.deleteMemberImage", userId);
+			dao.insertData("mypage.deleteFollow", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -65,11 +34,11 @@ public class MypageServiceImpl implements MypageService {
 	}
 
 	@Override
-	public Mypage readMypage(String userId) {
+	public Mypage readMypage(Map<String, Object> map) {
 		Mypage dto = null;
 		
 		try {
-			dto = dao.selectOne("mypage.readMypage", userId);
+			dto = dao.selectOne("mypage.readMypage", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

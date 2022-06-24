@@ -127,8 +127,8 @@ main { background-color: #fff; font-family: 'Noto Sans KR', sans-serif; color: #
 				  	</h2>
 				  	<div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
 				    	<div class="accordion-body">
-				      		<a href="${pageContext.request.contextPath}/mypage/modify">회원정보수정</a>
-				      		<a href="${pageContext.request.contextPath}/mypage/cancel">회원탈퇴</a>
+				      		<a href="${pageContext.request.contextPath}/member/pwd">회원정보수정</a>
+				      		<a href="${pageContext.request.contextPath}/member/pwd?dropout">회원탈퇴</a>
 				    	</div>
 				  	</div>
 				</div>

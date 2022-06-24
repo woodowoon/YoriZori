@@ -2,23 +2,19 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mypage">
-	<insert id="insertMemberImage" parameterType="com.sp.yorizori.mypage.Mypage">
-		INSERT INTO memberImage(userId, memberImageName)
-		VALUES (#{userId}, #{memberImageName, jdbcType=VARCHAR})
+	<insert id="insertFollow" parameterType="map">
+		INSERT INTO follow(num, follower_id, following_id)
+		VALUES (follow_seq.NEXTVAL, #{sessionId}, #{userId})
 	</insert>
 	
-	<update id="updateMemberImage" parameterType="com.sp.yorizori.mypage.Mypage">
-		UPDATE memberImage SET memberImageName=#{memberImageName}
-		WHERE userId = #{userId}
-	</update>
-	
-	<delete id="deleteMemberImage" parameterType="String">
-		DELETE FROM memberImage WHERE userId = #{userId}
+	<delete id="deleteFollow" parameterType="map">
+		DELETE FROM follow WHERE follower_id = #{sessionId} AND following_id = #{userId}
 	</delete>
 	
 	<select id="readMypage" parameterType="map" resultType="com.sp.yorizori.mypage.Mypage">
 		SELECT m.userId, nickName, memberImageName, NVL(recipeCount, 0) recipeCount, 
-		    NVL(followerCount ,0) followerCount, NVL(followingCount, 0) followingCount
+		    NVL(followerCount ,0) followerCount, NVL(followingCount, 0) followingCount, 
+		    NVL(userFollowed, 0) userFollowed
 		FROM member m
 		LEFT OUTER JOIN (
 		    SELECT i.userId, memberImageName
@@ -39,6 +35,12 @@
 		    FROM follow f
 		    GROUP BY f.follower_Id
 		) f ON m.userId = f.follower_Id
+		LEFT OUTER JOIN (
+		    SELECT f.following_Id, COUNT(*) userFollowed
+		    FROM follow f
+		    WHERE f.follower_Id = #{sessionId}
+		    GROUP BY f.following_Id
+		) f ON m.userId = f.following_Id
 		WHERE m.userId = #{userId}
 	</select>
 	

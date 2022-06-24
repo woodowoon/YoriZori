@@ -26,6 +26,7 @@ li { list-style: none; }
 .myInfo .count { margin-top: 10px; margin-bottom: 0; font-size: 25px; font-weight: 700; }
 .myInfo .name { margin-bottom: 0; font-size: 16px; }
 .profile-follow { height:50px; text-align: center; padding: 5px; }
+.btn-modify { width: 260px; height: 40px; border: 1px solid #0095f6; border-radius: 8px; background-color: #0095f6; color: #fff; font-size: 16px; letter-spacing: 0.03em; }
 .btn-follow { width: 260px; height: 40px; border: 1px solid #0095f6; border-radius: 8px; background-color: #0095f6; color: #fff; font-size: 16px; letter-spacing: 0.03em; }
 .btn-following { width: 260px; height: 40px; border: 1px solid #0095f6; border-radius: 8px; background-color: #fff; color: #0095f6; font-size: 16px; letter-spacing: 0.03em; }
 
@@ -67,6 +68,104 @@ li { list-style: none; }
 .btn-primary:focus, .btn-primary:hover { background-color: #0095f6; border-color: #0095f6; box-shadow: 0 0 0 0; }
 </style>
 
+<script type="text/javascript">
+function changeFollowing() {
+	
+}
+
+function ajaxFun(url, method, query, dataType, fn) {
+	$.ajax({
+		type:method,
+		url:url,
+		data:query,
+		dataType:dataType,
+		success:function(data) {
+			fn(data);
+		},
+		beforeSend:function(jqXHR) {
+			jqXHR.setRequestHeader("AJAX", true);
+		},
+		error:function(jqXHR) {
+			if(jqXHR.status === 403) {
+				login();
+				return false;
+			} else if(jqXHR.status === 400) {
+				alert("요청 처리가 실패 했습니다.");
+				return false;
+			}
+	    	
+			console.log(jqXHR.responseText);
+		}
+	});
+}
+
+$(function(){
+	$(".btn-follow").click(function(){
+		let userId = "${dto.userId}";
+		let sessionId = "${sessionScope.member.userId}";
+		let url = "${pageContext.request.contextPath}/mypage/follow";
+		let query = "userId=" + userId + "&sessionId=" + sessionId;
+		
+		const fn = function(data){
+			let state = data.state;
+			
+			if (state === "true") {
+				$(".btn-follow").css({"background" : "#fff", "color" : "#0095f6"});
+				$(".btn-follow").removeClass("btn-follow").addClass("btn-following");
+			} else if (state === "false") {
+				alert("팔로우 처리를 실패했습니다.");
+			}
+		};
+		
+		ajaxFun(url, "post", query, "json", fn);
+	});
+});
+
+$(function(){
+	$(".btn-following").click(function(){
+		let userId = "${dto.userId}";
+		let sessionId = "${sessionScope.member.userId}";
+		let url = "${pageContext.request.contextPath}/mypage/unfollow";
+		let query = "userId=" + userId + "&sessionId=" + sessionId;
+		
+		const fn = function(data){
+			let state = data;
+			
+			if (state === "true") {
+				$(".btn-following").css({"background" : "#0095f6", "color" : "#fff"});
+			} else if (state === "false") {
+				alert("팔로우 취소 처리를 실패했습니다.");
+			}
+		};
+		
+		ajaxFun(url, "post", query, "json", fn);
+	});
+});
+
+$(function(){
+	$(".modal-body").on("click", ".btn-sm-following", function(){
+		
+		let userId = $(this).attr("data-userId");
+		let sessionId = "${sessionScope.member.userId}";
+		
+		let url = "${pageContext.request.contextPath}/mypage/unfollow";
+		let query = "userId=" + userId + "&sessionId=" + sessionId;
+		
+		const fn = function(data){
+			let state = data;
+			
+			if (state === "true") {
+				document.getElementById('btn-sm-following').className = 'btn-sm-follow';
+			} else if (state === "false") {
+				alert("팔로우 취소 처리를 실패했습니다.");
+			}
+		};
+		
+		ajaxFun(url, "post", query, "json", fn);
+	});
+});
+</script>
+
 <div class="mypage">
 	<div class="nav-mypage">
 		<div class="btn-menu">
@@ -101,10 +200,10 @@ li { list-style: none; }
 		<div class="profile-follow">
 			<c:choose>
 				<c:when test="${dto.userId == sessionScope.member.userId}">
-					<button class="btn-follow" type="button" onclick="location.href='${pageContext.request.contextPath}/mypage/modify'">프로필 수정</button>
+					<button class="btn-modify" type="button" onclick="location.href='${pageContext.request.contextPath}/member/pwd'">프로필 수정</button>
 				</c:when>
 				<c:otherwise>
-					<button class="btn-follow" type="button">팔로우</button>
+					<button class="btn-${dto.userFollowed=='1'?'following':'follow'}" type="button">${dto.userFollowed=='1'?'팔로잉':'팔로우'}</button>
 				</c:otherwise>
 			</c:choose>
 		</div>
@@ -154,8 +253,8 @@ li { list-style: none; }
 				  	</h2>
 				  	<div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
 				    	<div class="accordion-body">
-				      		<a href="${pageContext.request.contextPath}/mypage/modify">회원정보수정</a>
-				      		<a href="${pageContext.request.contextPath}/mypage/cancel">회원탈퇴</a>
+				      		<a href="${pageContext.request.contextPath}/member/pwd">회원정보수정</a>
+				      		<a href="${pageContext.request.contextPath}/member/pwd?dropout">회원탈퇴</a>
 				    	</div>
 				  	</div>
 				</div>
@@ -256,7 +355,7 @@ li { list-style: none; }
 								<div></div>
 								${vo.followNickName}
 								<c:if test="${dto.userId == sessionScope.member.userId}">
-									<button class="btn-sm-following" type="button">팔로잉</button>
+									<button class="btn-sm-following" type="button" data-userId="${vo.followId}">팔로잉</button>
 								</c:if>
 							</li>
 						</c:forEach>

@@ -13,8 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sp.yorizori.common.FileManager;
 import com.sp.yorizori.common.MyUtil;
 import com.sp.yorizori.member.SessionInfo;
 
@@ -26,8 +26,6 @@ public class MypageController {
 	private MypageService service;
 	@Autowired
 	private MyUtil myUtil;
-	@Autowired
-	private FileManager fileManager;
 	
 	@RequestMapping(value = "main", method = RequestMethod.GET)
 	public String main(
@@ -35,6 +33,7 @@ public class MypageController {
 			@RequestParam String userId,
 			HttpSession session, HttpServletRequest req, Model model) throws Exception {
 		
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		String cp = req.getContextPath();
 		
 		int rows = 9;
@@ -57,8 +56,9 @@ public class MypageController {
 		map.put("start", start);
 		map.put("end", end);
 		map.put("userId", userId);
+		map.put("sessionId", info.getUserId());
 		
-		Mypage dto = service.readMypage(userId);
+		Mypage dto = service.readMypage(map);
 		List<Mypage> list = service.listMyrecipe(map);
 		List<Mypage> listFollower = service.listFollower(userId);
 		List<Mypage> listFollowing = service.listFollowing(userId);
@@ -80,20 +80,44 @@ public class MypageController {
 		return ".mypage.main";
 	}
 	
-	@RequestMapping(value = "modify", method = RequestMethod.GET)
-	public String modifyForm(Model model) throws Exception {
+	@RequestMapping(value = "follow", method = RequestMethod.POST)
+	@ResponseBody
+	public String follow(@RequestParam String userId, 
+			@RequestParam String sessionId) throws Exception {
 		
-		model.addAttribute("mode", "modify");
+		String state = "true";
 		
-		return ".mypage.pwd";
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("userId", userId);
+		map.put("sessionId", sessionId);
+		
+		try {
+			service.insertFollow(map);
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		return state;
 	}
 	
-	@RequestMapping(value = "cancel", method = RequestMethod.GET)
-	public String cancelForm(Model model) throws Exception {
+	@RequestMapping(value = "unfollow", method = RequestMethod.POST)
+	@ResponseBody
+	public String unfollow(@RequestParam String userId, 
+			@RequestParam String sessionId) throws Exception {
 		
-		model.addAttribute("mode", "cancel");
+		String state = "true";
 		
-		return ".mypage.pwd";
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("userId", userId);
+		map.put("sessionId", sessionId);
+		
+		try {
+			service.deleteFollow(map);
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		return state;
 	}
 	
 	@RequestMapping(value = "like", method = RequestMethod.GET)
@@ -124,8 +148,9 @@ public class MypageController {
 		map.put("start", start);
 		map.put("end", end);
 		map.put("userId", info.getUserId());
+		map.put("sessionId", info.getUserId());
 		
-		Mypage dto = service.readMypage(info.getUserId());
+		Mypage dto = service.readMypage(map);
 		List<Mypage> list = service.listLike(map);
 		List<Mypage> listFollower = service.listFollower(info.getUserId());
 		List<Mypage> listFollowing = service.listFollowing(info.getUserId());
@@ -174,8 +199,9 @@ public class MypageController {
 		map.put("start", start);
 		map.put("end", end);
 		map.put("userId", info.getUserId());
+		map.put("sessionId", info.getUserId());
 		
-		Mypage dto = service.readMypage(info.getUserId());
+		Mypage dto = service.readMypage(map);
 		List<Mypage> list = service.listWish(map);
 		List<Mypage> listFollower = service.listFollower(info.getUserId());
 		List<Mypage> listFollowing = service.listFollowing(info.getUserId());
@@ -223,8 +249,9 @@ public class MypageController {
 		map.put("start", start);
 		map.put("end", end);
 		map.put("userId", info.getUserId());
+		map.put("sessionId", info.getUserId());
 		
-		Mypage dto = service.readMypage(info.getUserId());
+		Mypage dto = service.readMypage(map);
 		List<Mypage> list = service.listFavorite(map);
 		List<Mypage> listFollower = service.listFollower(info.getUserId());
 		List<Mypage> listFollowing = service.listFollowing(info.getUserId());

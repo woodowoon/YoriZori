@@ -18,7 +18,7 @@ li { list-style: none; }
 .nav-mypage { display: flex; padding: 15px 25px; }
 .myNickname { width: 100%; text-align: center; padding-right: 42px; font-size: 20px; line-height: 38px; }
 
-.myProfile { height: 300px; }
+.myProfile { height: 250px; }
 .profile-detail { display: flex; height: 250px; padding-right: 25px; }
 .myImage { width: 250px; height: 250px; padding: 25px; margin-right: 100px; }
 .myImage > img { width: 200px; height: 200px; border-radius: 9999px; }
@@ -96,9 +96,6 @@ li { list-style: none; }
 				<p class="name">팔로잉</p>
 			</div>
 		</div>
-		<div class="profile-follow">
-			<button class="btn-follow" type="button">팔로우</button>
-		</div>
 	</div>
 	
 	<div class="feed-subject">
@@ -145,8 +142,8 @@ li { list-style: none; }
 				  	</h2>
 				  	<div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
 				    	<div class="accordion-body">
-				      		<a href="${pageContext.request.contextPath}/mypage/modify">회원정보수정</a>
-				      		<a href="${pageContext.request.contextPath}/mypage/cancel">회원탈퇴</a>
+				      		<a href="${pageContext.request.contextPath}/member/pwd">회원정보수정</a>
+				      		<a href="${pageContext.request.contextPath}/member/pwd?dropout">회원탈퇴</a>
 				    	</div>
 				  	</div>
 				</div>

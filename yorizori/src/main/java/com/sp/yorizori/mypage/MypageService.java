@@ -4,11 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 public interface MypageService {
-	public void insertMemberImage(Mypage dto, String pathname) throws Exception;
-	public void updateMemberImage(Mypage dto, String pathname) throws Exception;
-	public void deleteMemberImage(String userId, String pathname) throws Exception;
+	public void insertFollow(Map<String, Object> map) throws Exception;
+	public void deleteFollow(Map<String, Object> map) throws Exception;
 	
-	public Mypage readMypage(String userId);
+	public Mypage readMypage(Map<String, Object> map);
 	public List<Mypage> listFollower(String userId);
 	public List<Mypage> listFollowing(String userId);
 	

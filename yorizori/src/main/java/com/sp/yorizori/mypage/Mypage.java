@@ -1,7 +1,5 @@
 package com.sp.yorizori.mypage;
 
-import org.springframework.web.multipart.MultipartFile;
-
 public class Mypage {
 	private String userId;
 	private String nickName;
@@ -9,6 +7,7 @@ public class Mypage {
 	private String followerCount;
 	private String followingCount;
 	private String recipeCount;
+	private String userFollowed;
 	
 	private String followId;
 	private String followNickName;
@@ -25,8 +24,6 @@ public class Mypage {
 	private int festivalNum;
 	private String festivalName;
 	private String festivalPhotoName;
-	
-	private MultipartFile selectFile;
 
 	public String getUserId() {
 		return userId;
@@ -172,11 +169,11 @@ public class Mypage {
 		this.festivalPhotoName = festivalPhotoName;
 	}
 
-	public MultipartFile getSelectFile() {
-		return selectFile;
+	public String getUserFollowed() {
+		return userFollowed;
 	}
 
-	public void setSelectFile(MultipartFile selectFile) {
-		this.selectFile = selectFile;
+	public void setUserFollowed(String userFollowed) {
+		this.userFollowed = userFollowed;
 	}
 }

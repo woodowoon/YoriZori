@@ -14,10 +14,18 @@ main { background-color: #fff; font-family: 'Noto Sans KR', sans-serif; color: #
 .nav-mypage { display: flex; padding: 15px 25px; border-bottom: 2px solid #383d4a; }
 .mypage-subject { width: 100%; text-align: center; padding-right: 42px; font-size: 20px; line-height: 38px; }
 
-.sell-list { margin: 0 0 30px 0; padding: 0; list-style: none; }
-.sell { padding-bottom: 14px; position: relative; border-bottom: 1px solid #f2f2f2; }
-.sell:last-child { border-bottom: 1px solid #dbdbdb; }
-.box { display: table; width: 100%; table-layout: fixed; padding: 24px 0 10px; }
+.sell-col, .box { width: 100%; display: table; table-layout: fixed; }
+.sell-col > div, .box > div  { display: table-cell; padding: 16px 0; font-size: 12px; line-height: 18px; color: #5f5f5f; text-align: center; vertical-align: middle; }
+.sell-col > .col2, .box > .totUser { width: 90px; }
+.sell-col > .col3, .box > .totPrice { width: 120px; }
+.sell-col > .col4, .box > .totProfit { width: 120px; }
+.sell-col span { font-weight: bold; line-height: 18px; letter-spacing: -1.2px; }
+
+.sell-list { margin: 0 0 30px 0; padding: 0; list-style: none; border: solid #dadada; border-width: 1px 0;}
+.sell { position: relative; }
+.box { display: table; width: 100%; table-layout: fixed; }
+.box > .className { display: table-cell; }
+.box > .className a { overflow: hidden; text-overflow: ellipsis; line-height: 17px; white-space: nowrap; display: block; font-size: 14px; color: #666; }
 
 .offcanvas-title { cursor: pointer; }
 .offcanvas-title:hover, .offcanvas-title:active { color: #0d6efd; }
@@ -45,18 +53,61 @@ main { background-color: #fff; font-family: 'Noto Sans KR', sans-serif; color: #
 			판매 내역
 		</div>
 	</div>
+	
+	<div class="sell-col">
+		<div class="col1">
+			<span>클래스명</span>
+		</div>
+		<div class="col2">
+			<span>결제인원</span>
+		</div>
+		<div class="col3">
+			<span>결제총액</span>
+		</div>
+		<div class="col4">
+			<span>수익금</span>
+		</div>
+	</div>
 
 	<ul class="sell-list">
 		
 		<li class="sell">
 			<div class="box">
+				<div class="className">
+					<a>냥냥 클래스</a>
+				</div>
+				<div class="totUser">
+					0명
+				</div>
+				<div class="totPrice">
+					1000원
+				</div>
+				<div class="totProfit">
+					1000원
+				</div>
+			</div>
+		</li>
+		<li class="sell">
+			<div class="box">
+				<div class="className">
+					<a>냥냥 클래스</a>
+				</div>
+				<div class="totUser">
+					0명
+				</div>
+				<div class="totPrice">
+					1000원
+				</div>
+				<div class="totProfit">
+					1000원
+				</div>
 			</div>
 		</li>
 			
 	</ul>
 	
 	<div class="page-box">
-		1 2 3
+		${paging}
 	</div>
 	
 	<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
@@ -75,8 +126,8 @@ main { background-color: #fff; font-family: 'Noto Sans KR', sans-serif; color: #
 				  	</h2>
 				  	<div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
 				    	<div class="accordion-body">
-				      		<a href="${pageContext.request.contextPath}/mypage/modify">회원정보수정</a>
-				      		<a href="${pageContext.request.contextPath}/mypage/cancel">회원탈퇴</a>
+				      		<a href="${pageContext.request.contextPath}/member/pwd">회원정보수정</a>
+				      		<a href="${pageContext.request.contextPath}/member/pwd?dropout">회원탈퇴</a>
 				    	</div>
 				  	</div>
 				</div>
