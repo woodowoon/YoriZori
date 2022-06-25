@@ -164,6 +164,7 @@ ul {
     margin-inline-start: 0px;
     margin-inline-end: 0px;
     padding-inline-start: 40px;
+    list-style: none;
 }
 
 dl {
@@ -335,7 +336,7 @@ $(function() {
 								<li data-id="${vo.ingredientCode}">
 									<a ingre_id="71" href="javascript:;">
 										<em></em>
-										<img src="${pageContext.request.contextPath}/resources/images/frige.png" alt="20">
+										<img src="${pageContext.request.contextPath}/resources/images/ingredient/${vo.ingredientCode}.PNG" alt="">
 										<span>
 						                <strong><a class="selected">${vo.ingredientName}</a></strong>
 						                </span>
