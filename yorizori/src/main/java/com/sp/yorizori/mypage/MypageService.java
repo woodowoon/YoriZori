@@ -40,4 +40,10 @@ public interface MypageService {
 	public List<MyClass> listOrder(Map<String, Object> map);
 	
 	public void insertReview(MyClass dto) throws Exception;
+	
+	public int dataCountRefund(String userId);
+	public List<MyClass> listRefund(Map<String, Object> map);
+	
+	public int dataCountSell(String userId);
+	public List<MyClass> listSell(Map<String, Object> map);
 }

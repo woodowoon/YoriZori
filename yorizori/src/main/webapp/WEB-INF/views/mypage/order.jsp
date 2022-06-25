@@ -24,9 +24,14 @@ main { background-color: #fff; font-family: 'Noto Sans KR', sans-serif; color: #
 .order-info { display: table-cell; padding: 7px 40px 0 16px; vertical-align: top; width: 756px; }
 .order-info p { font-size: 13px; line-height: 17px; color: #959595; margin: 0; padding: 0; }
 .order-info a { overflow: hidden; text-overflow: ellipsis; line-height: 17px; white-space: nowrap; display: block; margin-top: 9px; font-size: 14px; color: #666; }
+.order-info a:hover, .order-info a:active { text-decoration: none; color: #0095f6 }
 .order-btn { display: table-cell; vertical-align: middle; width: 134px; padding-right: 15px; }
 .order-btn button { display: block; width: 100%; border: 1px solid #0095f6; font-size: 12px; line-height: 24px; color: #0095f6; background-color: #fff; text-align: center; }
 .order-btn button:first-child { margin-bottom: 4px; }
+.order-btn .btn-reviewed { border: 1px solid #aaa; color: #aaa; }
+
+.page-item.active .page-link { background-color: #0095f6; border-color: #0095f6; }
+.page-link, .page-link:hover, .page-link:active { color: #0095f6; }
 
 .offcanvas-title { cursor: pointer; }
 .offcanvas-title:hover, .offcanvas-title:active { color: #0d6efd; }
@@ -101,25 +106,39 @@ $(function(){
 	</div>
 
 	<ul class="order-list">
-		<c:forEach var="dto" items="${list}">
-			<li class="order">
-				<div class="box">
-					<div class="order-img">
-						<a>
-							<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-						</a>
-					</div>
-					<div class="order-info">
-						<p>구매일자 : ${dto.orderRegDate}</p>
-						<a>${dto.classSubject}</a>
-					</div>
-					<div class="order-btn">
-						<button type="button" class="btn-review" data-bs-toggle="modal" data-bs-target="#exampleModal" data-order="${dto.orderCode}" data-class="${dto.classCode}">리뷰쓰기</button>
-						<button type="button">환불하기</button>
-					</div>
-				</div>
-			</li>
-		</c:forEach>
+		<c:choose>
+			<c:when test="${list.size() != 0}">
+				<c:forEach var="dto" items="${list}">
+					<li class="order">
+						<div class="box">
+							<div class="order-img">
+								<a>
+									<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
+								</a>
+							</div>
+							<div class="order-info">
+								<p>구매일자 : ${dto.orderRegDate}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;결제금액 : ${dto.price}원</p>
+								<a href="${articleUrl}&classCode=${dto.classCode}">${dto.classSubject}</a>
+							</div>
+							<div class="order-btn">
+								<c:choose>
+									<c:when test="${dto.reviewed == 1}">
+										<button type="button" class="btn-reviewed" disabled="disabled">리뷰완료</button>
+									</c:when>
+									<c:otherwise>
+										<button type="button" class="btn-review" data-bs-toggle="modal" data-bs-target="#exampleModal" data-order="${dto.orderCode}" data-class="${dto.classCode}">리뷰쓰기</button>
+									</c:otherwise>
+								</c:choose>
+								<button type="button">환불하기</button>
+							</div>
+						</div>
+					</li>
+				</c:forEach>
+			</c:when>
+			<c:otherwise>
+				<div style="padding: 50px 0; text-align: center;">주문한 클래스가 없습니다.</div>
+			</c:otherwise>
+		</c:choose>
 	</ul>
 	
 	<div class="page-box">

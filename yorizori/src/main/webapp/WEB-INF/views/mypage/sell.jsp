@@ -15,7 +15,7 @@ main { background-color: #fff; font-family: 'Noto Sans KR', sans-serif; color: #
 .mypage-subject { width: 100%; text-align: center; padding-right: 42px; font-size: 20px; line-height: 38px; }
 
 .sell-col, .box { width: 100%; display: table; table-layout: fixed; }
-.sell-col > div, .box > div  { display: table-cell; padding: 16px 0; font-size: 12px; line-height: 18px; color: #5f5f5f; text-align: center; vertical-align: middle; }
+.sell-col > div, .box > div  { display: table-cell; padding: 15px 0; font-size: 12px; line-height: 18px; color: #5f5f5f; text-align: center; vertical-align: middle; }
 .sell-col > .col2, .box > .totUser { width: 90px; }
 .sell-col > .col3, .box > .totPrice { width: 120px; }
 .sell-col > .col4, .box > .totProfit { width: 120px; }
@@ -25,7 +25,11 @@ main { background-color: #fff; font-family: 'Noto Sans KR', sans-serif; color: #
 .sell { position: relative; }
 .box { display: table; width: 100%; table-layout: fixed; }
 .box > .className { display: table-cell; }
-.box > .className a { overflow: hidden; text-overflow: ellipsis; line-height: 17px; white-space: nowrap; display: block; font-size: 14px; color: #666; }
+.box > .className a { overflow: hidden; text-overflow: ellipsis; line-height: 17px; white-space: nowrap; display: block; color: #666; }
+.box > .className a:hover, .box > .className a:active { text-decoration: none; color: #0095f6 }
+
+.page-item.active .page-link { background-color: #0095f6; border-color: #0095f6; }
+.page-link, .page-link:hover, .page-link:active { color: #0095f6; }
 
 .offcanvas-title { cursor: pointer; }
 .offcanvas-title:hover, .offcanvas-title:active { color: #0d6efd; }
@@ -70,40 +74,31 @@ main { background-color: #fff; font-family: 'Noto Sans KR', sans-serif; color: #
 	</div>
 
 	<ul class="sell-list">
-		
-		<li class="sell">
-			<div class="box">
-				<div class="className">
-					<a>냥냥 클래스</a>
-				</div>
-				<div class="totUser">
-					0명
-				</div>
-				<div class="totPrice">
-					1000원
-				</div>
-				<div class="totProfit">
-					1000원
-				</div>
-			</div>
-		</li>
-		<li class="sell">
-			<div class="box">
-				<div class="className">
-					<a>냥냥 클래스</a>
-				</div>
-				<div class="totUser">
-					0명
-				</div>
-				<div class="totPrice">
-					1000원
-				</div>
-				<div class="totProfit">
-					1000원
-				</div>
-			</div>
-		</li>
-			
+		<c:choose>
+			<c:when test="${list.size() != 0}">
+				<c:forEach var="dto" items="${list}">
+					<li class="sell">
+						<div class="box">
+							<div class="className">
+								<a href="${articleUrl}&classCode=${dto.classCode}">${dto.classSubject}</a>
+							</div>
+							<div class="totUser">
+								${dto.payCount}명
+							</div>
+							<div class="totPrice">
+								${dto.totPrice}원
+							</div>
+							<div class="totProfit">
+								${dto.totProfit}원
+							</div>
+						</div>
+					</li>
+				</c:forEach>
+			</c:when>
+			<c:otherwise>
+				<div style="padding: 50px 0; text-align: center;">판매한 클래스가 없습니다.</div>
+			</c:otherwise>
+		</c:choose>
 	</ul>
 	
 	<div class="page-box">

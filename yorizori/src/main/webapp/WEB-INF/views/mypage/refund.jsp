@@ -24,8 +24,12 @@ main { background-color: #fff; font-family: 'Noto Sans KR', sans-serif; color: #
 .order-info { display: table-cell; padding: 7px 40px 0 16px; vertical-align: top; width: 756px; }
 .order-info p { font-size: 13px; line-height: 17px; color: #959595; margin: 0; padding: 0; }
 .order-info a { overflow: hidden; text-overflow: ellipsis; line-height: 17px; white-space: nowrap; display: block; margin-top: 9px; font-size: 14px; color: #666; }
+.order-info a:hover, .order-info a:active { text-decoration: none; color: #0095f6 }
 .order-btn { display: table-cell; vertical-align: middle; width: 134px; padding-right: 15px; }
 .order-btn button { display: block; width: 100%; border: 1px solid #0095f6; font-size: 12px; line-height: 24px; color: #0095f6; background-color: #fff; text-align: center; }
+
+.page-item.active .page-link { background-color: #0095f6; border-color: #0095f6; }
+.page-link, .page-link:hover, .page-link:active { color: #0095f6; }
 
 .offcanvas-title { cursor: pointer; }
 .offcanvas-title:hover, .offcanvas-title:active { color: #0d6efd; }
@@ -55,60 +59,35 @@ main { background-color: #fff; font-family: 'Noto Sans KR', sans-serif; color: #
 	</div>
 
 	<ul class="order-list">
-		
-		<li class="order">
-			<div class="box">
-				<div class="order-img">
-					<a>
-						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-					</a>
-				</div>
-				<div class="order-info">
-					<p>환불일자 : 22.06.17</p>
-					<a>냥냥 클래스</a>
-				</div>
-				<div class="order-btn">
-					<button type="button">문의하기</button>
-				</div>
-			</div>
-		</li>
-		<li class="order">
-			<div class="box">
-				<div class="order-img">
-					<a>
-						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-					</a>
-				</div>
-				<div class="order-info">
-					<p>환불일자 : 22.06.17</p>
-					<a>냥냥 클래스</a>
-				</div>
-				<div class="order-btn">
-					<button type="button">문의하기</button>
-				</div>
-			</div>
-		</li>
-		<li class="order">
-			<div class="box">
-				<div class="order-img">
-					<a>
-						<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
-					</a>
-				</div>
-				<div class="order-info">
-					<p>환불일자 : 22.06.17</p>
-					<a>냥냥 클래스</a>
-				</div>
-				<div class="order-btn">
-					<button type="button">문의하기</button>
-				</div>
-			</div>
-		</li>
-			
+		<c:choose>
+			<c:when test="${list.size() != 0}">
+				<c:forEach var="dto" items="${list}">
+					<li class="order">
+						<div class="box">
+							<div class="order-img">
+								<a>
+									<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
+								</a>
+							</div>
+							<div class="order-info">
+								<p>환불일자 : ${dto.cancelRegDate}</p>
+								<a href="${articleUrl}&classCode=${dto.classCode}">${dto.classSubject}</a>
+							</div>
+							<div class="order-btn">
+								<button type="button" onclick="location.href='${pageContext.request.contextPath}/qna/list'">문의하기</button>
+							</div>
+						</div>
+					</li>
+				</c:forEach>
+			</c:when>
+			<c:otherwise>
+				<div style="padding: 50px 0; text-align: center;">환불한 클래스가 없습니다.</div>
+			</c:otherwise>
+		</c:choose>
 	</ul>
 	
 	<div class="page-box">
-		1 2 3
+		${paging}
 	</div>
 	
 	<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">

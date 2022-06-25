@@ -327,4 +327,52 @@ public class MypageServiceImpl implements MypageService {
 			throw e;
 		}
 	}
+
+	@Override
+	public int dataCountRefund(String userId) {
+		int result = 0;
+		
+		try {
+			result = dao.selectOne("mypage.dataCountRefund", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public List<MyClass> listRefund(Map<String, Object> map) {
+		List<MyClass> list = null;
+		
+		try {
+			list = dao.selectList("mypage.listRefund", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public int dataCountSell(String userId) {
+		int result = 0;
+		
+		try {
+			result = dao.selectOne("mypage.dataCountSell", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public List<MyClass> listSell(Map<String, Object> map) {
+		List<MyClass> list = null;
+		
+		try {
+			list = dao.selectList("mypage.listSell", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

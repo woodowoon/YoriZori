@@ -25,6 +25,7 @@
 		            SELECT i.userId, memberImageName
 		            FROM memberImage i
 		        ) i ON r.userId = i.userId
+		        ORDER BY likeCount DESC
 		    ) tb WHERE ROWNUM &lt;= 100
 		) WHERE rnum &gt;= 1 ORDER BY rnum ASC
 	</select>
@@ -44,6 +45,7 @@
 		            GROUP BY following_id
 		        ) f ON m.userId = following_id
 		        WHERE role = 2
+		        ORDER BY followCount DESC
 		    ) tb WHERE ROWNUM &lt;= 100
 		) WHERE rnum &gt;= 1 ORDER BY rnum ASC
 	</select>

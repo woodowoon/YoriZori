@@ -318,7 +318,8 @@
 	<select id="listOrder" parameterType="map" resultType="com.sp.yorizori.mypage.MyClass">
 		SELECT * FROM (
 			SELECT ROWNUM rnum, tb.* FROM (
-				SELECT d.classCode, d.orderCode, price, TO_CHAR(orderEnroll, 'YYYY-MM-DD') orderRegDate, userId, classSubject, classPhotoName
+				SELECT d.classCode, d.orderCode, price, TO_CHAR(orderEnroll, 'YYYY-MM-DD') orderRegDate, 
+					userId, classSubject, classPhotoName, NVL(reviewed, 0) reviewed
 				FROM orderDetail d
 				LEFT OUTER JOIN (
 				    SELECT o.orderCode, orderEnroll, userId
@@ -332,6 +333,11 @@
 				    SELECT f.classCode, classPhotoName
 				    FROM classFile f
 				) f ON d.classCode = f.classCode
+				LEFT OUTER JOIN (
+		            SELECT r.orderCode, COUNT(*) reviewed
+		            FROM review r
+		            GROUP BY r.orderCode
+		        ) r ON d.orderCode = r.orderCode
 				WHERE userId = #{userId}
 			) tb WHERE ROWNUM &lt;= #{end}
 		) WHERE rnum &gt;= #{start}
@@ -357,4 +363,83 @@
 		INSERT INTO review(reviewNum, reviewContent, reviewStar, classCode, orderCode)
 		VALUES (review_seq.NEXTVAL, #{reviewContent}, #{reviewStar}, #{classCode}, #{orderCode})
 	</insert>
+	
+	<select id="listRefund" parameterType="map" resultType="com.sp.yorizori.mypage.MyClass">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+				SELECT cc.orderCode, TO_CHAR(cancelReg_date, 'YYYY-MM-DD') cancelRegDate, userId, d.classCode, c.classSubject, f.classPhotoName
+				FROM canceling cc
+				LEFT OUTER JOIN (
+				    SELECT o.orderCode, userId
+				    FROM ordering o
+				) o ON cc.orderCode = o.orderCode
+				LEFT OUTER JOIN (
+				    SELECT d.orderCode, d.classCode
+				    FROM orderDetail d
+				) d ON cc.orderCode = d.orderCode
+				LEFT OUTER JOIN (
+				    SELECT c.classCode, classSubject
+				    FROM classTable c
+				) c ON d.classCode = c.classCode
+				LEFT OUTER JOIN (
+				    SELECT f.classCode, classPhotoName
+				    FROM classFile f
+				) f ON d.classCode = f.classCode
+				WHERE userId = #{userId}
+			) tb WHERE ROWNUM &lt;= #{end}
+		) WHERE rnum &gt;= #{start}
+	</select>
+	
+	<select id="dataCountRefund" parameterType="map" resultType="Integer">
+		SELECT COUNT(*) refundCount FROM (
+		    SELECT cc.orderCode, TO_CHAR(cancelReg_date, 'YYYY-MM-DD') cancelRegDate, userId, d.classCode, c.classSubject, f.classPhotoName
+			FROM canceling cc
+			LEFT OUTER JOIN (
+			    SELECT o.orderCode, userId
+			    FROM ordering o
+			) o ON cc.orderCode = o.orderCode
+			LEFT OUTER JOIN (
+			    SELECT d.orderCode, d.classCode
+			    FROM orderDetail d
+			) d ON cc.orderCode = d.orderCode
+			LEFT OUTER JOIN (
+			    SELECT c.classCode, classSubject
+			    FROM classTable c
+			) c ON d.classCode = c.classCode
+			LEFT OUTER JOIN (
+			    SELECT f.classCode, classPhotoName
+			    FROM classFile f
+			) f ON d.classCode = f.classCode
+			WHERE userId = #{userId}
+		)
+	</select>
+	
+	<select id="listSell" parameterType="map" resultType="com.sp.yorizori.mypage.MyClass">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+				SELECT userId, c.classCode, classSubject, price, NVL(payCount, 0) payCount
+				FROM classTable c
+				LEFT OUTER JOIN (
+				    SELECT d.classCode, COUNT(*) payCount
+				    FROM orderDetail d
+				    GROUP BY d.classCode
+				) d ON c.classCode = d.classCode
+				WHERE userId = #{userId}
+				ORDER BY payCount DESC
+			) tb WHERE ROWNUM &lt;= #{end}
+		) WHERE rnum &gt;= #{start}
+	</select>
+	
+	<select id="dataCountSell" parameterType="map" resultType="Integer">
+		SELECT COUNT(*) refundCount FROM (
+		    SELECT userId, c.classCode, classSubject, price, payCount
+			FROM classTable c
+			LEFT OUTER JOIN (
+			    SELECT d.classCode, COUNT(*) payCount
+			    FROM orderDetail d
+			    GROUP BY d.classCode
+			) d ON c.classCode = d.classCode
+			WHERE userId = #{userId}
+		)
+	</select>
 </mapper>

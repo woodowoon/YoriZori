@@ -343,13 +343,94 @@ public class MypageController {
 	}
 	
 	@RequestMapping(value = "refund", method = RequestMethod.GET)
-	public String refund() throws Exception {
+	public String refund(@RequestParam(value = "page", defaultValue = "1") int current_page,
+			HttpSession session, HttpServletRequest req, Model model) throws Exception {
+		
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		String cp = req.getContextPath();
+		
+		int rows = 3;
+		int total_page = 0;
+		int dataCountRefund = 0;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		dataCountRefund = service.dataCountRefund(info.getUserId());
+		if (dataCountRefund != 0) {
+			total_page = myUtil.pageCount(rows, dataCountRefund);
+		}
+		
+		if (total_page < current_page) {
+			current_page = total_page;
+		}
+		
+		int start = (current_page - 1) * rows + 1;
+		int end = current_page * rows;
+		map.put("start", start);
+		map.put("end", end);
+		map.put("userId", info.getUserId());
+		
+		List<MyClass> list = service.listRefund(map);
+		
+		String listUrl = cp + "/mypage/refund";
+		String articleUrl = cp + "/class/article?category=0&page=1";
+		String paging = myUtil.paging(current_page, total_page, listUrl);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("articleUrl", articleUrl);
+		model.addAttribute("page", current_page);
+		model.addAttribute("dataCount", dataCountRefund);
+		model.addAttribute("total_page", total_page);
+		model.addAttribute("paging", paging);
 		
 		return ".mypage.refund";
 	}
 	
 	@RequestMapping(value = "sell", method = RequestMethod.GET)
-	public String sell() throws Exception {
+	public String sell(@RequestParam(value = "page", defaultValue = "1") int current_page,
+			HttpSession session, HttpServletRequest req, Model model) throws Exception {
+		
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		String cp = req.getContextPath();
+		
+		int rows = 5;
+		int total_page = 0;
+		int dataCountSell = 0;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		dataCountSell = service.dataCountSell(info.getUserId());
+		if (dataCountSell != 0) {
+			total_page = myUtil.pageCount(rows, dataCountSell);
+		}
+		
+		if (total_page < current_page) {
+			current_page = total_page;
+		}
+		
+		int start = (current_page - 1) * rows + 1;
+		int end = current_page * rows;
+		map.put("start", start);
+		map.put("end", end);
+		map.put("userId", info.getUserId());
+		
+		List<MyClass> list = service.listSell(map);
+		
+		for (MyClass dto : list) {
+			dto.setTotPrice(dto.getPrice() * dto.getPayCount());
+			dto.setTotProfit((int)(dto.getTotPrice() * 0.8));
+		}
+		
+		String listUrl = cp + "/mypage/sell";
+		String articleUrl = cp + "/class/article?category=0&page=1";
+		String paging = myUtil.paging(current_page, total_page, listUrl);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("articleUrl", articleUrl);
+		model.addAttribute("page", current_page);
+		model.addAttribute("dataCount", dataCountSell);
+		model.addAttribute("total_page", total_page);
+		model.addAttribute("paging", paging);
 		
 		return ".mypage.sell";
 	}

@@ -6,11 +6,18 @@ public class MyClass {
 	private String orderRegDate;
 	private int classCode;
 	private String classSubject;
-	private String price;
+	private int price;
 	private String classPhotoName;
+	private int reviewed;
 	
 	private String reviewContent;
 	private String reviewStar;
+	
+	private String cancelRegDate;
+	
+	private int payCount;
+	private int totPrice;
+	private int totProfit;
 	
 	public String getUserId() {
 		return userId;
@@ -42,10 +49,10 @@ public class MyClass {
 	public void setClassSubject(String classSubject) {
 		this.classSubject = classSubject;
 	}
-	public String getPrice() {
+	public int getPrice() {
 		return price;
 	}
-	public void setPrice(String price) {
+	public void setPrice(int price) {
 		this.price = price;
 	}
 	public String getClassPhotoName() {
@@ -53,6 +60,12 @@ public class MyClass {
 	}
 	public void setClassPhotoName(String classPhotoName) {
 		this.classPhotoName = classPhotoName;
+	}
+	public int getReviewed() {
+		return reviewed;
+	}
+	public void setReviewed(int reviewed) {
+		this.reviewed = reviewed;
 	}
 	public String getReviewStar() {
 		return reviewStar;
@@ -65,5 +78,29 @@ public class MyClass {
 	}
 	public void setReviewContent(String reviewContent) {
 		this.reviewContent = reviewContent;
+	}
+	public String getCancelRegDate() {
+		return cancelRegDate;
+	}
+	public void setCancelRegDate(String cancelRegDate) {
+		this.cancelRegDate = cancelRegDate;
+	}
+	public int getPayCount() {
+		return payCount;
+	}
+	public void setPayCount(int payCount) {
+		this.payCount = payCount;
+	}
+	public int getTotPrice() {
+		return totPrice;
+	}
+	public void setTotPrice(int totPrice) {
+		this.totPrice = totPrice;
+	}
+	public int getTotProfit() {
+		return totProfit;
+	}
+	public void setTotProfit(int totProfit) {
+		this.totProfit = totProfit;
 	}
 }
