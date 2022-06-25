@@ -63,7 +63,7 @@
 			</a>
 			<div class="menus">
 				<div class="left-menu">
-					<a href="${pageContext.request.contextPath}/recipe/feed">피드</a>   
+					<a href="${pageContext.request.contextPath}/recipe/feed">레시피</a>   
 					<a href="${pageContext.request.contextPath}/class/list">클래스</a>
 					<a href="${pageContext.request.contextPath}/category/list">분류</a>
 					<a href="${pageContext.request.contextPath}/rank/recipe">랭킹</a>
