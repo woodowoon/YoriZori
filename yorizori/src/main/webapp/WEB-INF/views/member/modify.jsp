@@ -19,6 +19,14 @@ main { background-color: #f7f8fb; font-family: 'Noto Sans KR', sans-serif; color
 .form-container > form > div > div { width: 550px; }
 .form-container > form > div > .div-flex { display: flex; }
 
+.form-container > form > div > .img-viewer {
+	cursor: pointer; border: 1px solid #ccc; width: 128px; height: 128px;
+	border-radius: 9999px; background-image: url("${pageContext.request.contextPath}/resources/images/profileImage.png");
+	position: relative; z-index: 9999; background-repeat : no-repeat; background-size : cover;
+}
+
+.form-container > form > div > .userId { width: 472px; font-size: 25px; font-weight: 700; padding-left: 40px; padding-top: 40px; }
+
 #userId { width: 275px; }
 #nickName { width: 275px; }
 #userName { width: 275px; }
@@ -142,6 +150,46 @@ function changeEmail() {
         f.email1.focus();
     }
 }
+
+$(function() {
+	var img = "${dto.imageFilename}";
+	if( img ) { // 수정인 경우
+		img = "${pageContext.request.contextPath}/uploads/photo/" + img;
+		$(".img-viewer").empty();
+		$(".img-viewer").css("background-image", "url("+img+")");
+	}
+	
+	$(".img-viewer").click(function(){
+		$("form[name=modifyForm] input[name=selectFile]").trigger("click"); 
+	});
+	
+	$("form[name=modifyForm] input[name=selectFile]").change(function(){
+		var file=this.files[0];
+		if(! file) {
+			$(".img-viewer").empty();
+			if( img ) {
+				img = "${pageContext.request.contextPath}/uploads/photo/" + img;
+				$(".img-viewer").css("background-image", "url("+img+")");
+			} else {
+				img = "${pageContext.request.contextPath}/resources/images/profileImage.png";
+				$(".img-viewer").css("background-image", "url("+img+")");
+			}
+			return false;
+		}
+		
+		if(! file.type.match("image.*")) {
+			this.focus();
+			return false;
+		}
+		
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			$(".img-viewer").empty();
+			$(".img-viewer").css("background-image", "url("+e.target.result+")");
+		}
+		reader.readAsDataURL(file);
+	});
+});
 </script>
 
 <div class="modify">
@@ -157,6 +205,13 @@ function changeEmail() {
     		<div class="form-container">
 	        	<form name="modifyForm" method="post" class="row">
 	        		<div>
+	        			<div class="img-viewer"></div>
+						<input type="file" name="selectFile" accept="image/*" class="form-control" style="display: none;">
+						<div class="userId">
+				            ${sessionScope.member.userId}
+						</div>	        		
+	        		</div>
+	        		<div style="display: none;">
 						<label for="userId">아이디</label>
 						<div>
 				            <input type="text" name="userId" id="userId" class="form-control" value="${sessionScope.member.userId}" readonly="readonly">
