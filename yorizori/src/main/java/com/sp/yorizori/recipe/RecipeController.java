@@ -144,7 +144,7 @@ public class RecipeController {
 		List<Recipe> selist = service.readRecipeseasoning(recipeNum);
 		
 		if(dto == null) {
-			return "redirect:/recipe/peed?" + query;
+			return "redirect:/recipe/feed?" + query;
 		}
 		
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -460,6 +460,7 @@ public class RecipeController {
 	public String insertnotifyReply (
 			@RequestParam int recipeNum,
 			@RequestParam int recipeCommentNum,
+			@RequestParam String replyreason,
 			HttpSession session,
 			Model model,
 			Notify dto
@@ -478,5 +479,4 @@ public class RecipeController {
 		return "redirect:/recipe/article?page=1&recipeNum=" + recipeNum;
 	}
 	
-		
 }
