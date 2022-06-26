@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.sp.yorizori.common.FileManager;
 import com.sp.yorizori.common.dao.CommonDAO;
+import com.sp.yorizori.mypage.MyClass;
 
 @Service("foodclass.foodClassService")
 public class FoodClassServiceImpl implements FoodClassService {
@@ -196,6 +197,31 @@ public class FoodClassServiceImpl implements FoodClassService {
 		}
 		
 		return list;
+	}
+
+	@Override
+	public List<MyClass> readReview(Map<String, Object> map) {
+		List<MyClass> list = null;
+		
+		try {
+			list = dao.selectList("foodClass.readReview", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public int reviewCount(Map<String, Object> map) {
+		int result = 0;
+		
+		try {
+			result = dao.selectOne("foodClass.reviewCount", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 
 }

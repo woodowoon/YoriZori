@@ -20,6 +20,7 @@ import com.sp.yorizori.common.MyUtil;
 import com.sp.yorizori.foodclass.qna.Board;
 import com.sp.yorizori.foodclass.qna.BoardService;
 import com.sp.yorizori.member.SessionInfo;
+import com.sp.yorizori.mypage.MyClass;
 
 @Controller("foodclass.foodClassController")
 @RequestMapping("/class/*")
@@ -196,6 +197,51 @@ public class FoodClassController {
 		return model;
 	}
 	
+	@RequestMapping(value = "reviewList")
+	@ResponseBody
+	public Map<String, Object> reviewList(
+			@RequestParam int classCode,
+			@RequestParam(value = "pageNo", defaultValue = "1") int current_page,
+			HttpSession session
+			) throws Exception {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("classCode", classCode);
+		
+		int rows = 5;
+		int dataCount = service.reviewCount(map);
+		int total_page = myUtil.pageCount(rows, dataCount);
+		
+		if (current_page > total_page) {
+			current_page = total_page;
+		}
+
+		int start = (current_page - 1) * rows + 1;
+		int end = current_page * rows;
+		map.put("start", start);
+		map.put("end", end);
+		
+		FoodClass classDto = service.readClass(classCode);
+		
+		List<MyClass> list = service.readReview(map);
+		for(MyClass dto : list) {
+			dto.setReviewContent(dto.getReviewContent().replaceAll("\n", "<br>"));
+		}
+		
+		String paging = myUtil.pagingMethod(current_page, total_page, "reviewPage");
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		
+		model.put("dataCount", dataCount);
+		model.put("page", current_page);
+		model.put("paging", paging);
+		model.put("list", list);
+		model.put("dto", classDto);
+		
+		return model; 
+	}
+	
 	@RequestMapping(value = "qnaList")
 	@ResponseBody
 	public Map<String, Object> qnaList(
@@ -271,7 +317,6 @@ public class FoodClassController {
 			Board dto,
 			HttpSession session) throws Exception {
 		
-		SessionInfo info = (SessionInfo) session.getAttribute("member");
 		String state = "true";
 		try {
 			qnaService.updateBoard(dto);

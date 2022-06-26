@@ -97,4 +97,23 @@
 		FROM classFile
 		WHERE classCode = #{classCode}
 	</select>
+	
+	<select id="readReview" parameterType="map" resultType="com.sp.yorizori.mypage.MyClass">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+				SELECT reviewNum, nickname, reviewContent, reviewStar, userId
+				FROM review r
+				LEFT OUTER JOIN (
+				    SELECT od.userId, m.nickname, orderCode FROM ordering od
+				    JOIN member m ON od.userId = m.userId
+				) o ON o.orderCode = r.orderCode
+				WHERE classCode = #{classCode}
+				ORDER BY reviewNum DESC
+			) tb WHERE ROWNUM &lt;= #{end}
+		) WHERE rnum &gt;= #{start}				
+	</select>
+	
+	<select id="reviewCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0) FROM review WHERE classCode = #{classCode}
+	</select>
 </mapper>

@@ -2,6 +2,7 @@ package com.sp.yorizori.mypage;
 
 public class MyClass {
 	private String userId;
+	private String nickname;
 	private int orderCode;
 	private String orderRegDate;
 	private int classCode;
@@ -25,6 +26,12 @@ public class MyClass {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}	
 	public int getOrderCode() {
 		return orderCode;
 	}

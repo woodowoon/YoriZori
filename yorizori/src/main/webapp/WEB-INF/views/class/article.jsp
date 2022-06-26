@@ -47,6 +47,11 @@
 .lec-detail .review .addPhoto { cursor: pointer; vertical-align: top; }
 .lec-detail .review textarea { resize: none; width: 700px; height: 140px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; padding: 10px 12px; margin-left: 10px; }
 .lec-detail .review button { width: 140px; height: 140px; font-size: 20px; vertical-align: top; border: 1px solid #ccc; border-left: none; border-radius: 4px; background: transparent; margin-left: -3px; }
+.lec-detail .reviewBody { width: 1000px; margin: 30px auto; }
+.lec-detail .reviewInfo * { font-size: 20px; border: 1px solid #ccc; border-radius: 4px; border-bottom: none; padding: 6px 50px; }
+.lec-detail .reviewInfo span:first-child { border-right: none; }
+.lec-detail .reviewInfo span:last-child { display: inline-block; width: 140px; text-align: center; color: #cead00; padding: 6px 10px; }
+.lec-detail .reviewDetail p { font-size: 16px; border: 1px solid #ccc; border-radius: 4px; padding: 10px 14px; }
 
 .lec-detail .classQna form * { display: inline-block; }
 .lec-detail .classQna form input { width: 620px; font-size: 16px; border: 1px solid #ccc; border-bottom: none; border-radius: 4px; padding: 10px 12px; margin: 0 0 -1px 131px; }
@@ -81,8 +86,9 @@
 #popup-preview, #popup-video { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2; }
 #popup-preview > div , #popup-video > div { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 1000px; height: 500px; }
 #popup-preview video, #popup-video video { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 900px; height: 500px; }
-#popup-preview #closeBtn, #popup-video #closeBtn { position: absolute; top: 40px; right: 0; font-size: 40px; color: #fff; border: none; background: transparent; }
+#popup-preview #closeBtn, #popup-video #closeBtn { position: absolute; top: -15px; right: 0; font-size: 40px; color: #fff; border: none; background: transparent; }
 
+.lec-detail .review-page-box { text-align: center; margin: 30px 0; }
 .lec-detail .page-box { margin: 30px 0; }
 .lec-detail .page-link { padding: 0.375rem 0.75rem; }
 .page-item.active .page-link { background-color: #f44502; border-color: #f44502; }
@@ -135,6 +141,60 @@ $(function() {
 		ajaxFun(url, "post", query, "json", fn);
 	});
 });
+
+$(function(){
+	reviewPage(1);
+});
+
+function reviewPage(page) {
+	let url = "${pageContext.request.contextPath}/class/reviewList";
+	let query = "pageNo=" + page + "&classCode=${dto.classCode}";
+	
+	const fn = function(data) {
+		printReview(data);
+	};
+	ajaxFun(url, "get", query, "json", fn);
+}
+
+function printReview(data) {
+	let dataCount = data.dataCount;
+	let pageNo = data.pageNo;
+	let total_page = data.total_page;
+	let paging = data.paging;
+	
+	console.log(data.list);
+	console.log(dataCount);
+	
+	let out = "";
+	for(let idx = 0; idx < data.list.length; idx++) {
+		let userId = data.list[idx].userId;
+		let nickname = data.list[idx].nickname;
+		let content = data.list[idx].reviewContent;
+		let stars = data.list[idx].reviewStar;
+		
+		out += "<div class='reviewInfo'>";
+		out += "	<span>"+ nickname + "</span>";
+		if(stars == "5") {
+			out += "<span>★★★★★</span>";	
+		} else if(stars == "4") {
+			out += "<span>★★★★</span>";
+		} else if(stars == "3") {
+			out += "<span>★★★</span>";
+		} else if(stars == "2") {
+			out += "<span>★★</span>";
+		} else {
+			out += "<span>★</span>";
+		}
+		out += "</div>";
+		out += "<div class='reviewDetail'>";
+		out += "	<p>" + content + "</p>";
+		out += "</div>";
+	}
+	$(".reviewBody").html(out);
+	
+	out = dataCount == 0 ? '등록된 리뷰가 없습니다.' : paging;
+	$(".review-page-box").html(out);
+}
 
 $(function(){
 	listPage(1);
@@ -392,13 +452,10 @@ $(function(){
 	
 	<div class="full review">
 		<h3>클래스 리뷰</h3>
-		<form name="reviewForm" method="post">
-			<div class="addPhoto">
-				<img src="${pageContext.request.contextPath}/resources/images/file-attach.gif">
-			</div>
-			<textarea placeholder="클래스 후기를 남겨주세요."></textarea>
-			<button type="button" class="">등록</button>
-		</form>
+		<div class="reviewBody">
+		</div>
+		<div class="review-page-box">
+		</div>
 	</div>
 	
 	<div class="full classQna">
