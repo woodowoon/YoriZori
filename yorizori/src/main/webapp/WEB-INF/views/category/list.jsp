@@ -189,14 +189,24 @@ $(function(){
 });
 
 $(function(){
+	var tmp="${recipeTime}";
+	$("#recipeTimeRange").attr("title", tmp);
+	$("#recipeTimeRange").val(tmp);
+	$(".recipeTimeValue").html( tmp + "분");
+	var out="";
+	if(tmp!=null && tmp!=""){
+		out = "<span>"+tmp+"분 이내</span>";
+	}
+	
+	$("#tmp").html("");
+	$("#tmp").append(out);
+	
+	
 	$("#recipeTimeRange").change(function(){
-		console.log($(this).val() );
 		$("#recipeTimeRange").attr("title", $(this).val());
 		$(".recipeTimeValue").html( $(this).val() + "분");
-
 		var out = "<span>"+$(this).val()+"분 이내</span>";
 		$("#tmp").html("");
-		
 		$("#tmp").append(out);
 		
 	});
@@ -215,6 +225,7 @@ function searchList() {
 	var f = document.searchForm;
 	f.submit();
 }
+
 
 $(function(){
 	var caseNumList = "${caseNumList}";
@@ -571,7 +582,10 @@ $(function(){
 							<img src="${pageContext.request.contextPath}/uploads/recipe/${dto.recipePhotoName}" />
 							-->
 							<a class="call_recipe thmb" href="${pageContext.request.contextPath}/recipe/article?page=4&recipeNum=${dto.recipeNum}">
+							  <!--  
 						      <img src="${pageContext.request.contextPath}/recipe/article?page=4&recipeNum=${dto.recipePhotoName}" />
+						      -->
+							  <img src="${pageContext.request.contextPath}/resources/images/${dto.recipePhotoName}" />
 							</a>
 							<span class="author">
 									<a href="">

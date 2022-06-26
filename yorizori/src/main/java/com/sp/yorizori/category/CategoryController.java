@@ -52,7 +52,7 @@ public class CategoryController {
 			model.addAttribute("recipeLevelList", recipeLevel);
 			model.addAttribute("ingredientCodeList", ingredientCode);
 			model.addAttribute("parentList", parent);
-			model.addAttribute("recipeTimeList", recipeTime);
+			model.addAttribute("recipeTime", recipeTime);
 			model.addAttribute("sortField", sortField);
 			
 			
