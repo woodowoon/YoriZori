@@ -4,8 +4,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <script type="text/javascript">
-function NotifyOk() {
-	alert("대댓글 신고");
+function NotifyOkAnswer() {
+	alert("신고가 완료되었습니다.");
 }
 
 
@@ -59,7 +59,7 @@ function NotifyOk() {
        <h5 class="modal-title" id="exampleModalLabel">대댓글 신고</h5>
        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	      </div>
-	      <form name="recipeReplyNotify">
+	      <form name="recipeReplyAnswerNotify">
 		      <div class="modal-body">
 		        <p> 닉네임 : ${vo.nickName} </p>
 		        <p> 댓글 내용 : ${vo.commentContent} </p>
@@ -71,7 +71,7 @@ function NotifyOk() {
 	      
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-		        <button type="button" class="btn btn-primary" onclick="NotifyOk();">신고</button>
+		        <button type="button" class="btn btn-primary" onclick="NotifyOkAnswer();">신고</button>
 		      </div>
 	      </form>
 	    </div>

@@ -7,6 +7,7 @@ public class Notify {
 	private String reason;
 	private String notify_date;
 	private int recipeCommentNum;
+	private String replyreason;
 	
 	public int getRecipeNum() {
 		return recipeNum;
@@ -37,5 +38,11 @@ public class Notify {
 	}
 	public void setRecipeCommentNum(int recipeCommentNum) {
 		this.recipeCommentNum = recipeCommentNum;
+	}
+	public String getReplyreason() {
+		return replyreason;
+	}
+	public void setReplyreason(String replyreason) {
+		this.replyreason = replyreason;
 	}
 }

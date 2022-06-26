@@ -17,6 +17,6 @@
 		INSERT INTO notifyReply 
 		(recipeNum, recipeCommentNum, userId, reason, notify_date) 
 			VALUES 
-		(#{recipeNum}, #{recipeCommentNum}, #{userId}, #{reason}, SYSDATE)
+		(#{recipeNum}, #{recipeCommentNum}, #{userId}, #{replyreason, jdbcType=VARCHAR}, SYSDATE)
 	</insert>
 </mapper>

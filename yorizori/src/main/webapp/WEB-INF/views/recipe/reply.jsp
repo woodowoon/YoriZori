@@ -3,31 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<script type="text/javascript">
-function NotifyOk() {
-	alert("댓글 신고");
-}
 
-function NotifyOk() {
-	var f = document.recipeReplyNotify;
-	var str;
-	
-	let recipeNum = $(this).attr("data-recipeNum");
-	let replyNum = $(this).attr("data-replyNum");
-	
-	console.log(recipeNum + replyNum)
-	
-	if(! f.reason.value) {
-		f.reason.focus();
-		return;
-	}
-	
-	// f.action="${pageContext.request.contextPath}/recipe/notify?page=" + ${page} + "&recipeNum=" + ${dto.recipeNum} ;
-	// f.submit();
-}
-
-
-</script>
 
 <style type="text/css">
 main {
@@ -111,28 +87,28 @@ main {
 			  <div class="modal-dialog modal-dialog-centered">
 			    <div class="modal-content">
 			      <div class="modal-header">
-			      
-		       <h5 class="modal-title" id="exampleModalLabel">댓글 신고</h5>
-		       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			       <h5 class="modal-title" id="exampleModalLabel">댓글 신고</h5>
+			       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			      </div>
-			      <form name="recipeReplyNotify">
+			      <form name="recipeReplyNotify" id ="recipeReplyNotify">
 				      <div class="modal-body">
 				        <p> 닉네임 : ${vo.nickName} </p>
 				        <p> 댓글 내용 : ${vo.commentContent} </p>
 				        <p> 신고사유 </p>
-				        <textarea rows="7" cols="63" name ="reason"></textarea>
+				        <textarea rows="7" cols="63" name ="replyreason"></textarea>
 				        <input type="hidden" name="recipeNum" value="${vo.recipeNum}">
 				        <input type="hidden" name="recipeCommentNum" value="${vo.recipeCommentNum}">
 				      </div>
 			      
 				      <div class="modal-footer">
 				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-				        <button type="button" class="btn btn-primary" onclick="NotifyOk();" data-recipeNum="${vo.recipeNum}" data-replyNum = "${vo.recipeCommentNum}">신고</button>
+				        <button type="button" class="btn btn-primary" data-recipeNum="${vo.recipeNum}" data-recipeCommentNum="${vo.recipeCommentNum}">신고</button>
 				      </div>
-			      </form>
-			    </div>
-			  </div>
-			</div>
+				     </form>
+				    </div>
+				  </div>
+				</div>
+    
 		    
 		 </c:forEach>
 		 
@@ -141,7 +117,62 @@ main {
 
 
 
+
+
 <div class="page-box">
 	${paging}
 </div>
+
+
+<script type="text/javascript">
+function ajaxFun(url, method, query, dataType, fn) {
+	$.ajax({
+		type:method,
+		url:url,
+		data:query,
+		dataType:dataType,
+		success:function(data) {
+			fn(data);
+		},
+		beforeSend:function(jqXHR) {
+			jqXHR.setRequestHeader("AJAX", true);
+		},
+		error:function(jqXHR) {
+			if(jqXHR.status === 403) {
+				login();
+				return false;
+			} else if(jqXHR.status === 400) {
+				alert("요청 처리가 실패 했습니다.");
+				return false;
+			}
+			console.log(jqXHR.responseText);
+		}
+	});
+}
+
+// 댓글신고
+$(function() {
+	$(".btn-primary").click(function() {
+		let recipeNum = $(this).attr("data-recipeNum");
+		let recipeCommentNum = $(this).attr("data-recipeCommentNum");
+		let replyreason = $("textarea[name=replyreason]").val();
+		
+		let url = "${pageContext.request.contextPath}/recipe/replynotify";
+		let query = "recipeNum=" + recipeNum + "&recipeCommentNum=" + recipeCommentNum + "&replyreason=" + replyreason;
+		
+		const fn = function(data) {
+			let state = data.state;
+			if(state === "true"){
+				location.href="${pageContext.request.contextPath}/recipe/article?page=1&recipeNum" + recipeNum;
+			} else if(state === "false") {
+				alert("신고 실패");
+			}
+		};
+		
+		ajaxFun(url, "post", query, "json", fn);
+		
+	});
+});
+
+</script>
 
