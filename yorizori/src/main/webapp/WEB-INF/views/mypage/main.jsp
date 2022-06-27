@@ -40,7 +40,8 @@ li { list-style: none; }
 .mypage .feed-list li img { width: 100%; }
 .mypage .feed-list li .box:hover img { filter: brightness(70%); }
 
-.box { position: relative; cursor: pointer; }
+.box { position: relative; cursor: pointer; width: 100%; height: 100%; }
+.box img { max-width: 100%; min-height: 100%; }
 .text { position: absolute; visibility: hidden; left: 0; bottom: 0; width: 100%; height: 55%; text-align: center; color: #fff; font-size: 18px; }
 .box:hover .text { visibility: visible; }
 

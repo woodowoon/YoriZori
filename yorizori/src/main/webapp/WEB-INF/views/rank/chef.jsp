@@ -38,12 +38,13 @@ li { list-style: none; }
 	letter-spacing: -0.03em;
 	vertical-align: unset;
 }
+
 .ranking .full .chef-list { padding: 40px 0px 20px 128px; }
 .ranking .full .chef-list li { position: relative; float: left; margin: 2px 45px 24px; }
-.ranking .full .chef-list li div { width: 108px; }
+.ranking .full .chef-list li div { width: 108px; cursor: pointer; }
 .ranking .full .chef-list li div img { width: 100%; border-radius: 50%; }
 .ranking .full .chef-list li div a { display: block; font-size: 16px; text-align: center; padding: 8px 0; }
-.ranking .full .chef-list li div a:hover { text-decoration: none; }
+.ranking .full .chef-list li div a:hover { text-decoration: none; color: #f44502; }
 
 </style>
 
@@ -59,7 +60,7 @@ li { list-style: none; }
 			<c:forEach var="dto" items="${list}">
 				<li>
 					<span class="rank-box">${dto.rnum}</span>
-					<div>
+					<div onclick="location.href='${pageContext.request.contextPath}/mypage/main?userId=${dto.userId}'">
 						<c:choose>
 							<c:when test="${dto.userImageName ne NULL}">
 								<img src="${pageContext.request.contextPath}/uploads/photo/${dto.userImageName}">
@@ -70,7 +71,7 @@ li { list-style: none; }
 						</c:choose>
 					</div>
 					<div>
-						<a href="#">${dto.nickName}</a>
+						<a href="${pageContext.request.contextPath}/mypage/main?userId=${dto.userId}">${dto.nickName}</a>
 					</div>
 				</li>
 			</c:forEach>

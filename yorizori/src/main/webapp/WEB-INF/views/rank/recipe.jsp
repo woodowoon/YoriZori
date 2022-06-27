@@ -44,7 +44,7 @@ li { list-style: none; }
 .ranking .full .rank-list p { font-size: 15px; margin: 14px 0px 8px 2px; }
 .ranking .full .rank-list .profile > div { display: inline-block; }
 .ranking .full .rank-list .profile > div > img { display: inline-block; width: 25px; height: 25px; border-radius: 50%; background: #f1f1f2; margin-right: 6px; }
-.ranking .full .rank-list .profile span { font-size: 14px; vertical-align: top; display: inline-block; height: 25px; line-height: 24px; }
+.ranking .full .rank-list .profile span { cursor: pointer; font-size: 14px; vertical-align: top; display: inline-block; height: 25px; line-height: 24px; }
 .ranking .full .rank-list .info { margin-top: 3px; }
 .ranking .full .rank-list .info img { width: 25px; margin-right: 6px; }
 .ranking .full .rank-list .info span { font-size: 13px; color: #999; vertical-align: middle; }
@@ -88,7 +88,7 @@ li { list-style: none; }
 									</c:otherwise>
 								</c:choose>
 							</div>
-							<span>${dto.nickName}</span>
+							<span onclick="location.href='${pageContext.request.contextPath}/mypage/main?userId=${dto.userId}'">${dto.nickName}</span>
 						</div>
 						<div class="info">
 							<img src="${pageContext.request.contextPath}/resources/images/heart2.png">
