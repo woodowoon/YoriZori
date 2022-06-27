@@ -310,6 +310,7 @@ $(function(){
 					<c:if test="${mode=='update'}">
 						<input type="hidden" name="num" value="${dto.num}">
 						<input type="hidden" name="page" value="${page}">
+						<input type="hidden" name="menu" value="${menu}">
 					</c:if>
 				</div>
 			</form>

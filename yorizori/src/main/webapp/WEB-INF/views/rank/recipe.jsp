@@ -40,7 +40,7 @@ li { list-style: none; }
 	letter-spacing: -0.03em;
 	vertical-align: unset;
 }
-.ranking .full .rank-list li a img { width: 100%; }
+.ranking .full .rank-list li a img { width: 100%; height: 282px; }
 .ranking .full .rank-list p { font-size: 15px; margin: 14px 0px 8px 2px; }
 .ranking .full .rank-list .profile > div { display: inline-block; }
 .ranking .full .rank-list .profile > div > img { display: inline-block; width: 25px; height: 25px; border-radius: 50%; background: #f1f1f2; margin-right: 6px; }

@@ -238,7 +238,7 @@
 				    SELECT c.eventNum, couponName, discountPrice, createTime, expireTime
 				    FROM coupon c
 				) c ON u.eventNum = c.eventNum
-				WHERE userId = #{userId} AND orderCode IS NULL AND expireTime &lt; SYSDATE
+				WHERE userId = #{userId} AND orderCode IS NULL AND expireTime &gt; SYSDATE
 			) tb WHERE ROWNUM &lt;= #{end}
 		) WHERE rnum &gt;= #{start}	
 	</select>
@@ -251,7 +251,7 @@
 		        SELECT c.eventNum, couponName, discountPrice, createTime, expireTime
 		        FROM coupon c
 		    ) c ON u.eventNum = c.eventNum
-		    WHERE userId = #{userId} AND orderCode IS NULL AND expireTime &lt; SYSDATE
+		    WHERE userId = #{userId} AND orderCode IS NULL AND expireTime &gt; SYSDATE
 		)
 	</select>
 	
@@ -265,7 +265,7 @@
 				    SELECT c.eventNum, couponName, discountPrice, createTime, expireTime
 				    FROM coupon c
 				) c ON u.eventNum = c.eventNum
-				WHERE userId = #{userId} AND (orderCode IS NOT NULL OR expireTime &gt; SYSDATE)
+				WHERE userId = #{userId} AND (orderCode IS NOT NULL OR expireTime &lt; SYSDATE)
 			) tb WHERE ROWNUM &lt;= #{end}
 		) WHERE rnum &gt;= #{start}	
 	</select>
@@ -278,7 +278,7 @@
 		        SELECT c.eventNum, couponName, discountPrice, createTime, expireTime
 		        FROM coupon c
 		    ) c ON u.eventNum = c.eventNum
-		    WHERE userId = #{userId} AND (orderCode IS NOT NULL OR expireTime &gt; SYSDATE)
+		    WHERE userId = #{userId} AND (orderCode IS NOT NULL OR expireTime &lt; SYSDATE)
 		)
 	</select>
 	

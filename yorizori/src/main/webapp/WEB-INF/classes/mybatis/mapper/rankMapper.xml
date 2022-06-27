@@ -33,7 +33,7 @@
 	<select id="rankChef" resultType="com.sp.yorizori.rank.RankChef">
 		SELECT * FROM (
 		    SELECT ROWNUM rnum, tb.* FROM (
-		        SELECT m.userId, nickName, role, memberImageName, NVL(followCount, 0) followCount
+		        SELECT m.userId, nickName, role, memberImageName userImageName, NVL(followCount, 0) followCount
 		        FROM member m
 		        LEFT OUTER JOIN (
 		            SELECT i.userId, memberImageName

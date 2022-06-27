@@ -35,7 +35,7 @@ li { list-style: none; }
 
 .mypage .myFeed { margin: 4px 25px 50px 25px; }
 .mypage .feed-list { padding: 0; margin: 0; border-bottom: 1px solid #d2d2d2; }
-.mypage .feed-list li { position: relative; float: left; width: 314px; margin: 0 4px 4px 0; }
+.mypage .feed-list li { float: left; width: 314px; height: 314px; margin: 0 4px 4px 0; overflow: hidden; }
 .mypage .feed-list li:nth-child(3n) { margin: 0 0 4px 0; }
 .mypage .feed-list li img { width: 100%; }
 .mypage .feed-list li .box:hover img { filter: brightness(70%); }

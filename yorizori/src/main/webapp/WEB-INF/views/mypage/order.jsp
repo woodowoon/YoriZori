@@ -114,8 +114,8 @@ $(function(){
 							<div class="order-img">
 								<a href="${articleUrl}&classCode=${dto.classCode}">
 									<c:choose>
-										<c:when test="${dto.classPhotoName} != NULL">
-											<img src="${pageContext.request.contextPath}/uploads/recipe/${dto.classPhotoName}">
+										<c:when test="${dto.classPhotoName ne NULL}">
+											<img src="${pageContext.request.contextPath}/uploads/class/${dto.classPhotoName}">
 										</c:when>
 										<c:otherwise>
 											<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
