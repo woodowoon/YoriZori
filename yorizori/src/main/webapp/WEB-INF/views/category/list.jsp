@@ -569,8 +569,7 @@ $(function(){
 					</div>
 				</div>
 				
-				<ul class="lst_recipe">
-				
+				<ul class="lst_recipe">	
 <!-- test start2 -->
 
 
