@@ -112,6 +112,7 @@ public class MemberController {
 		info.setUserName(dto.getUserName());
 		info.setCountryNum(dto.getCountryNum());
 		info.setNickName(dto.getNickName());
+		info.setEmail(dto.getEmail());
 		
 		session.setMaxInactiveInterval(30 * 60);
 		

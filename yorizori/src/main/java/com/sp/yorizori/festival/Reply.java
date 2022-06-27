@@ -7,6 +7,7 @@ public class Reply {
 	private String nickName;
 	private String content;
 	private String reg_date;
+	private String userImageName;
 
 	public int getReplyNum() {
 		return replyNum;
@@ -54,5 +55,13 @@ public class Reply {
 
 	public void setReg_date(String reg_date) {
 		this.reg_date = reg_date;
+	}
+
+	public String getUserImageName() {
+		return userImageName;
+	}
+
+	public void setUserImageName(String userImageName) {
+		this.userImageName = userImageName;
 	}
 }

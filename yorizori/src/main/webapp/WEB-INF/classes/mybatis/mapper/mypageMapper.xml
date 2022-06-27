@@ -191,10 +191,11 @@
 				    FROM festival f
 				) f ON l.festivalNum = f.festivalNum
 				LEFT OUTER JOIN (
-				    SELECT ROWNUM, p.festivalNum, festivalPhotoName
-				    FROM festivalPhoto p
-				    WHERE ROWNUM = 1
-				    ORDER BY festivalPhotoNum ASC
+				    SELECT * FROM (
+		                SELECT festivalPhotoNum, p.festivalNum, festivalPhotoName, 
+		                    ROW_NUMBER() OVER(PARTITION BY p.festivalNum ORDER BY festivalPhotoNum ASC) rank
+		                FROM festivalPhoto p
+		            ) WHERE rank = 1
 				) p ON f.festivalNum = p.festivalNum
 				WHERE userId = #{userId}
 			) tb WHERE ROWNUM &lt;= #{end}
@@ -238,7 +239,7 @@
 				    SELECT c.eventNum, couponName, discountPrice, createTime, expireTime
 				    FROM coupon c
 				) c ON u.eventNum = c.eventNum
-				WHERE userId = #{userId} AND orderCode IS NULL AND expireTime &lt; SYSDATE
+				WHERE userId = #{userId} AND orderCode IS NULL AND expireTime &gt; SYSDATE
 			) tb WHERE ROWNUM &lt;= #{end}
 		) WHERE rnum &gt;= #{start}	
 	</select>
@@ -251,7 +252,7 @@
 		        SELECT c.eventNum, couponName, discountPrice, createTime, expireTime
 		        FROM coupon c
 		    ) c ON u.eventNum = c.eventNum
-		    WHERE userId = #{userId} AND orderCode IS NULL AND expireTime &lt; SYSDATE
+		    WHERE userId = #{userId} AND orderCode IS NULL AND expireTime &gt; SYSDATE
 		)
 	</select>
 	
@@ -265,7 +266,7 @@
 				    SELECT c.eventNum, couponName, discountPrice, createTime, expireTime
 				    FROM coupon c
 				) c ON u.eventNum = c.eventNum
-				WHERE userId = #{userId} AND (orderCode IS NOT NULL OR expireTime &gt; SYSDATE)
+				WHERE userId = #{userId} AND (orderCode IS NOT NULL OR expireTime &lt; SYSDATE)
 			) tb WHERE ROWNUM &lt;= #{end}
 		) WHERE rnum &gt;= #{start}	
 	</select>
@@ -278,7 +279,7 @@
 		        SELECT c.eventNum, couponName, discountPrice, createTime, expireTime
 		        FROM coupon c
 		    ) c ON u.eventNum = c.eventNum
-		    WHERE userId = #{userId} AND (orderCode IS NOT NULL OR expireTime &gt; SYSDATE)
+		    WHERE userId = #{userId} AND (orderCode IS NOT NULL OR expireTime &lt; SYSDATE)
 		)
 	</select>
 	
