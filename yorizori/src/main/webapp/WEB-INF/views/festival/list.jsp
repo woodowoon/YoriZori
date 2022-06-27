@@ -74,7 +74,7 @@ $(function(){
 							<div class="festival-img">
 								<a href="${articleUrl}&num=${dto.num}">
 									<c:choose>
-										<c:when test="${dto.fileName != null}">
+										<c:when test="${dto.fileName ne NULL}">
 											<img src="${pageContext.request.contextPath}/uploads/festival/${dto.fileName}">
 										</c:when>
 										<c:otherwise>

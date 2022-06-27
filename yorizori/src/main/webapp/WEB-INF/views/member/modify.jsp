@@ -76,8 +76,8 @@ function modifyOk() {
 	let str;
 	
 	str = f.nickName.value;
-    if( !/^[가-힣]{2,5}$/.test(str) ) {
-        alert("닉네임을 다시 입력하세요.");
+    if( !str ) {
+        alert("닉네임을 입력하세요.");
         f.nickName.focus();
         return;
     }
@@ -359,7 +359,7 @@ $(function() {
 		
 		<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
 			<div class="offcanvas-header">
-				<h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel" onclick="location.href='${pageContext.request.contextPath}/mypage/main'">마이페이지</h5>
+				<h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel" onclick="location.href='${pageContext.request.contextPath}/mypage/main?userId=${sessionScope.member.userId}'">마이페이지</h5>
 				<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 			</div>
 			

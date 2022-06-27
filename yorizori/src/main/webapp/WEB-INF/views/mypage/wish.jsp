@@ -45,7 +45,7 @@ li { list-style: none; }
 
 .modal-body ul { margin: 0; padding: 0; }
 .modal-body ul li { display: flex; padding: 10px 0; line-height: 30px; }
-.modal-body ul li div { width: 30px; height: 30px; border: 1px solid #eaeaea; border-radius: 9999px; margin-right: 10px; }
+.modal-body ul li div img { width: 30px; height: 30px; border: 1px solid #eaeaea; border-radius: 9999px; margin-right: 10px; }
 .btn-sm-follow { width: 80px; height: 31px; border: 1px solid #0095f6; border-radius: 8px; background-color: #0095f6; color: #fff; font-size: 14px; letter-spacing: 0.03em; margin-left: auto; }
 .btn-sm-following { width: 80px; height: 31px; border: 1px solid #0095f6; border-radius: 8px; background-color: #fff; color: #0095f6; font-size: 14px; letter-spacing: 0.03em; margin-left: auto; }
 
@@ -81,7 +81,14 @@ li { list-style: none; }
 	<div class="myProfile">
 		<div class="profile-detail">
 			<div class="myImage">
-				<img src="${pageContext.request.contextPath}/resources/images/profileImage.png">
+				<c:choose>
+					<c:when test="${dto.memberImageName ne NULL}">
+						<img src="${pageContext.request.contextPath}/uploads/photo/${dto.memberImageName}">
+					</c:when>
+					<c:otherwise>
+						<img src="${pageContext.request.contextPath}/resources/images/profileImage.png">
+					</c:otherwise>
+				</c:choose>
 			</div>
 			<div class="myInfo">
 				<p class="count">${dto.recipeCount}</p>
@@ -109,7 +116,14 @@ li { list-style: none; }
 					<c:forEach var="vo" items="${list}">
 						<li>
 							<div class="box" onclick="location.href='${articleUrl}&classCode=${vo.classCode}'">
-								<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
+								<c:choose>
+									<c:when test="${vo.classPhotoName ne NULL}">
+										<img src="${pageContext.request.contextPath}/uploads/class/${vo.classPhotoName}">
+									</c:when>
+									<c:otherwise>
+										<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
+									</c:otherwise>
+								</c:choose>
 								<div class="text">${vo.classSubject}</div>
 							</div>
 						</li>
@@ -217,7 +231,16 @@ li { list-style: none; }
 					<ul>
 						<c:forEach var="vo" items="${listFollower}">
 							<li>
-								<div></div>
+								<div>
+									<c:choose>
+										<c:when test="${vo.followImageName ne NULL}">
+											<img src="${pageContext.request.contextPath}/uploads/photo/${vo.followImageName}">
+										</c:when>
+										<c:otherwise>
+											<img src="${pageContext.request.contextPath}/resources/images/profileImage.png">
+										</c:otherwise>
+									</c:choose>
+								</div>
 								${vo.followNickName}
 							</li>
 						</c:forEach>
@@ -241,7 +264,16 @@ li { list-style: none; }
 					<ul>
 						<c:forEach var="vo" items="${listFollowing}">
 							<li>
-								<div></div>
+								<div>
+									<c:choose>
+										<c:when test="${vo.followImageName ne NULL}">
+											<img src="${pageContext.request.contextPath}/uploads/photo/${vo.followImageName}">
+										</c:when>
+										<c:otherwise>
+											<img src="${pageContext.request.contextPath}/resources/images/profileImage.png">
+										</c:otherwise>
+									</c:choose>
+								</div>
 								${vo.followNickName}
 								<button class="btn-sm-following" type="button">팔로잉</button>
 							</li>

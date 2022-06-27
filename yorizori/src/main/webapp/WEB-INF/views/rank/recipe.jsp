@@ -42,13 +42,17 @@ li { list-style: none; }
 }
 .ranking .full .rank-list li a img { width: 100%; }
 .ranking .full .rank-list p { font-size: 15px; margin: 14px 0px 8px 2px; }
-.ranking .full .rank-list .profile > div { display: inline-block; width: 25px; height: 25px; border-radius: 50%; background: #f1f1f2; margin-right: 6px; }
-.ranking .full .rank-list .profile span { font-size: 14px; vertical-align: top; }
+.ranking .full .rank-list .profile > div { display: inline-block; }
+.ranking .full .rank-list .profile > div > img { display: inline-block; width: 25px; height: 25px; border-radius: 50%; background: #f1f1f2; margin-right: 6px; }
+.ranking .full .rank-list .profile span { font-size: 14px; vertical-align: top; display: inline-block; height: 25px; line-height: 24px; }
 .ranking .full .rank-list .info { margin-top: 3px; }
 .ranking .full .rank-list .info img { width: 25px; margin-right: 6px; }
 .ranking .full .rank-list .info span { font-size: 13px; color: #999; vertical-align: middle; }
-
 </style>
+
+<script type="text/javascript">
+
+</script>
 
 <div class="ranking">
 	<div class="full">
@@ -63,12 +67,26 @@ li { list-style: none; }
 					<span class="rank-box">${dto.rnum}</span>
 					<div>
 						<a href="${pageContext.request.contextPath}/recipe/article?page=1&recipeNum=${dto.num}">
-							<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
+							<c:choose>
+								<c:when test="${dto.recipePhotoName ne NULL}">
+									<img src="${pageContext.request.contextPath}/uploads/recipe/${dto.recipePhotoName}">
+								</c:when>
+								<c:otherwise>
+									<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
+								</c:otherwise>
+							</c:choose>
 						</a>
 						<p>${dto.subject}</p>
 						<div class="profile">
 							<div>
-								
+								<c:choose>
+									<c:when test="${dto.userImageName ne NULL}">
+										<img src="${pageContext.request.contextPath}/uploads/photo/${dto.userImageName}">
+									</c:when>
+									<c:otherwise>
+										<img src="${pageContext.request.contextPath}/resources/images/profileImage.png">
+									</c:otherwise>
+								</c:choose>
 							</div>
 							<span>${dto.nickName}</span>
 						</div>

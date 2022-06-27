@@ -112,8 +112,15 @@ $(function(){
 					<li class="order">
 						<div class="box">
 							<div class="order-img">
-								<a>
-									<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
+								<a href="${articleUrl}&classCode=${dto.classCode}">
+									<c:choose>
+										<c:when test="${dto.classPhotoName} != NULL">
+											<img src="${pageContext.request.contextPath}/uploads/recipe/${dto.classPhotoName}">
+										</c:when>
+										<c:otherwise>
+											<img src="${pageContext.request.contextPath}/resources/images/rank1.jpg">
+										</c:otherwise>
+									</c:choose>
 								</a>
 							</div>
 							<div class="order-info">

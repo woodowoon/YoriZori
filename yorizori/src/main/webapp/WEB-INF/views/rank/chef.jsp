@@ -60,7 +60,14 @@ li { list-style: none; }
 				<li>
 					<span class="rank-box">${dto.rnum}</span>
 					<div>
-						<img src="${pageContext.request.contextPath}/resources/images/chef-rank-dummy.png">
+						<c:choose>
+							<c:when test="${dto.userImageName ne NULL}">
+								<img src="${pageContext.request.contextPath}/uploads/photo/${dto.userImageName}">
+							</c:when>
+							<c:otherwise>
+								<img src="${pageContext.request.contextPath}/resources/images/profileImage.png">
+							</c:otherwise>
+						</c:choose>
 					</div>
 					<div>
 						<a href="#">${dto.nickName}</a>
