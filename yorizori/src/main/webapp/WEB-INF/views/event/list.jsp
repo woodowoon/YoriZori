@@ -10,31 +10,25 @@
 <style type="text/css">
 main { background-color: #f7f8fb; font-family: 'Noto Sans KR', sans-serif; color: #000000; letter-spacing: -0.03em; padding: 60px 0; }
 
-.e-container { background: #fff; border-radius: 24px; padding: 35px 0; width: 1320px; margin: 0 auto; }
+.e-container { background: #fff; border-radius: 24px; padding: 35px 0; width: 1450px; margin: 0 auto; }
 
-.event-title { width: 100%; font-size: 25px; font-weight: 700; margin-bottom: 35px; list-style: none; display: flex; justify-content: center; }
+.event-title { width: 100%; font-size: 30px; font-weight: 700; margin-bottom: 35px; list-style: none; display: flex; justify-content: center; }
 .event-title .end-li { padding-left: 50px;}
-
-.event-list { list-style: none; display: flex; width: 95%; margin: 0 auto 50px auto; padding-left: 0; }
-.event-list > li { font-size: 16px; width: 33.3%; text-align: center; border-bottom: 1px solid #dadada; border-top: 1px solid #dadada; }
-.event-list > li > a { display: block; height: 64px; }
-.event-list > li > a:hover, .event-list > li > a:active { text-decoration: none; color: #f44502; }
-.event-list > li > a > span { line-height: 60px; }
 
 .event-container { width: 95%; margin: 0 auto; }
 .event-list { list-style: none; display: flex; padding-left: 0; }
 .event-list li:nth-child(1) { margin-left: 0; }
-.event-list > li { margin: 0 0 20px 24px; width: calc(25% - 18px); }
+.event-list > li { margin: auto; width: calc(25% - 18px); }
 
-.event-box { border: 1px solid #dadada; text-align: center; width: 400px; }
-.event-img { margin-bottom: 20px; width: 400px; height: 300px; overflow: hidden;}
+.event-box { border: 1px solid #dadada; width: 400px; text-align: center; margin-top: 20px; }
+.event-img { margin-bottom: 20px; width: 400px; height: 300px; overflow: hidden; }
 .event-img > a > img { max-width: 100%; min-height: 100%; }
 .event-info { letter-spacing: 0; margin: 0 10px; }
 .event-title { font-size: 20px; font-weight: 500; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
 .event-title > a { text-decoration: none; color: #000; }
 .event-desc { font-size: 16px; font-weight: 300; }
 
-.btn-container { width: 90%; margin: 0 auto; text-align: right; }
+.btn-container { width: 95%; margin-top: 50px; text-align: right; }
 .btn-write { color: #ffffff; background-color: #f44502; font-size: 25px; border-radius: 300px; padding: 10px 20px; }
 
 .page-item.active .page-link { background-color: #f44502; border-color: #f44502; }
@@ -60,16 +54,16 @@ $(function(){
 	</ul>
 	
 	<div class="event-container">
-		<c:forEach var="dto" items="${list}" varStatus="status" step="4">
+		<c:forEach var="dto" items="${list}" varStatus="status" step="3">
 			<ul class="event-list">
-				<c:forEach var="dto" items="${list}" begin="${status.index}" end="${status.index+3}">
+				<c:forEach var="dto" items="${list}" begin="${status.index}" end="${status.index+2}">
 					<li>
 						<div class="event-box">
 							<div class="event-img">
-								<a href="${articleUrl}&num=${dto.eventNum}">
+								<a href="${articleUrl}&eventNum=${dto.eventNum}">
 									<c:choose>
-										<c:when test="${dto.fileName != null}">
-											<img src="${pageContext.request.contextPath}/uploads/event/${dto.fileName}">
+										<c:when test="${dto.eventName != null}">
+											<img src="${pageContext.request.contextPath}/uploads/event/${dto.eventName}">
 										</c:when>
 										<c:otherwise>
 											<img src="${pageContext.request.contextPath}/resources/images/noimage.png">
@@ -78,7 +72,7 @@ $(function(){
 								</a>
 							</div>
 							<div class="event-info">
-								<p class="event-title"><a href="${articleUrl}&num=${dto.subject}">${dto.subject}</a></p>
+								<p class="event-title"><a href="${articleUrl}&eventNum=${dto.eventNum}">${dto.subject}</a></p>
 								<p class="event-desc">${dto.startTime} ~ ${dto.expireTime}</p>
 							</div>
 						</div>

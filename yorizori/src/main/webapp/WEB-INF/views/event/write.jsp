@@ -182,7 +182,7 @@ $(function(){
 					<tr>
 						<td>이벤트 내용</td>
 						<td style="padding: 10px 20px;">
-							<textarea name="content" id="eventContent" class="form-control">${dto.eventContent}</textarea>
+							<textarea name="eventContent" id="eventContent" class="form-control">${dto.eventContent}</textarea>
 						</td>
 					</tr>
 					
@@ -231,7 +231,7 @@ $(function(){
 					<button type="button" class="btn btn-submit" onclick="sendOk();">${mode=='update'?'수정완료':'등록완료'}</button>
 					<button type="button" class="btn btn-white" onclick="location.href='${pageContext.request.contextPath}/event/list';">${mode=='update'?'수정취소':'등록취소'}</button>
 					<c:if test="${mode=='update'}">
-						<input type="hidden" name="num" value="${dto.eventnum}">
+						<input type="hidden" name="num" value="${dto.eventNum}">
 						<input type="hidden" name="page" value="${page}">
 					</c:if>
 				</div>

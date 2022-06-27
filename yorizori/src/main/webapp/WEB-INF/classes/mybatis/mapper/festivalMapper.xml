@@ -178,6 +178,7 @@
 		SELECT festivalPhotoNum fileNum, festivalPhotoName fileName
 		FROM festivalPhoto
 		WHERE festivalNum = #{num}
+		ORDER BY fileNum ASC
 	</select>
 	
 	<select id="searchFile" parameterType="Integer" resultType="com.sp.yorizori.festival.Festival">
@@ -214,10 +215,11 @@
 	<select id="listReply" parameterType="map" resultType="com.sp.yorizori.festival.Reply">
 		SELECT * FROM (
 		    SELECT ROWNUM rnum, tb.* FROM (
-		        SELECT replyNum, r.userId, nickName, replyContent content, 
+		        SELECT replyNum, r.userId, nickName, replyContent content, memberImageName userImageName,
 		            TO_CHAR(reg_date, 'YYYY-MM-DD hh:mm') reg_date, festivalNum num
 		        FROM festivalReply r
 		        JOIN member m ON r.userId = m.userId
+		        JOIN memberImage i ON r.userId = i.userId
 		        WHERE festivalNum = #{num}
 		        ORDER BY replyNum DESC
 		    ) tb WHERE ROWNUM &lt;= #{end}

@@ -12,8 +12,10 @@ main { background-color: #f7f8fb; font-family: 'Noto Sans KR', sans-serif; color
 .tbodyReply > tr:nth-child(2n) {
 	border-bottom: 1px solid #dee2e6;
 }
-.nickName { width: 100px; line-height: 38px; font-size: 15px; font-weight: 500; }
-.regDate { width: auto; line-height: 38px; font-size: 15px; color: #aaa; font-weight: 300; }
+.reply-writer .col-1 { padding: 0; }
+.reply-writer .col-1 img { width: 100%; border-radius: 9999px; }
+.nickName { width: auto; line-height: 43px; font-size: 15px; font-weight: 500; cursor: pointer; }
+.regDate { width: auto; line-height: 43px; font-size: 15px; color: #aaa; font-weight: 300; }
 .replyContent { padding-bottom: 17px!important; }
 .reply-delete { margin: 0 10px; color: #aaa; cursor: pointer; }
 
@@ -39,8 +41,17 @@ main { background-color: #f7f8fb; font-family: 'Noto Sans KR', sans-serif; color
 							<tr>
 								<td width='50%'>
 									<div class='row reply-writer'>
-										<div class='col-1'><i class='bi bi-person-circle text-muted icon'></i></div>
-										<div class='nickName'>${vo.nickName}</div>
+										<div class='col-1'>
+											<c:choose>
+												<c:when test="${vo.userImageName ne NULL}">
+													<img src="${pageContext.request.contextPath}/uploads/photo/${vo.userImageName}">
+												</c:when>
+												<c:otherwise>
+													<img src="${pageContext.request.contextPath}/resources/images/profileImage.png">
+												</c:otherwise>
+											</c:choose>
+										</div>
+										<div class='nickName' onclick="location.href='${pageContext.request.contextPath}/mypage/main?userId=${vo.userId}'">${vo.nickName}</div>
 										<div class='regDate'>${vo.reg_date}</div>
 									</div>
 								</td>

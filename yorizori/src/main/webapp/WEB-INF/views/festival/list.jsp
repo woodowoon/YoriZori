@@ -33,7 +33,7 @@ main { background-color: #f7f8fb; font-family: 'Noto Sans KR', sans-serif; color
 .festival-title > a { text-decoration: none; color: #000; }
 .festival-desc { font-size: 16px; font-weight: 300; }
 
-.btn-container { width: 95%; margin: 0 auto; text-align: right; }
+.btn-container { width: 95%; margin-top: 50px; text-align: right; }
 .btn-write { color: #ffffff; background-color: #f44502; font-size: 18px; border-radius: 9999px; padding: 10px 20px; margin: 0 10px; }
 
 .page-item.active .page-link { background-color: #f44502; border-color: #f44502; }
@@ -74,7 +74,7 @@ $(function(){
 							<div class="festival-img">
 								<a href="${articleUrl}&num=${dto.num}">
 									<c:choose>
-										<c:when test="${dto.fileName != null}">
+										<c:when test="${dto.fileName ne NULL}">
 											<img src="${pageContext.request.contextPath}/uploads/festival/${dto.fileName}">
 										</c:when>
 										<c:otherwise>

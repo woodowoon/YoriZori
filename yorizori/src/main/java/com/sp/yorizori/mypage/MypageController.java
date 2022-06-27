@@ -495,7 +495,7 @@ public class MypageController {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		if (tab == "usable") {
+		if (tab.equals("usable")) {
 			dataCount = service.dataCountUsable(info.getUserId());
 			if (dataCount != 0) {
 				total_page = myUtil.pageCount(rows, dataCount);
@@ -519,7 +519,7 @@ public class MypageController {
 		
 		List<MyEvent> list = null;
 		
-		if (tab == "usable") {
+		if (tab.equals("usable")) {
 			list = service.listUsable(map);
 		} else {
 			list = service.listUseless(map);

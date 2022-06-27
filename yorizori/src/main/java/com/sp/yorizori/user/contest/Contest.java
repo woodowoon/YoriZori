@@ -1,4 +1,4 @@
-package com.sp.yorizori.contest;
+package com.sp.yorizori.user.contest;
 
 import java.util.List;
 
@@ -14,9 +14,12 @@ public class Contest {
 	
 	private int partNum;
 	private String userId;
-	private String nickName;
 	private String reg_date;
-
+	private String partContent;
+	
+	private int partPhotoNum;
+	private String partPhotoName;
+	
 	private List<MultipartFile> selectFile;
 	
 	private int fileNum;
@@ -70,19 +73,30 @@ public class Contest {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getNickName() {
-		return nickName;
-	}
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
-	}
 	public String getReg_date() {
 		return reg_date;
 	}
 	public void setReg_date(String reg_date) {
 		this.reg_date = reg_date;
 	}
-	
+	public String getPartContent() {
+		return partContent;
+	}
+	public void setPartContent(String partContent) {
+		this.partContent = partContent;
+	}
+	public int getPartPhotoNum() {
+		return partPhotoNum;
+	}
+	public void setPartPhotoNum(int partPhotoNum) {
+		this.partPhotoNum = partPhotoNum;
+	}
+	public String getPartPhotoName() {
+		return partPhotoName;
+	}
+	public void setPartPhotoName(String partPhotoName) {
+		this.partPhotoName = partPhotoName;
+	}
 	public List<MultipartFile> getSelectFile() {
 		return selectFile;
 	}
