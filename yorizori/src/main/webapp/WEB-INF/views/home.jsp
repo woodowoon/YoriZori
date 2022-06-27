@@ -188,7 +188,7 @@ $(document).ready(function(){
     <div class="feature f01">
 		<h4><span class="color-point">먹고 싶은 요리의 레시피</span>를 검색 해보세요!</h4>
 		<h2>오늘은 어떤 <span class="color-point">음식</span>이 끌리나요?</h2>
-		<a href="${pageContext.request.contextPath}/category/list" class="featureBtn">레시피 보러가기 ＞</a>
+		<a href="${pageContext.request.contextPath}/recipe/feed" class="featureBtn">레시피 보러가기 ＞</a>
 		<div class="items floating">
 			<div class="item">
 				<img src="${pageContext.request.contextPath}/resources/images/ingredient/23.PNG">

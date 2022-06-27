@@ -8,4 +8,5 @@ public interface PaymentService {
 	public Payment readMember(String userId);
 	
 	public List<Payment> coupon(int eventNum);
+	 
 }
