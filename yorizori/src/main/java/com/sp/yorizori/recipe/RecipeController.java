@@ -32,7 +32,7 @@ public class RecipeController {
 	@RequestMapping(value = "feed")
 	public String list(
 			@RequestParam(value = "page", defaultValue = "1") int current_page,
-			@RequestParam(value = "rows", defaultValue = "5") int rows,
+			@RequestParam(value = "rows", defaultValue = "8") int rows,
 			HttpServletRequest req,
 			HttpSession session,
 			Recipe dto,
@@ -161,7 +161,6 @@ public class RecipeController {
 		
 		boolean isRecipeLike = service.isRecipeLike(map);
 		boolean isrecipenotifyPost = service.isrecipenotifyPost(map);
-		
 		
 		model.addAttribute("isrecipenotifyPost", isrecipenotifyPost);
 		model.addAttribute("selist", selist);

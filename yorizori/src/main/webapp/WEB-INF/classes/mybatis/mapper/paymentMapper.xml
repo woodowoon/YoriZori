@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="payment">
+	
+	<select id="classInfo" parameterType="Integer" resultType="com.sp.yorizori.payment.Payment">
+		SELECT classCode, userId classUser, classSubject, price 
+			FROM classTable WHERE classCode = #{classCode}
+	</select>
+	
+	<select id="listcoupon" parameterType="String" resultType="com.sp.yorizori.payment.Payment">
+		SELECT c.eventNum, couponName, discountprice, uc.userId userId
+		    FROM coupon c
+		    LEFT OUTER JOIN (
+		        SELECT eventNum, userId, orderCode FROM userCoupon 
+		    ) uc ON uc.eventNum = c.eventNum
+		WHERE uc.userId = #{userId} AND (orderCode IS NULL OR expireTime &gt; SYSDATE)
+	</select>
+	
+	<select id="readcoupon" parameterType="Integer" resultType="com.sp.yorizori.payment.Payment">
+		SELECT couponName, discountPrice FROM coupon WHERE eventNum = #{eventNum}
+	</select>
+	
+</mapper>

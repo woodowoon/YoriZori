@@ -6,6 +6,7 @@ public class Category {
 	private int recipeNum;
 	private String userId;
 	private String userName;
+	private String nickName;
 	private String recipeSubject;
 	private String recipeContent;
 	private String recipePhotoName;
@@ -18,9 +19,7 @@ public class Category {
 	private int countryNum;
 	private int parent;
 	private int ingredientCode;
-
-	
-	
+	private String memberImageName;
 
 	public int getIngredientCode() {
 		return ingredientCode;
@@ -111,6 +110,18 @@ public class Category {
 	}
 	public void setSelectFile(MultipartFile selectFile) {
 		this.selectFile = selectFile;
+	}
+	public String getMemberImageName() {
+		return memberImageName;
+	}
+	public void setMemberImageName(String memberImageName) {
+		this.memberImageName = memberImageName;
+	}
+	public String getNickName() {
+		return nickName;
+	}
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 	
 	

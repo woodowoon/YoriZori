@@ -12,8 +12,8 @@
 	
 	<select id="listCategory" parameterType="map" resultType="com.sp.yorizori.category.Category">
 
-		SELECT DISTINCT a.recipeNum, a.userId, userName, a.recipeSubject, a.recipeTime,
-			   b.recipePhotoName, NVL(likeCount, 0) likeCount, recipeReg_date
+		SELECT DISTINCT a.recipeNum, a.userId, userName, a.recipeSubject, a.recipeTime, m.nickName nickName,
+			   b.recipePhotoName, NVL(likeCount, 0) likeCount, recipeReg_date, memberImageName
 		 from recipe a
 		 join member m ON a.userId=m.userId	
 		 left outer join recipePhoto b on a.recipeNum = b.recipeNum
@@ -30,6 +30,9 @@
 		 	select e.ingredientCode, e.parent
 		 	from ingredient e
 		 ) e on d.ingredientCode = e.ingredientCode
+		 left outer join(
+		 	select userId, memberImageName FROM memberImage mi
+		 ) mi on mi.userId = m.userId
 	
 		 <where>
 		 	<if test="caseNum != null">

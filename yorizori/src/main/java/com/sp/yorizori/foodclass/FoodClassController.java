@@ -350,4 +350,5 @@ public class FoodClassController {
 		model.put("state", state);
 		return model;
 	}
+	
 }

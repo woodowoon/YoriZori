@@ -414,7 +414,7 @@ $(function(){
 				<span>강의시간 ${dto.videoTime}분</span>
 			</div>
 			<div class="classPayment">
-				<a href="#" class="payBtn">결제</a>
+				<a href="${pageContext.request.contextPath}/payment/pay?classCode=${dto.classCode}" class="payBtn">결제</a>
 				<a href="#" class="classLike">
 					<c:choose>
 						<c:when test="${userClassLike == false}">

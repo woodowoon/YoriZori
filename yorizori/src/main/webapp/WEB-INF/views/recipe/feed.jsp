@@ -84,6 +84,7 @@ $(function() {
 	$(".like").click(function() {
 		let userRecipeLike = $(this).attr("data-userRecipeLike");
 		let isRecipeLike;
+		let recipeNum = $(this).attr("data-recipeNum");
 		
 		if(userRecipeLike > 0) {
 			isRecipeLike = true;
@@ -92,8 +93,9 @@ $(function() {
 		}
 		
 		let url = "${pageContext.request.contextPath}/recipe/insertRecipeLike";
-		let recipeNum = $(this).attr("data-recipeNum");
 		let query = "recipeNum=" + recipeNum + "&isRecipeLike=" + isRecipeLike;
+		
+		console.log(userRecipeLike);
 		
 		const fn = function(data) {
 			let state = data.state;
@@ -119,8 +121,8 @@ $(function() {
 				<h3>레시피</h3>
 			</div>
 			<video autoplay="autoplay" muted="muted" class="introVideo">
-				<source src="${pageContext.request.contextPath}/resources/media/class-intro.webm" type="video/webm">
-				<source src="${pageContext.request.contextPath}/resources/media/class-intro.mp4" type="video/mp4">
+				
+				<source src="${pageContext.request.contextPath}/resources/media/recipe-intro1.mp4" type="video/mp4">
 			</video>
 		</div>
 		
@@ -143,15 +145,15 @@ $(function() {
 										<c:when test="${dto.userRecipeLike == 0}">
 											<!-- 좋아요X -->
 											<div class ="like" data-recipeNum="${dto.recipeNum}" data-userRecipeLike="${dto.userRecipeLike}">
-												<i style="color: #5D5D5D; font-size: 1.5rem;" class="bi bi-heart"></i>
-												<span>좋아요 ${dto.recipeLikeCount}개</span>
+												<i style="color: #5D5D5D; font-size: 1.2rem;" class="bi bi-heart"></i>
+												<span style="font-size: 13px;">좋아요${dto.recipeLikeCount}개</span>
 											</div>
 										</c:when>
 										<c:otherwise>
 											<!-- 좋아요O -->
 											<div class ="like" data-recipeNum="${dto.recipeNum}" data-userRecipeLike="${dto.userRecipeLike}">
-												<i style="color: red; font-size: 1.4rem;" class="bi bi-heart-fill"></i>
-												<span>좋아요 ${dto.recipeLikeCount}개</span>
+												<i style="color: red; font-size: 1.2rem;" class="bi bi-heart-fill"></i>
+												<span style="font-size: 13px;">좋아요 ${dto.recipeLikeCount}개</span>
 											</div>
 										</c:otherwise>
 									</c:choose>

@@ -4,7 +4,7 @@
 <mapper namespace="member">
 
 	<select id="loginMember" parameterType="String" resultType="com.sp.yorizori.member.Member">
-		SELECT userId, userName, userPwd, nickName, role, countryNum
+		SELECT userId, userName, userPwd, nickName, role, countryNum, email
 		FROM member
 		WHERE userId = #{userId} AND enabled != 0
 	</select>

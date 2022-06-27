@@ -589,12 +589,20 @@ $(function(){
 							</a>
 							<span class="author">
 									<a href="">
-										<img alt="크리에이터" src="${pageContext.request.contextPath}/resources/images/yorizori1.png" />
-						</a>			<strong><a href="${pageContext.request.contextPath}/mypage/main?userId=${dto.userId}">크리에이터</a></strong>
+									<c:choose>
+										<c:when test="${dto.memberImageName eq null}">
+											<img class="profileImage" src="${pageContext.request.contextPath}/resources/images/profileImage.png" style="width: 50px; height: 60px;">
+										</c:when>
+										<c:otherwise>
+											<img class="profileImage" src="${pageContext.request.contextPath}/uploads/photo/${dto.memberImageName}" style="width: 50px; height: 60px;">
+										</c:otherwise>
+									</c:choose>  
+							</a>			
+								<strong><a href="${pageContext.request.contextPath}/mypage/main?userId=${dto.userId}">${dto.nickName}</a></strong> 
 							</span>
 							<p>
 						    <a class="call_recipe" href="${pageContext.request.contextPath}/recipe/article?page=4&recipeNum=${dto.recipeNum}">
-						      ${dto.userId}
+						      
 						      <strong>${dto.recipeSubject}</strong>
 						    </a>
 						  </p>

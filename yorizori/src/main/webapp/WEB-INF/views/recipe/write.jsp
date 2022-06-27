@@ -726,7 +726,6 @@ $(function() {
 								<input type="hidden" name="recipeNum" value="${dto.recipeNum}">
 								<input type="hidden" name="page" value="${page}">
 								<input type="hidden" name="imageFilename" value="${dto.imageFilename}">
-								
 							</c:if>
 						</td>
 					</tr>
