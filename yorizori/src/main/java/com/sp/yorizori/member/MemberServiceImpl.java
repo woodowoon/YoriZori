@@ -1,13 +1,12 @@
 package com.sp.yorizori.member;
 
 import java.util.Map;
-
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sp.yorizori.member.Member;
+import com.sp.yorizori.common.FileManager;
 import com.sp.yorizori.common.dao.CommonDAO;
 import com.sp.yorizori.mail.Mail;
 import com.sp.yorizori.mail.MailSender;
@@ -22,6 +21,8 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	private MailSender mailSender;
 	
+	@Autowired
+	private FileManager fileManager;
 	
 	@Override
 	public Member loginMember(String userId) {
@@ -69,7 +70,7 @@ public class MemberServiceImpl implements MemberService {
 
 		try {
 			dto = dao.selectOne("member.readMember", userId);
-
+			
 			if (dto != null) {
 				if (dto.getEmail() != null) {
 					String[] s = dto.getEmail().split("@");
@@ -93,37 +94,21 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public void updateRole(Map<String, Object> map) throws Exception {
+	public void updateMember(Member dto, String pathname) throws Exception {
+		String saveFilename = fileManager.doFileUpload(dto.getSelectFile(), pathname);
+		
 		try {
-			dao.updateData("member.updateRole", map);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	@Override
-	public void updateLastLogin(String userId) throws Exception {
-		try {
-			dao.updateData("member.updateLastLogin", userId);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	@Override
-	public void updateMember(Member dto) throws Exception {
-		try {
-			if (dto.getEmail1().length() != 0 && dto.getEmail2().length() != 0) {
-				dto.setEmail(dto.getEmail1() + "@" + dto.getEmail2());
+			if(saveFilename != null) {
+				if(dto.getImageFilename().length() != 0) {
+					fileManager.doFileDelete(dto.getImageFilename(), pathname);
+				}
+				
+				dto.setImageFilename(saveFilename);
 			}
-
-			if (dto.getTel1().length() != 0 && dto.getTel2().length() != 0 && dto.getTel3().length() != 0) {
-				dto.setTel(dto.getTel1() + "-" + dto.getTel2() + "-" + dto.getTel3());
-			}
-
+			
 			dao.updateData("member.updateMember", dto);
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -175,5 +160,89 @@ public class MemberServiceImpl implements MemberService {
 			throw new Exception("이메일 전송중 오류가 발생했습니다.");
 		}
 
+	}
+
+	@Override
+	public boolean isMemberImage(Map<String, Object> map) {
+		boolean b = false;
+		
+		try {
+			int result = dao.selectOne("member.isMemberPhoto", map);
+			
+			if(result > 0) {
+				b = true;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return b;
+	}
+
+	@Override
+	public void updateMember(Member dto) throws Exception {
+		try {
+			if (dto.getEmail1().length() != 0 && dto.getEmail2().length() != 0) {
+				dto.setEmail(dto.getEmail1() + "@" + dto.getEmail2());
+			}
+
+			if (dto.getTel1().length() != 0 && dto.getTel2().length() != 0 && dto.getTel3().length() != 0) {
+				dto.setTel(dto.getTel1() + "-" + dto.getTel2() + "-" + dto.getTel3());
+			}
+			
+			dao.updateData("member.updateMember", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	@Override
+	public void updateMemberPhoto(Member dto, String pathname) throws Exception {
+		String saveFilename = fileManager.doFileUpload(dto.getSelectFile(), pathname);
+		
+		try {
+			if(saveFilename != null) {
+				
+				dto.setImageFilename(saveFilename);
+			}
+			
+			dao.updateData("member.updateMemberPhoto", dto);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public void insertMemberPhoto(Member dto, String pathname) throws Exception {
+		String saveFilename = fileManager.doFileUpload(dto.getSelectFile(), pathname);
+		
+		try {
+			if(saveFilename != null) {
+				
+				
+				dto.setImageFilename(saveFilename);
+				
+				dao.insertData("member.insertMemberPhoto", dto);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public void deleteMemberPhoto(String userId) {
+		try {
+			dao.deleteData("member.deleteMemberPhoto", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

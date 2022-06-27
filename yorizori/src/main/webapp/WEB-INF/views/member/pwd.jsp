@@ -47,10 +47,10 @@ function sendOk() {
 	<div class="body-container">	
         <div class="cancel-container">
 			<form name="pwdForm" method="post">
-				<h3 class="text-center" style="font-weight: 700;">회원${mode=='modify'?'정보수정':'탈퇴'}</h3>
+				<h3 class="text-center" style="font-weight: 700;">회원${mode=='update'?'정보수정':'탈퇴'}</h3>
                  
 				<div class="d-grid">
-					<p class="form-control-plaintext text-center">회원${mode=='modify'?'정보수정':'탈퇴'}를 위해 비밀번호를 입력해주세요.</p>
+					<p class="form-control-plaintext text-center">회원${mode=='update'?'정보수정':'탈퇴'}를 위해 비밀번호를 입력해주세요.</p>
            		</div>
                  
 				<div class="cancel">

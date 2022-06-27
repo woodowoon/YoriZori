@@ -52,8 +52,8 @@
 	
 	<!-- 회원정보 읽기 -->
 	<select id="readMember" parameterType="String" resultType="com.sp.yorizori.member.Member">
-		SELECT m.userId, userPwd, nickName, userName, tel, birth, addr1, addr2, email,
-			countryNum, zip, modify_date, memberImageName FROM member m
+		SELECT m.userId, userPwd, nickName, userName, tel, TO_CHAR(birth, 'YYYY-MM-DD') birth, addr1, addr2, email,
+			countryNum, zip, modify_date, memberImageName imageFilename FROM member m
 			LEFT OUTER JOIN (
 				SELECT userId, memberImageName FROM memberImage mi
 			) mi ON m.userId = mi.userId 
@@ -62,10 +62,40 @@
 	
     <!-- 회원정보 수정  --> 
     <update id="updateMember" parameterType="com.sp.yorizori.member.Member">
-		
+		UPDATE member SET
+		    userPwd = #{userPwd},
+		    nickName = #{nickName},
+		    userName = #{userName},
+		    tel = #{tel},
+		    birth = #{birth},
+		    addr1 = #{addr1},
+		    addr2 = #{addr2},
+		    email = #{email},
+		    countryNum = #{countryNum},
+		    zip = #{zip},
+		    modify_date = SYSDATE
+		WHERE userId = #{userId}
     </update>
     
     <!-- 회원 사진 -->
+    <insert id="insertMemberPhoto" parameterType="com.sp.yorizori.member.Member">
+    	INSERT INTO memberImage (userId, memberImageName) VALUES (#{userId}, #{imageFilename, jdbcType=VARCHAR})
+    </insert>
+    
+   	<!-- 회원사진 읽기 -->
+    <select id="isMemberPhoto" parameterType="map" resultType="Integer">
+    	SELECT NVL(COUNT(*), 0) FROM memberImage WHERE userId = #{userId}
+    </select>
+    
+    <!-- 회원사진 삭제 -->
+    <delete id="deleteMemberPhoto" parameterType="String">
+    	DELETE FROM memberImage WHERE userId = #{userId}
+    </delete>
+    
+    <!-- 회원사진 수정 -->
+    <update id="updateMemberPhoto" parameterType="com.sp.yorizori.member.Member">
+    	UPDATE memberImage SET memberImageName = #{imageFilename, jdbcType=VARCHAR} WHERE userId = #{userId}
+    </update>
     
     <!-- 회원 탈퇴(상태값만 변경)  -->    
     <update id="deleteMember" parameterType="String">

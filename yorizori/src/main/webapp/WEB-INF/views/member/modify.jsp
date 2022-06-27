@@ -85,10 +85,23 @@ function modifyOk() {
     str = f.userName.value;
     if( !/^[가-힣]{2,5}$/.test(str) ) {
         alert("이름을 다시 입력하세요.");
-        f.nickName.focus();
+        f.userName.focus();
         return;
     }
 
+    str = f.userPwd.value;
+	if( !/^(?=.*[a-z])(?=.*[!@#$%^*+=-]|.*[0-9]).{5,10}$/i.test(str) ) { 
+		alert("패스워드를 다시 입력 하세요. ");
+		f.userPwd.focus();
+		return;
+	}
+
+	if( str !== f.userPwd2.value ) {
+        alert("패스워드가 일치하지 않습니다. ");
+        f.userPwd.focus();
+        return;
+	}
+    
     str = f.birth.value;
     if( !str ) {
         alert("생년월일을 입력하세요.");
@@ -131,7 +144,7 @@ function modifyOk() {
         return;
     }
 
-   	f.action = "${pageContext.request.contextPath}/mypage/modify";
+   	f.action = "${pageContext.request.contextPath}/member/update";
     f.submit();
 }
 
@@ -190,6 +203,7 @@ $(function() {
 		reader.readAsDataURL(file);
 	});
 });
+
 </script>
 
 <div class="modify">
@@ -203,7 +217,7 @@ $(function() {
     		<h3 class="text-center" style="font-weight: 700;">회원정보수정</h3>
     		
     		<div class="form-container">
-	        	<form name="modifyForm" method="post" class="row">
+	        	<form name="modifyForm" method="post" class="row" enctype="multipart/form-data">
 	        		<div>
 	        			<div class="img-viewer"></div>
 						<input type="file" name="selectFile" accept="image/*" class="form-control" style="display: none;">
@@ -231,7 +245,21 @@ $(function() {
 				            <input type="text" name="userName" id="userName" class="form-control" autocomplete="off" placeholder="이름을 입력하세요." value="${dto.userName}">			 
 				        </div>
 				    </div>
-				 
+				 	
+				 	<div>
+						<label for="userPwd">비밀번호</label>
+						<div>
+				            <input type="password" name="userPwd" id="userPwd" class="form-control" autocomplete="off" placeholder="비밀번호를 입력하세요.">			 
+				        </div>
+				    </div>
+				 	
+				 	<div>
+						<label for="userPwd2">비밀번호</label>
+						<div>
+				            <input type="password" name="userPwd2" id="userPwd2" class="form-control" autocomplete="off" placeholder="비밀번호를 다시 입력하세요.">			 
+				        </div>
+				    </div>
+				 	
 				    <div>
 				        <label for="birth">생년월일</label>
 				        <div>
@@ -307,10 +335,10 @@ $(function() {
 						<label for="countryNum">가장 선호하는<br>음식 카테고리</label>
 				        <div>
 					        <div class="select category-select">
-								<input type="radio" id="select1" name="countryNum" value="1"><label for="select1">한식</label>
-		    				    <input type="radio" id="select2" name="countryNum" value="2"><label for="select2">중식</label>
-		    				    <input type="radio" id="select3" name="countryNum" value="3"><label for="select3">일식</label>
-		    				    <input type="radio" id="select4" name="countryNum" value="4"><label for="select4">양식</label> 
+								<input type="radio" id="select1" name="countryNum" value="1" ${dto.countryNum==1?"checked='checked'":""}><label for="select1">한식</label>
+		    				    <input type="radio" id="select2" name="countryNum" value="2" ${dto.countryNum==2?"checked='checked'":""}><label for="select2">중식</label>
+		    				    <input type="radio" id="select3" name="countryNum" value="3" ${dto.countryNum==3?"checked='checked'":""}><label for="select3">일식</label>
+		    				    <input type="radio" id="select4" name="countryNum" value="4" ${dto.countryNum==4?"checked='checked'":""}><label for="select4">양식</label> 
 							</div>
 						</div>
 					</div>
@@ -345,8 +373,8 @@ $(function() {
 					  	</h2>
 					  	<div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
 					    	<div class="accordion-body">
-					      		<a href="${pageContext.request.contextPath}/mypage/modify">회원정보수정</a>
-					      		<a href="${pageContext.request.contextPath}/mypage/cancel">회원탈퇴</a>
+					      		<a href="${pageContext.request.contextPath}/member/pwd">회원정보수정</a>
+				      		<a href="${pageContext.request.contextPath}/member/pwd?dropout">회원탈퇴</a>
 					    	</div>
 					  	</div>
 					</div>

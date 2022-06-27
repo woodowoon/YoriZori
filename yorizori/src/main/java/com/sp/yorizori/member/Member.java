@@ -1,5 +1,7 @@
 package com.sp.yorizori.member;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class Member {
 	private String userId;
 	private String userPwd;
@@ -23,7 +25,8 @@ public class Member {
 	private String addr2;
 	private int enabled;
 	
-	
+	private String imageFilename;
+	private MultipartFile selectFile;
 
 	public String getUserId() {
 		return userId;
@@ -150,6 +153,18 @@ public class Member {
 	}
 	public void setEnabled(int enabled) {
 		this.enabled = enabled;
+	}
+	public String getImageFilename() {
+		return imageFilename;
+	}
+	public void setImageFilename(String imageFilename) {
+		this.imageFilename = imageFilename;
+	}
+	public MultipartFile getSelectFile() {
+		return selectFile;
+	}
+	public void setSelectFile(MultipartFile selectFile) {
+		this.selectFile = selectFile;
 	}
 	
 	

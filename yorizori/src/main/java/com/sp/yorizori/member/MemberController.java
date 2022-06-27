@@ -1,5 +1,6 @@
 package com.sp.yorizori.member;
 
+import java.io.File;
 import java.util.HashMap;
 
 
@@ -251,18 +252,55 @@ public class MemberController {
 			reAttr.addFlashAttribute("title", "회원 탈퇴");
 			reAttr.addFlashAttribute("message", sb.toString());
 			
-			return "redirect:/";
+			return "redirect:/member/complete";
 		}
 		
-		return "redirect:/";
-	}
-	
-	@RequestMapping(value = "update")
-	public String memberUpdate() {
-		
+		// 회원정보수정폼
+		model.addAttribute("dto", dto);
+		model.addAttribute("mode", "update");
 		return ".member.modify";
 	}
 	
+	@RequestMapping(value = "update",  method = RequestMethod.POST)
+	public String updateSubmit(
+			Member dto,
+			final RedirectAttributes reAttr,
+			Model model,
+			HttpSession session
+			) {
+		
+		String root = session.getServletContext().getRealPath("/");
+		String path = root + "uploads" + File.separator + "photo";
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("userId", info.getUserId());
+		
+		boolean isMemberImage = service.isMemberImage(map);
+		
+		try {
+			
+			if(isMemberImage) {
+				service.updateMemberPhoto(dto, path);
+			} else if(! isMemberImage) {
+				service.insertMemberPhoto(dto, path);
+			} 
+			
+			dto.setUserId(info.getUserId());
+			service.updateMember(dto);
+		} catch (Exception e) {
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(dto.getUserName() + "님의 회원정보가 정상적으로 변경되었습니다.<br>");
+		sb.append("메인화면으로 이동 하시기 바랍니다.<br>");
+
+		reAttr.addFlashAttribute("title", "회원 정보 수정");
+		reAttr.addFlashAttribute("message", sb.toString());
+
+		return "redirect:/member/complete";
+	}
 	
 	
 }
