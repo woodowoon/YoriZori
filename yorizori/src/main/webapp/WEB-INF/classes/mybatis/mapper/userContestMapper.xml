@@ -8,7 +8,7 @@
 	
 	<insert id="insertContest" parameterType="com.sp.yorizori.user.contest.Contest">
 		INSERT INTO participation (partNum, userId, reg_date, partContent, contestNum) 
-		VALUES (#{partNum, #{userId, #{reg_date}, #{partContent, #{contestNum})
+		VALUES (#{partNum}, #{userId}, #{reg_date}, #{partContent}, #{contestNum})
 	</insert>
 
 	<select id="readContest" parameterType="Integer" resultType="com.sp.yorizori.user.contest.Contest">
@@ -17,7 +17,7 @@
 		WHERE partNum = #{partNum}
 	</select>
 	
-	<update id="updateContest" parameterType="com.sp.yorizori.user.contest.Contest">
+		<update id="updateContest" parameterType="com.sp.yorizori.user.contest.Contest">
 		UPDATE participation SET partContent=#{partContent}, contestNum=#{contestNum},
 		WHERE partNum = #{partNum}
 	</update>
@@ -25,7 +25,7 @@
 	<delete id="deleteContest" parameterType="Integer">
 		DELETE FROM participation WHERE partNum = #{partNum}
 	</delete>
-
+	
 	<!-- 파일 -->
 	<insert id="insertFile" parameterType="com.sp.yorizori.user.contest.Contest">
 		INSERT INTO participationPhoto(partPhotoNum, partPhotoName, partNum)
@@ -56,5 +56,6 @@
 	<delete id="deleteFile" parameterType="map">
 		DELETE FROM participationPhoto WHERE ${field} = #{num}
 	</delete>
+	
 
 </mapper>
