@@ -584,8 +584,9 @@ $(function(){
 							<a class="call_recipe thmb" href="${pageContext.request.contextPath}/recipe/article?page=4&recipeNum=${dto.recipeNum}">
 							  <!--  
 						      <img src="${pageContext.request.contextPath}/recipe/article?page=4&recipeNum=${dto.recipePhotoName}" />
-						      -->
-							  <img src="${pageContext.request.contextPath}/resources/images/${dto.recipePhotoName}" />
+						       -->
+							  <img src="${pageContext.request.contextPath}/uploads/recipe/${dto.recipePhotoName}" />
+							  
 							</a>
 							<span class="author">
 									<a href="">
