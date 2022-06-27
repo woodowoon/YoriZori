@@ -84,7 +84,6 @@
 	</interceptors> 
 	
     <!-- 예외처리 -->
-    <!--   나중에 풀것.
     <beans:bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
         <beans:property name="order" value="1" />
         <beans:property name="exceptionMappings">
@@ -96,5 +95,5 @@
         </beans:property>
         <beans:property name="defaultErrorView" value=".error.error"/>
     </beans:bean>
-	-->
+	
 </beans:beans>
