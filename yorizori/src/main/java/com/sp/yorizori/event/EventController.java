@@ -137,16 +137,11 @@ public class EventController {
 		map.put("eventNum", eventNum);
 		map.put("start", start);
 		map.put("end", end);
-		
-		Event preReadDto = service.preReadEvent(map);
-		Event nextReadDto = service.nextReadEvent(map);
-		
+				
 		// 파일
 		List<Event> listFile = service.listFile(eventNum);
 		
 		model.addAttribute("dto", dto);
-		model.addAttribute("preReadDto", preReadDto);
-		model.addAttribute("nextReadDto", nextReadDto);
 		model.addAttribute("listFile", listFile);
 		model.addAttribute("page", page);
 		model.addAttribute("query", query);
@@ -160,20 +155,14 @@ public class EventController {
 			@RequestParam int eventNum,
 			@RequestParam String page,
 			@RequestParam(defaultValue = "ing") String menu,
-			HttpSession session ,Model model) throws Exception {
+			HttpSession session, Model model) throws Exception {
 		
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
-		
+				
 		Event dto = service.readEvent(eventNum);
-		if(dto == null || ! info.getUserId().equals(dto.getUserId())) {
+		if (info.getRole() > 0) {
 			return "redirect:/event/list?page=" + page;
 		}
-		
-		String query = "menu=" + menu;
-		query += "&page=" + page;
-		
-		dto.setStartTime(dto.getStartTime().replace(".", "-"));
-		dto.setExpireTime(dto.getExpireTime().replace(".", "-"));
 		
 		List<Event> listFile = service.listFile(eventNum);
 		
@@ -181,7 +170,6 @@ public class EventController {
 		model.addAttribute("listFile", listFile);
 		model.addAttribute("page", page);
 		model.addAttribute("menu", menu);
-		model.addAttribute("query", query);
 		model.addAttribute("mode", "update");
 		
 		return ".event.write";
@@ -227,7 +215,7 @@ public class EventController {
 		query += "&page=" + page;
 		
 		if (info.getRole() > 0) {
-			return "redirect:/notice/list?" + query;
+			return "redirect:/event/list?" + query;
 		}
 		
 		try {

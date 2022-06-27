@@ -1,18 +1,50 @@
 package com.sp.yorizori.contest;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.sp.yorizori.common.FileManager;
 import com.sp.yorizori.common.dao.CommonDAO;
 
 @Service("contest.contestService")
 public class ContestServiceImpl implements ContestService {
 	@Autowired
 	private CommonDAO dao;
-		
+	
+	@Autowired
+	private FileManager fileManager;
+	
+	@Override
+	public void insertContest(Contest dto, String pathname) throws Exception {
+		try {
+			int seq = dao.selectOne("contest.seq");
+			dto.setContestNum(seq);
+			
+			dao.insertData("contest.inserContest", dto);
+			
+			if(! dto.getSelectFile().isEmpty()) {
+				for(MultipartFile mf : dto.getSelectFile()) {
+					String fileName = fileManager.doFileUpload(mf, pathname);
+					if(fileName == null) {
+						continue;
+					}
+					
+					dto.setFileName(fileName);
+					
+					insertFile(dto);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
 	@Override
 	public List<Contest> listContest(Map<String, Object> map) {
 		List<Contest> list = null;
@@ -52,6 +84,60 @@ public class ContestServiceImpl implements ContestService {
 	}
 	
 	@Override
+	public void updateContest(Contest dto, String pathname) throws Exception {
+		try {
+			dao.updateData("contest.updateContest", dto);
+			
+			if(! dto.getSelectFile().isEmpty()) {
+				for(MultipartFile mf : dto.getSelectFile()) {
+					String fileName = fileManager.doFileUpload(mf, pathname);
+					if(fileName == null) {
+						continue;
+					}
+					
+					dto.setFileName(fileName);
+					
+					insertFile(dto);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	@Override
+	public void deleteContest(int contestNum, String pathname) throws Exception {
+		try {
+			List<Contest> listFile = listFile(contestNum);
+			if(listFile != null) {
+				for(Contest dto : listFile) {
+					fileManager.doFileDelete(dto.getFileName(), pathname);
+				}				
+			}
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("contestNum", contestNum);
+			deleteFile(map);
+			
+			dao.deleteData("contest.deleteContest", contestNum);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	@Override
+	public void insertFile(Contest dto) throws Exception {
+		try {
+			dao.insertData("contest.insertFile", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	@Override
 	public List<Contest> listFile(int contestNum) {
 		List<Contest> listFile = null;
 		
@@ -74,56 +160,14 @@ public class ContestServiceImpl implements ContestService {
 		}
 		return dto;
 	}
-
+	
 	@Override
-	public void insertContestLike(Map<String, Object> map) throws Exception {
+	public void deleteFile(Map<String, Object> map) throws Exception {
 		try {
-			dao.insertData("contest.insertContestLike", map);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-		
-	}
-
-	@Override
-	public void deleteContestLike(Map<String, Object> map) throws Exception {
-		try {
-			dao.deleteData("contest.deleteContestLike", map);
+			dao.deleteData("contest.deleteFile", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
 	}
-
-	@Override
-	public int contestLikeCount(int partNum) {
-		int result = 0;
-		
-		try {
-			result = dao.selectOne("contest.contestLikeCount", partNum);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return result;
-	}
-
-	@Override
-	public boolean userContestLiked(Map<String, Object> map) {
-		boolean result = false;
-		
-		try {
-			int cnt = dao.selectOne("contest.userContestLiked", map);
-			if(cnt != 0) {
-				result = true;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return result;
-	}
-
-
 }

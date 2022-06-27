@@ -39,42 +39,14 @@ function sendOk() {
     var f = document.contestForm;
 	var str;
 	
-    str = f.subject.value.trim();
+    str = f.partContent.value.trim();
     if(!str) {
-        alert("공모전 제목을 입력하세요. ");
-        f.subject.focus();
-        return;
-    }
-
-    str = f.contestContent.value.trim();
-    if(!str) {
-        alert("공모전 내용을 입력하세요. ");
+        alert("참가 내용을 입력하세요. ");
         f.contestContent.focus();
         return;
     }
-    
-    var mode = "${mode}";
-    if( (mode === "write") && (!f.selectFile.value) ) {
-        alert("공모전 사진을 추가 하세요.");
-        f.selectFile.focus();
-        return;
-    }
-    
-    str = f.start_date.value.trim();
-    if(!str) {
-        alert("공모전 시작일을 입력하세요. ");
-        f.start_date.focus();
-        return;
-    }
-    
-    str = f.end_date.value.trim();
-    if(!str) {
-        alert("공모전 마감일을 입력하세요. ");
-        f.end_date.focus();
-        return;
-    }
-    
-    f.action = "${pageContext.request.contextPath}/contest/${mode}";
+           
+    f.action = "${pageContext.request.contextPath}/contest/user/${mode}";
     f.submit();
 }
 
@@ -166,37 +138,16 @@ $(function(){
 <div class="c-container">
 	<div class="write-container">	
 		<div class="write-title">
-			<span>공모전 등록</span>
+			<span>공모전 작성</span>
 		</div>
 		
 		<div class="write-main">
 			<form name="contestForm" method="post" enctype="multipart/form-data">
 				<table class="write-form">
 					<tr>
-						<td>공모전 제목</td>
-						<td style="padding: 0 20px;">
-							<input type="text" name="subject" class="form-control" value="${dto.subject}">
-						</td>
-					</tr>
-
-					<tr>
-						<td>공모전 내용</td>
+						<td>참가 내용</td>
 						<td style="padding: 10px 20px;">
-							<textarea name="contestContent" id="contestContent" class="form-control">${dto.contestContent}</textarea>
-						</td>
-					</tr>
-					
-					<tr>
-						<td>공모전 시작일</td>
-						<td style="padding: 0 450px 0 20px;">
-							<input type="date" name="start_date" id="start_date" class="form-control" value="${dto.start_date}" placeholder="공모전 시작일">
-						</td>
-					</tr>
-					
-					<tr>
-						<td>공모전 마감일</td>
-						<td style="padding: 0 450px 0 20px;">
-							<input type="date" name="end_date" id="end_date" class="form-control" value="${dto.end_date}" placeholder="공모전 마감일">
+							<textarea name="partContent" id="partContent" class="form-control">${dto.contestContent}</textarea>
 						</td>
 					</tr>
 					
@@ -209,7 +160,7 @@ $(function(){
 							<input type="file" name="selectFile" accept="image/*" multiple="multiple" style="display: none;" class="form-control">
 						</td>
 					</tr>
-					
+
 					<c:if test="${mode=='update'}">
 						<tr>
 							<td>등록이미지</td>
@@ -224,12 +175,12 @@ $(function(){
 							</td>
 						</tr>
 					</c:if>
-
+					
 				</table>
 				
 				<div class="btn-container">
 					<button type="button" class="btn btn-submit" onclick="sendOk();">${mode=='update'?'수정완료':'등록완료'}</button>
-					<button type="button" class="btn btn-white" onclick="location.href='${pageContext.request.contextPath}/contest/list';">${mode=='update'?'수정취소':'등록취소'}</button>
+					<button type="button" class="btn btn-white" onclick="location.href='${pageContext.request.contextPath}/contest/user/article';">${mode=='update'?'수정취소':'등록취소'}</button>
 					<c:if test="${mode=='update'}">
 						<input type="hidden" name="num" value="${dto.contestNum}">
 						<input type="hidden" name="page" value="${page}">

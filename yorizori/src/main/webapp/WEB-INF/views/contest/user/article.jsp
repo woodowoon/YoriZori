@@ -5,36 +5,7 @@
 
 <style type="text/css">
 .body-container {
-	height: 200px;
-	text-align: center;
-}
-.e-container { background: #fff; border-radius: 24px; padding: 35px 0; width: 1000px; margin: 0 auto; }
-
-.coupon {
-	width: 150px; 
-	height: 60px;
-	padding: 10px; 
-	border-radius: 12px; 
-	background: #f44502; 
-	color: #fff; 
-	text-align: center;
-	font-size: 20px;
-	font-weight: bold;
-	margin: auto;
-	display: block;
-}
-
-main {
-    background-color: #f7f8fb;
-    font-family: 'Noto Sans KR', sans-serif;
-    color: #000000;
-    letter-spacing: -0.03em;
-    
-}
-
-h3 {
-	margin-left: 30px;
-	text-align: left;
+	max-width: 800px;
 }
 
 </style>
@@ -42,10 +13,10 @@ h3 {
 
 <script type="text/javascript">
 <c:if test="${sessionScope.member.userId==dto.userId || sessionScope.member.role==0}">
-	function deleteOk() {
+	function deleteOk(num, mode) {
 	    if(confirm("게시글을 삭제 하시 겠습니까 ? ")) {
-	    	let query = "eventNum=${dto.eventNum}&${query}";
-		    let url = "${pageContext.request.contextPath}/event/delete?" + query;
+	    	let query = "num="+num+"&mode="+mode+"&${query}";
+		    let url = "${pageContext.request.contextPath}/contest/delete?" + query;
 	    	location.href = url;
 		}
 	}
@@ -82,67 +53,92 @@ function ajaxFun(url, method, query, dataType, fn) {
 		}
 	});
 }
+
+$(function(){
+	$(".btnSendContestLike").click(function(){
+		let userContestLiked = "${userContestLiked}";
+		
+		let url = "${pageContext.request.contextPath}/contest/insertContestLike";
+		let num = "${dto.num}";
+		let query = "num=" + num + "&userContestLiked=" + userContestLiked;
+		
+		const fn = function(data){
+			let state = data.state;
+			if(state === "true") {
+				location.href="${pageContext.request.contextPath}/contest/article?${query}&num=${dto.num}";
+				
+			} else if(state === "false") {
+				alert("관심 등록 처리를 실패했습니다.");
+			}
+		};
+		
+		ajaxFun(url, "post", query, "json", fn);
+	});
+});
 </script>
 
-<div class="e-container">
-	<div class="event-title">
-		<h3><i class="icofont-sale-discount"></i>할인 이벤트</h3>
-		
+<body>
+	<div class="contest">
+	<h2>공모전</h2>
+	</div>
+</body>
+
+<div class="c-container">
+	<div class="contest-title">
+		<div class="body-container">
+			<h3><i class="icofont-chef"></i>공모전</h3>
+		</div>
 		<div class="body-main">
 				
 			<table class="table mb-0">
 				<thead>
 					<tr>
-						<td colspan="2" align="center" style="font-size: 20px;">
-							${dto.subject} 
+						<td colspan="2" align="center">
+							${dto.subject}
 						</td>
 					</tr>
+					
 					<tr>
-						<td style="text-align: right;">
-							${dto.startTime} ~ ${dto.expireTime}
+						<td style="text-align: center;">
+							${dto.start_date} ~ ${dto.end_date}
 						</td>
 					</tr>
 				</thead>
 				
-				<tbody>			
+				<tbody>
 					<tr>
-						<td colspan="2" style="text-align: center; font-size: 17px;">
-							${dto.eventContent}
+						<td align="right">
+							닉네임 : ${dto.nickName}		
 						</td>
-						
+						<td align="right">
+							작성일 : ${dto.reg_date}
+						</td>		
 					</tr>
-					
 					<tr>
 						<td align="center">
-							<c:forEach  var="item" items="${listFile}">
-								<c:choose>
-									<c:when test="${not empty item.fileName}">
-										<img src="${pageContext.request.contextPath}/uploads/event/${item.fileName}">
-									</c:when>
-									<c:otherwise>
-										<img src="${pageContext.request.contextPath}/resources/images/noimage.png">
-									</c:otherwise>
-								</c:choose>
-							</c:forEach>
-							<c:choose>
-								<c:when test="${sessionScope.member.userId=dto.userId}">
-									<button type="button" class="coupon">쿠폰 받기</button>
-								</c:when>
-								<c:otherwise>
-									<button type="button" class="coupon" disabled="disabled">쿠폰 받기</button>
-								</c:otherwise>
-							</c:choose>
+							${dto.posterName}
 						</td>
 					</tr>
+					<tr>
+						<td align="center">
+							${dto.partContent}
+						</td>
+					</tr>
+					
 				</tbody>
 			</table>
+			
+			<button type="button" class="btn btn_star btnSendContestLike">
+				<span class="ico" style="background-image: url('${pageContext.request.contextPath}/resources/images/${userContestLiked?'fill-star':'star'}.png');">좋아요</span>
+				<span class="num" id="ContestLikeCount">${dto.ContestLikeCount}</span>
+			</button>
 			
 			<table class="table table-borderless">
 				<tr>
 					<td width="50%">
 						<c:choose>
-							<c:when test="${sessionScope.member.role == 0}">
-								<button class="btn btn-light" type="button" onclick="location.href='${pageContext.request.contextPath}/event/update?eventNum=${dto.eventNum}&page=${page}';">수정</button>
+							<c:when test="${sessionScope.member.userId==dto.userId}">
+								<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/contest/user/update?contestNum=${dto.contestNum}&page=${page}';">수정</button>
 							</c:when>
 							<c:otherwise>
 								<button type="button" class="btn btn-light" disabled="disabled">수정</button>
@@ -150,8 +146,8 @@ function ajaxFun(url, method, query, dataType, fn) {
 						</c:choose>
 				    	
 						<c:choose>
-				    		<c:when test="${sessionScope.member.role == 0}">
-								<button class="btn btn-light" type="button" onclick="deleteOk();">삭제</button>
+				    		<c:when test="${sessionScope.member.member.userId==dto.userId}">
+				    			<button type="button" class="btn btn-light" onclick="deleteOk();">삭제</button>
 				    		</c:when>
 				    		<c:otherwise>
 				    			<button type="button" class="btn btn-light" disabled="disabled">삭제</button>

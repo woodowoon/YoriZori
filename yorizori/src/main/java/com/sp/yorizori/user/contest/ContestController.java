@@ -1,11 +1,10 @@
-package com.sp.yorizori.contest;
+package com.sp.yorizori.user.contest;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,8 @@ import com.sp.yorizori.common.FileManager;
 import com.sp.yorizori.common.MyUtil;
 import com.sp.yorizori.member.SessionInfo;
 
-@Controller("contest.contestController")
-@RequestMapping("/contest/*")
+@Controller("user.contest.contestController")
+@RequestMapping("/user/contest/*")
 public class ContestController {
 	@Autowired
 	private ContestService service;
@@ -28,79 +27,18 @@ public class ContestController {
 	private MyUtil myUtil;
 	@Autowired
 	private FileManager fileManager;
-
-	@RequestMapping(value = "list")
-	public String list(
-			@RequestParam(value = "page", defaultValue = "1") int current_page,
-			@RequestParam(defaultValue = "ing") String menu,
-			HttpServletRequest req, Model model) throws Exception {
-		
-		String cp = req.getContextPath();
-		
-		int rows = 9;
-		int total_page = 0;
-		int dataCount = 0;
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("menu", menu);
-		
-		dataCount = service.dataCount(map);
-		if(dataCount != 0) {
-			total_page = myUtil.pageCount(rows, dataCount);
-		}
-		
-		if(total_page < current_page) {
-			current_page = total_page;
-		}
-		
-		int start = (current_page - 1) * rows + 1;
-		int end = current_page * rows;
-		map.put("start", start);
-		map.put("end", end);
-		
-		List<Contest> list = service.listContest(map);
-		
-		String query = "menu=" + menu;
-		String listUrl = cp + "/contest/list?" + query;
-		String articleUrl = cp + "/contest/article?" + query + "&page=" + current_page;
-		
-		if(query.length() != 0) {
-			listUrl = cp + "/contest/list?" + query;
-			articleUrl = cp + "/contest/article?page=" + current_page + "&" + query;
-		}
-		
-		String paging = myUtil.paging(current_page, total_page, listUrl);
-		
-		model.addAttribute("list", list);
-		model.addAttribute("articleUrl", articleUrl);
-		model.addAttribute("page", current_page);
-		model.addAttribute("dataCount", dataCount);
-		model.addAttribute("total_page", total_page);
-		model.addAttribute("paging", paging);
-		model.addAttribute("menu", menu);
-				
-		return ".contest.list";
-	}
 	
 	@RequestMapping(value = "write", method = RequestMethod.GET)
-	public String writeForm(Model model, HttpSession session) throws Exception {
-		SessionInfo info = (SessionInfo) session.getAttribute("member");
-		if(info.getRole() > 0) {
-			return "redirect:/contest/list";
-		}
+	public String writeForm(HttpSession session, Model model) throws Exception {
 		
 		model.addAttribute("mode", "write");
-		return ".contest.write";
+		
+		return ".contest.user.write";
 	}
 	
 	@RequestMapping(value = "write", method = RequestMethod.POST)
 	public String writeSubmit(Contest dto, HttpSession session) throws Exception {
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
-		
-		if(info.getRole() > 0) {
-			return "redirect:/contest/list";
-		}
-		
 		try {
 			String root = session.getServletContext().getRealPath("/");
 			String pathname = root + "uploads" + File.separator + "contest";
@@ -109,13 +47,12 @@ public class ContestController {
 			service.insertContest(dto, pathname);
 		} catch (Exception e) {
 		}
-		
-		return "redirect:/contest/list";
+		return "redirect:/contest/article";
 	}
 	
 	@RequestMapping(value = "article")
 	public String article(
-			@RequestParam int contestNum,
+			@RequestParam int partNum,
 			@RequestParam String page,
 			@RequestParam(defaultValue = "ing") String menu,
 			Model model) throws Exception {
@@ -123,20 +60,20 @@ public class ContestController {
 		String query = "menu=" + menu;
 		query += "&page=" + page;
 		
-		Contest dto = service.readContest(contestNum);
+		Contest dto = service.readContest(partNum);
 		if(dto == null) {
-			return "redirect:/contest/list?" + query;
+			return "redirect:/contest/article?" + query;
 		}
 		
-		dto.setContestContent(myUtil.htmlSymbols(dto.getContestContent()));
+		dto.setPartContent(myUtil.htmlSymbols(dto.getPartContent()));
 		
 		int rows = 9;
 		int start = (Integer.parseInt(page) - 1) * rows + 1;
 		int end = Integer.parseInt(page) * rows;
-		
+
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("menu", menu);
-		map.put("contestNum", contestNum);
+		map.put("partNum", partNum);
 		map.put("start", start);
 		map.put("end", end);
 		
@@ -145,24 +82,25 @@ public class ContestController {
 		model.addAttribute("query", query);
 		model.addAttribute("menu", menu);
 		
-		return ".contest.article";
+		return ".contest.user.article";
 	}
 	
 	@RequestMapping(value = "update", method = RequestMethod.GET)
 	public String updateForm(
-			@RequestParam int contestNum,
+			@RequestParam int partNum,
 			@RequestParam String page,
+			@RequestParam int rows,
 			@RequestParam(defaultValue = "ing") String menu,
 			HttpSession session, Model model) throws Exception {
 		
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
 		
-		Contest dto = service.readContest(contestNum);
-		if(info.getRole() > 0) {
-			return "redirect:/contest/list?page=" + page;
+		Contest dto = service.readContest(partNum);
+		if (dto == null || ! info.getUserId().equals(dto.getUserId())) {
+			return "redirect:/contest/user/article?page=" + page + "&rows=" + rows;
 		}
 		
-		List<Contest> listFile = service.listFile(contestNum);
+		List<Contest> listFile = service.listFile(partNum);
 		
 		model.addAttribute("dto", dto);
 		model.addAttribute("listFile", listFile);
@@ -181,9 +119,6 @@ public class ContestController {
 			HttpSession session) throws Exception {
 		
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
-		if(info.getRole() > 0) {
-			return "redirect:/contest/list?page=" + page;
-		}
 		
 		String query = "menu=" + menu;
 		query += "&page=" + page;
@@ -196,12 +131,12 @@ public class ContestController {
 			service.updateContest(dto, pathname);
 		} catch (Exception e) {
 		}
-		return "redirect:/contest/article?" + query + "&contestNum=" + dto.getContestNum();
+		return "redirect:/contest/user/article?" + query + "&partNum=" + dto.getPartNum();
 	}
 	
 	@RequestMapping(value = "delete")
 	public String delete(
-			@RequestParam int contestNum,
+			@RequestParam int partNum,
 			@RequestParam String page,
 			@RequestParam(defaultValue = "ing") String menu,
 			HttpSession session) throws Exception {
@@ -210,38 +145,14 @@ public class ContestController {
 		String query = "menu=" + menu;
 		query += "&page=" + page;
 		
-		if(info.getRole() > 0) {
-			return "redirect:/contest/list?" + query;
-		}
-		
 		try {
 			String root = session.getServletContext().getRealPath("/");
 			String pathname = root + "uploads" + File.separator + "contest";
-			service.deleteContest(contestNum, pathname);
+			service.deleteContest(partNum, pathname);
 		} catch (Exception e) {
 		}
 		
 		return "redirect:/contest/list?" + query;
 	}
-	
-	@RequestMapping(value = "deleteFile", method = RequestMethod.POST)
-	public Map<String, Object> deleteFile(
-			@RequestParam int fileNum,
-			HttpSession session) throws Exception {
-		
-		String root = session.getServletContext().getRealPath("/");
-		String pathname = root + "uploads" + File.separator + "contest";
-		
-		Contest dto = service.readFile(fileNum);
-		if(dto != null) {
-			fileManager.doFileDelete(dto.getFileName(), pathname);
-		}
-		
-		Map<String, Object> model = new HashMap<>();
-		model.put("state", "true");
-		
-		return model;
-		
-	}
-	
+
 }

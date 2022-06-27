@@ -8,7 +8,7 @@
 	
 	<insert id="insertEvent" parameterType="com.sp.yorizori.event.Event">
 		INSERT INTO event(eventNum, subject, eventContent, startTime, expireTime)
-		VALUES (#{eventNum}, #{subject}, #{eventContent}, #{startTime}, #{expireTIme})
+		VALUES (#{eventNum}, #{subject}, #{eventContent}, #{startTime}, #{expireTime})
 	</insert>
 	
 	<sql id="where-list">
@@ -47,10 +47,19 @@
 	<select id="listEvent" parameterType="map" resultType="com.sp.yorizori.event.Event">
 		SELECT * FROM (
 			SELECT ROWNUM rnum, tb.* FROM (
-				SELECT eventNum, subject, 
-					TO_CHAR(startTime, 'YYYY-MM-DD') startTime, 
-					TO_CHAR(expireTIme, 'YYYY-MM-DD') expireTIme
-				FROM event
+				SELECT e.eventNum, e.subject, 
+					TO_CHAR(e.startTime, 'YYYY-MM-DD') startTime, 
+					TO_CHAR(e.expireTIme, 'YYYY-MM-DD') expireTIme,
+					ei.eventName
+				FROM event e
+				LEFT OUTER JOIN 
+ 				(
+                    SELECT eventNum
+                    , min(eventName) as eventName
+                    FROM eventImage
+                    GROUP BY eventNum
+                )ei
+				ON e.eventnum = ei.eventnum
 				<where>
 					<if test="menu != null and menu != ''">
 						<include refid="where-list"/>
@@ -62,49 +71,13 @@
 	</select>
 	
 	<select id="readEvent" parameterType="Integer" resultType="com.sp.yorizori.event.Event">
-		SELECT eventNum, userId, nickName, subject, eventContent, 
+		SELECT eventNum, subject, eventContent, 
 		TO_CHAR(startTime, 'YYYY-MM-DD')startTime, 
 		TO_CHAR(expireTime, 'YYYY-MM-DD')expireTime
 		FROM event
 		WHERE eventNum = #{eventNum}
 	</select>
 	
-	<select id="preReadEvent" parameterType="map" resultType="com.sp.yorizori.event.Event">
-		SELECT * FROM (
-			SELECT * FROM (
-				SELECT ROWNUM rnum, tb.* FROM (
-					SELECT eventNum, subject
-					FROM event
-					<where>
-						<if test="menu != null and menu != ''">
-							<include refid="where-list"/>
-						</if>
-					</where>
-					<include refid="order-list"/>
-				) tb WHERE ROWNUM &lt;= #{end}
-			) WHERE rnum &gt;= #{start}	AND rnum &lt; #{rnum}
-			ORDER BY rnum DESC
-		) WHERE ROWNUM = 1
-	</select>
-	
-	<select id="nextReadEvent" parameterType="map" resultType="com.sp.yorizori.event.Event">
-		SELECT * FROM (
-			SELECT * FROM (
-				SELECT ROWNUM rnum, tb.* FROM (
-					SELECT eventNum, subject
-					FROM event
-					<where>
-						<if test="menu != null and menu != ''">
-							<include refid="where-list"/>
-						</if>
-					</where>
-					<include refid="order-list"/>
-				) tb WHERE ROWNUM &lt;= #{end}
-			) WHERE rnum &gt;= #{start}	AND rnum &gt; #{rnum}
-			ORDER BY rnum ASC
-		) WHERE ROWNUM = 1
-	</select>
-
 	<update id="updateEvent" parameterType="com.sp.yorizori.event.Event">
 		UPDATE event SET subject=#{subject}, eventContent=#{eventContent},
 			startTime = #{startTime}, expireTime = #{expireTime}
