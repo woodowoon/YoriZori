@@ -72,7 +72,7 @@ li { list-style-type: none; }
 .f02 h4 { font-size: 24px; margin-top: 30px; }
 
 .f03 h2 { font-family: 'GmarketSansBold'; font-size: 54px; padding-top: 85px; }
-/* .f03 h4 { font-size: 24px; margin-top: 30px; } */
+.f03 h4 { font-size: 24px; margin-top: 30px; }
 
 .f04 { width: 1440px; text-align: left; margin-top: 80px; }
 .f04 .left { float: left; margin-left: 100px; }
@@ -91,6 +91,7 @@ li { list-style-type: none; }
 .f05 .txt h3 { font-family: 'GmarketSansBold'; font-size: 36px; padding-top: 50px; }
 .f05 .txt h4 { margin-top: 20px; }
 .f05 .txt .featureBtn { display: inline-block; width: 130px; text-align: center; margin: 30px 20px 50px; }
+
 
 #slideShow {
   /*전체 컨테이너*/
