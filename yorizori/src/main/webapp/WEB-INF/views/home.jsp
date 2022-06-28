@@ -306,7 +306,7 @@ $(document).ready(function(){
 	        </ul>
 	    </div>
 	    <div class="controller">
-	    	<span class="prev">&lt;</span> 
+	    	<span class="prev" style="visibility: hidden;">&lt;</span> 
       		<span class="next">&gt;</span>
 	    </div>
     </div>

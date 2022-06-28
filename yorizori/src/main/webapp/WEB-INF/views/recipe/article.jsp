@@ -81,7 +81,7 @@ a > i { display: flex; }
 .writer:hover, .writer:active { text-decoration: none; color: #f44502 }
 
 .prev-next { display: flex; width: 95%; margin: 0 auto; }
-.prev, .list, .next { width: 33.3%; }
+.list { width: 100%; }
 .prev, .next { display: flex; line-height: 49px; }
 .prev > .prev-subject, .next > .next-subject { padding: 0 20px; font-size: 15px; font-weight: 300; }
 .prev > .prev-subject:hover, .next > .next-subject:hover { text-decoration: none; color: #333; }
@@ -486,11 +486,6 @@ $(function() {
 	</div>
 	
 	<div class="prev-next">
-		<div class="prev">
-			<a class="ai ai-left"><i class="bi bi-chevron-left"></i></a>
-			<a class="prev-subject" href="${pageContext.request.contextPath}/recipe/article?${query}&recipeNum=${preReadDto.recipeNum}">${preReadDto.recipeSubject}</a>
-			
-		</div>
 		<div class="list">
 			<c:choose>
 				<c:when test="${sessionScope.member.userId==dto.userId}">
@@ -522,12 +517,6 @@ $(function() {
 					
 				</c:otherwise>
 			</c:choose>  
-			
-			
-		</div>
-		<div class="next">
-			<a class="next-subject" href="${pageContext.request.contextPath}/recipe/article?${query}&recipeNum=${nextReadDto.recipeNum}">${nextReadDto.recipeSubject}</a>
-			<a class="ai ai-right"><i class="bi bi-chevron-right"></i></a>
 		</div>
 	</div>
 		    
