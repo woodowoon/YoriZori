@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <style type="text/css">
-.contents {
+.contents { 
     -webkit-font-smoothing: antialiased;
     font-family: 'Noto Sans', sans-serif;
     color: #000000;
