@@ -443,7 +443,7 @@ $(function(){
 			</div>
 		</div>
 		<div class="video-list">
-			<div class="video-title">마제소바 <span>/ ${dto.videoTime}분</span></div>
+			<div class="video-title">${dto.videoFileName} <span>/ ${dto.videoTime}분</span></div>
 			<div class="video-btn">
 				<button type="button" id="showClass"><i class="bi bi-play-fill"></i></button>
 			</div>
