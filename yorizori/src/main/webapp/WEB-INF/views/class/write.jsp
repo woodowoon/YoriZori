@@ -24,7 +24,7 @@
 .insertClass .full > h3 { font-size: 30px; font-weight: 700; margin: 20px 0; }
 
 .insertClass .full form .line { margin-top: 25px; }
-.insertClass .full form .line p { display: inline-block; width: 200px; font-size: 22px; font-weight: 700; vertical-align: middle; }
+.insertClass .full form .line > p { display: inline-block; width: 200px; font-size: 22px; font-weight: 700; vertical-align: middle; }
 .insertClass .full form .line .sm-p { width: 100px; }
 .insertClass .full form .line input { display: inline-block; width: 500px; font-size: 18px; height: 50px; vertical-align: middle; background: #f5f5f5; border: 1px solid #e1e1e1; padding: 6px 12px; margin-right: 60px;}
 .insertClass .full form .line #price { width: 350px; }
