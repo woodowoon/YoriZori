@@ -4,20 +4,18 @@
 <mapper namespace="addchef">
 
     <insert id="insertAddchef" parameterType="com.sp.yorizori.addchef.Addchef">
-		INSERT INTO chefApply(num,userId, reg_date, intro, acceptance)
-		VALUES(chefApply_seq.NEXTVAL,#{userId}, SYSDATE, #{intro}, 1)
-		
-
+		INSERT INTO chefApply(userId, reg_date, intro, accept)
+		VALUES(#{userId}, SYSDATE, #{intro}, 1)
     </insert>
     
 	<select id="readAddchef" parameterType="String" resultType="com.sp.yorizori.addchef.Addchef">
-		SELECT acceptance, a.userId, reg_date, intro
+		SELECT accept, a.userId, reg_date, intro
 		FROM addchef a
 		WHERE a.userId = #{userId}
 	</select>  
 
     <update id="updateAccept" parameterType="map">
-		UPDATE addchef SET acceptance = #{acceptance}
+		UPDATE addchef SET accept = #{accept}
 		WHERE userId=#{userId}
     </update>
 </mapper>

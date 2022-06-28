@@ -11,6 +11,9 @@ public class Chef {
 	private String addr1;
 	private String addr2;
 	private String email;
+	private int recipeCount;
+	private int followCount;
+	private int classCount;
 	
 	private int role;
 	private int zip;
@@ -34,6 +37,27 @@ public class Chef {
 	
 	private String intro;
 	private int accept;
+	
+	
+	
+	public int getRecipeCount() {
+		return recipeCount;
+	}
+	public void setRecipeCount(int recipeCount) {
+		this.recipeCount = recipeCount;
+	}
+	public int getFollowCount() {
+		return followCount;
+	}
+	public void setFollowCount(int followCount) {
+		this.followCount = followCount;
+	}
+	public int getClassCount() {
+		return classCount;
+	}
+	public void setClassCount(int classCount) {
+		this.classCount = classCount;
+	}
 	public int getListNum() {
 		return listNum;
 	}

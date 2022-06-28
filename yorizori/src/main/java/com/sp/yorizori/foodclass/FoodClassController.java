@@ -48,11 +48,11 @@ public class FoodClassController {
 		int dataCount = 0;
 		
 		Map<String, Object> map = new HashMap<String, Object>();
-		boolean userClassLike = service.userClassLike(map);
+		// boolean userClassLike = service.userClassLike(map);
 		
 		map.put("userId", info.getUserId());
 		map.put("category", category);
-		map.put("userClassLike", userClassLike);
+		// map.put("userClassLike", userClassLike);
 		
 		dataCount = service.dataCount(map);
 		if(dataCount != 0) {
@@ -89,7 +89,7 @@ public class FoodClassController {
 		model.addAttribute("total_page", total_page);
 		model.addAttribute("paging", paging);
 		model.addAttribute("category", category);
-		model.addAttribute("userClassLike", userClassLike);
+		// model.addAttribute("userClassLike", userClassLike);
 		
 		return ".class.list";
 	}

@@ -123,21 +123,11 @@ function chefStateDetaileView() {
 }
 
 function selectStateChange() {
-	const f = document.deteailedChefForm;
-	
-	let s = f.stateCode.value;
-	let txt = f.stateCode.options[f.stateCode.selectedIndex].text;
-	
-	f.memo.value = "";	
-	if(! s) {
-		return;
+	if(confirm("상태를 변경하시겠습니까 ?")) {
+		const f = document.deteailedChefForm;
+		f.action="${pageContext.request.contextPath}/admin/chefManage/updateChefState";
+		f.submit();
 	}
-
-	if(s!=="0" && s!=="6") {
-		f.memo.value = txt;
-	}
-	
-	f.memo.focus();
 }
 
 </script>
@@ -197,10 +187,10 @@ function selectStateChange() {
 							<td>${dto.nickName}</td>
 							<td>${dto.birth}</td>
 							<td>${dto.tel}</td>
-							<td>${recipeCount} 개</td>
-							<td>${followCount} 명</td>
-							<td>${classCount} 개</td>
-							<td>승인 완료</td>
+							<td>${dto.recipeCount} 개</td>
+							<td>${dto.followCount} 명</td>
+							<td>${dto.classCount} 개</td>
+							<td>${dto.accept == 1 ? "대기":"승인"}</td>
 							<td>${dto.email}</td>
 						</tr>
 						</c:forEach>
@@ -208,7 +198,7 @@ function selectStateChange() {
 				</table>
 						 
 				<div class="page-box">
-					${dataCount == 0 ? "등록된 쉐프가 없습니다." : paging}
+					
 				</div>
 						
 				<table class="table">

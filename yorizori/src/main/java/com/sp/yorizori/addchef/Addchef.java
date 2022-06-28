@@ -1,18 +1,18 @@
 package com.sp.yorizori.addchef;
 
 public class Addchef {
-	private int num;
 	private String userId;
 	private String reg_date;
 	private String intro;
-	private int acceptance;
+	private int accept;
 	
 	
-	public int getNum() {
-		return num;
+
+	public int getAccept() {
+		return accept;
 	}
-	public void setNum(int num) {
-		this.num = num;
+	public void setAccept(int accept) {
+		this.accept = accept;
 	}
 	public String getUserId() {
 		return userId;
@@ -32,12 +32,7 @@ public class Addchef {
 	public void setIntro(String intro) {
 		this.intro = intro;
 	}
-	public int getAcceptance() {
-		return acceptance;
-	}
-	public void setAcceptance(int acceptance) {
-		this.acceptance = acceptance;
-	}
+
 	
 	
 

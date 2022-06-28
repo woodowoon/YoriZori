@@ -14,43 +14,51 @@
 	</sql>
 	
 	<select id="dataCount" resultType="Integer" parameterType="map">
-		SELECT COUNT(*) FROM member
+		select count(a.*)
+		  from member a,
+		       chefApply b
+		 where 1=1
+		   and a.userId=b.userId
+
 		<where>
 			<if test="keyword!=null and keyword!='' ">
 				<include refid="where-list"/>
 			</if>
-			AND role = 2
 		</where>
 	</select>
 	
 	<select id="listChef" parameterType="map" resultType="com.sp.yorizori.admin.chefManage.Chef">
-		SELECT * FROM (
-			SELECT ROWNUM rnum, tb.* FROM (
-				SELECT userId, userPwd, userName, nickName, 
-					tel, TO_CHAR(birth, 'YYYY-MM-DD') birth, 
-					addr1, addr2, zip, TO_CHAR(register_date, 'YYYY-MM-DD') register_date, 
-					modify_date, last_login, email, role, failure_cnt, enabled				
-				FROM member 
+	 select a.userId, a.userPwd, a.userName, a.nickName, 
+					a.tel, TO_CHAR(a.birth, 'YYYY-MM-DD') birth, 
+					a.addr1, a.addr2, a.zip, TO_CHAR(a.register_date, 'YYYY-MM-DD') register_date, 
+					a.modify_date, a.last_login, a.email, a.role, a.failure_cnt, a.enabled, b.intro, b.accept,
+					(select count(c.userId) from recipe c where c.userId=a.userId) recipeCount,
+					(select count(c.follower_id) from follow c where a.userId=c.follower_id) followCount,
+					(select count(c.userId) from  classTable c where c.userId=a.userId) classCount
+					
+				   from member a,
+				        chefApply b
+				  where a.userId=b.userId
+
 				<where>
 					<if test="keyword!=null and keyword!='' ">
 						<include refid="where-list"/>
 					</if>
-					AND role = 2
-					
+				
 				</where> 
 				ORDER BY register_date DESC
-			) tb WHERE ROWNUM &lt;= #{end}
-		) WHERE rnum &gt;= #{start}
 	</select>
 	
 	<select id="readChef" parameterType="String"
 			resultType="com.sp.yorizori.admin.chefManage.Chef">
-		SELECT userId, userPwd, userName, nickName, 
-			tel, TO_CHAR(birth, 'YYYY-MM-DD') birth, 
-			addr1, addr2, zip, TO_CHAR(register_date, 'YYYY-MM-DD') register_date, 
-			modify_date, last_login, email, role, failure_cnt, enabled				
-		FROM member
-		WHERE userId = #{userId}
+		 select a.userId, a.userPwd, a.userName, a.nickName, 
+					a.tel, TO_CHAR(a.birth, 'YYYY-MM-DD') birth, 
+					a.addr1, a.addr2, a.zip, TO_CHAR(a.register_date, 'YYYY-MM-DD') register_date, 
+					a.modify_date, a.last_login, a.email, a.role, a.failure_cnt, a.enabled, b.intro, b.accept
+				   from member a,
+				        chefApply b
+				  where a.userId=b.userId
+				  	and a.userId=#{userId}
 	</select>
 	
 	<update id="updateFailureCountReset" parameterType="String">
@@ -59,7 +67,10 @@
 	</update>
 	
 	<update id="updateChefEnabled" parameterType="map">
-		UPDATE member SET enabled=#{enabled} WHERE userId=#{userId}
+		UPDATE chefApply SET accept=#{accept} WHERE userId=#{userId}
+    </update>
+	<update id="updateMemberRole" parameterType="map">
+		UPDATE member SET role=#{role} WHERE userId=#{userId}
     </update>
     
     <insert id="insertChefState" parameterType="com.sp.yorizori.admin.chefManage.Chef">
