@@ -198,7 +198,7 @@ function selectStateChange() {
 				</table>
 						 
 				<div class="page-box">
-					${dataCount == 0 ? "등록된 쉐프가 없습니다." : paging}
+					
 				</div>
 						
 				<table class="table">

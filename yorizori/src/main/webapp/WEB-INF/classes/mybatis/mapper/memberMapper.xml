@@ -53,7 +53,7 @@
 	<!-- 회원정보 읽기 -->
 	<select id="readMember" parameterType="String" resultType="com.sp.yorizori.member.Member">
 		SELECT m.userId, userPwd, nickName, userName, tel, TO_CHAR(birth, 'YYYY-MM-DD') birth, addr1, addr2, email,
-			countryNum, zip, modify_date, memberImageName imageFilename FROM member m
+			countryNum, zip, enabled, modify_date, memberImageName imageFilename FROM member m
 			LEFT OUTER JOIN (
 				SELECT userId, memberImageName FROM memberImage mi
 			) mi ON m.userId = mi.userId 
