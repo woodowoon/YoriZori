@@ -218,8 +218,14 @@
 		        SELECT replyNum, r.userId, nickName, replyContent content, memberImageName userImageName,
 		            TO_CHAR(reg_date, 'YYYY-MM-DD hh:mm') reg_date, festivalNum num
 		        FROM festivalReply r
-		        JOIN member m ON r.userId = m.userId
-		        JOIN memberImage i ON r.userId = i.userId
+		        LEFT OUTER JOIN (
+		            SELECT m.userId, nickName
+		            FROM member m
+		        ) m ON r.userId = m.userId
+		        LEFT OUTER JOIN (
+		            SELECT i.userId, memberImageName
+		            FROM memberImage i
+		        ) i ON r.userId = i.userId
 		        WHERE festivalNum = #{num}
 		        ORDER BY replyNum DESC
 		    ) tb WHERE ROWNUM &lt;= #{end}

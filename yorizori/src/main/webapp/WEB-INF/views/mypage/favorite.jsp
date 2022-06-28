@@ -39,15 +39,15 @@ li { list-style: none; }
 .mypage .feed-list li img { width: 100%; }
 .mypage .feed-list li .box:hover img { filter: brightness(70%); }
 
-.box { position: relative; cursor: pointer; }
+.box { position: relative; cursor: pointer; width: 100%; height: 100%; }
 .text { position: absolute; visibility: hidden; left: 0; top: 145px; width: 100%; text-align: center; color: #fff; font-size: 18px; }
 .box:hover .text { visibility: visible; }
 
 .modal-body ul { margin: 0; padding: 0; }
 .modal-body ul li { display: flex; padding: 10px 0; line-height: 30px; }
-.modal-body ul li div img { width: 30px; height: 30px; border: 1px solid #eaeaea; border-radius: 9999px; margin-right: 10px; }
-.btn-sm-follow { width: 80px; height: 31px; border: 1px solid #0095f6; border-radius: 8px; background-color: #0095f6; color: #fff; font-size: 14px; letter-spacing: 0.03em; margin-left: auto; }
-.btn-sm-following { width: 80px; height: 31px; border: 1px solid #0095f6; border-radius: 8px; background-color: #fff; color: #0095f6; font-size: 14px; letter-spacing: 0.03em; margin-left: auto; }
+.modal-body ul li div img { width: 30px; height: 30px; border-radius: 9999px; margin-right: 10px; }
+.btn-sm-follow { width: 80px; height: 32px; border: 1px solid #0095f6; border-radius: 8px; background-color: #0095f6; color: #fff; font-size: 14px; letter-spacing: 0.03em; margin-left: auto; }
+.btn-sm-following { width: 80px; height: 32px; border: 1px solid #0095f6; border-radius: 8px; background-color: #fff; color: #0095f6; font-size: 14px; letter-spacing: 0.03em; margin-left: auto; }
 
 .page-item.active .page-link { background-color: #0095f6; border-color: #0095f6; }
 .page-link, .page-link:hover, .page-link:active { color: #0095f6; }
