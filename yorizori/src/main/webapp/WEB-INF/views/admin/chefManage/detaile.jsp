@@ -24,8 +24,8 @@
 		<td class="ps-5">${dto.register_date}</td>
 	</tr>
 	<tr>
-		<td class="text-center bg-light">최근로그인</td>
-		<td class="ps-5">${dto.last_login}</td>
+		<td class="text-center bg-light">소개</td>
+		<td class="ps-5" colspan="2">${dto.intro}</td>
 	</tr>
 	
 </table>
@@ -37,17 +37,11 @@
 		<tr>
 			<td class="wp-15 text-center bg-light">승인상태</td>
 			<td class="ps-5">
-				<select class="form-select" name="stateCode" id="stateCode" onchange="selectStateChange()">
+				<select class="form-select" name="accept" id="accept" onchange="selectStateChange()">
 					<option value="">::승인상태::</option>
-					<option value="2">승인 완료</option>
-					<option value="3">승인 대기</option>
+					<option value="1" ${dto.accept=="1"?"selected='selected'":""}>승인 대기</option>
+					<option value="2" ${dto.accept=="2"?"selected='selected'":""}>승인 완료</option>
 				</select>
-			</td>
-		</tr>
-		<tr>
-			<td class="pe-7 text-center bg-light">메 모</td>
-			<td class="ps-5">
-				<input type="text" name="memo" id="memo" class="form-control" style="width: 95%;">
 			</td>
 		</tr>
 	</table>

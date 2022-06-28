@@ -66,6 +66,7 @@ public class ChefManageServiceImpl implements ChefManageService {
 	public void updateChefEnabled(Map<String, Object> map) throws Exception {
 		try {
 			dao.updateData("chefManage.updateChefEnabled", map);
+			dao.updateData("chefManage.updateMemberRole", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;

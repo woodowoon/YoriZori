@@ -32,6 +32,9 @@ public class ChefManageController {
 			@RequestParam(defaultValue = "userId") String condition,
 			@RequestParam(defaultValue = "") String keyword,
 			@RequestParam(defaultValue = "") String enabled,
+			@RequestParam(defaultValue = "") String intro,
+			@RequestParam(defaultValue = "") String accept,
+
 			HttpServletRequest req,
 			Model model) throws Exception {
 		
@@ -49,6 +52,8 @@ public class ChefManageController {
 		map.put("enabled", enabled);
 		map.put("condition", condition);
 		map.put("keyword", keyword);
+		map.put("intro", intro);
+		map.put("accept", accept);
 		
 		dataCount = service.dataCount(map);
 		if(dataCount != 0) {
@@ -92,7 +97,6 @@ public class ChefManageController {
 		}
 		
 		String paging = myUtil.paging(current_page, total_page, listUrl);
-		
 		model.addAttribute("list", list);
 		model.addAttribute("page", current_page);
 		model.addAttribute("dataCount", dataCount);
@@ -100,52 +104,52 @@ public class ChefManageController {
 		model.addAttribute("paging", paging);
 		model.addAttribute("enabled", enabled);
 		model.addAttribute("condition", condition);
-		model.addAttribute("keyword", keyword);
+		model.addAttribute("intro", intro);
+		model.addAttribute("accept", accept);
+		
 		
 		return ".admin.chefManage.chefList";
 	}
 	
 	@RequestMapping(value = "detaile")
-	public String detaileChef(@RequestParam String userId, Model model) throws Exception {
+	public String detaileChef(@RequestParam String userId, Model model,			
+							  @RequestParam(defaultValue = "") String intro,
+							  @RequestParam(defaultValue = "") String birth,
+						      @RequestParam(defaultValue = "") String tel,
+							  @RequestParam(defaultValue = "") String accept) throws Exception {
+		
 		Chef dto = service.readChef(userId);
 		Chef chefState = service.readChefState(userId);
 		List<Chef> listState = service.listChefState(userId);
 		
 		model.addAttribute("dto", dto);
 		model.addAttribute("chefState", chefState);
+		model.addAttribute("birth", birth);
+		model.addAttribute("tel", tel);
 		model.addAttribute("listState", listState);
+		model.addAttribute("intro", intro);
+		model.addAttribute("accept", accept);
 				
 		return "admin/chefManage/detaile";
 	}
 	
 	@RequestMapping(value = "updateChefState", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> updateChefState(Chef dto) throws Exception {
-		String state = "true";
-		
+	public String updateChefState(Chef dto) throws Exception {
+	
 		try {
 			Map<String, Object> map = new HashMap<>();
 			map.put("userId", dto.getUserId());
-			if(dto.getStateCode() == 0) {
-				map.put("enabled", 1);
-			} else {
-				map.put("enabled", 0);
-			}
-			service.updateFailureCountReset(dto.getUserId());
+			map.put("accept", dto.getAccept());
+			map.put("role", 2);
 			
-			service.insertChefState(dto);
+			service.updateChefEnabled(map);
 			
-			if(dto.getStateCode() == 0) {
-				service.updateFailureCountReset(dto.getUserId());
-			}
 		} catch (Exception e) {
-			state = "false";
+			
 		}
+	
 		
-		Map<String, Object> model = new HashMap<>();
-		model.put("state", state);
-		
-		return model;
+		return "redirect:/admin/chefManage/chefList";
 	}
 	
 }
