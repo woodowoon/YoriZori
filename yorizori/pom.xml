@@ -58,7 +58,13 @@
 		<repository>
 			<id>osgeo</id>
 			<url>https://repo.osgeo.org/repository/release/</url>
-		</repository>  	    
+		</repository> 
+		
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+		 	    
 	</repositories>
 	
 	<dependencies>
@@ -380,8 +386,16 @@
 			<artifactId>commons-codec</artifactId>
 			<version>1.13</version>
 		</dependency>
-
+		
+		<dependency>
+		    <groupId>com.github.iamport</groupId>
+		    <artifactId>iamport-rest-client-java</artifactId>
+		    <version>0.2.17</version>
+		</dependency>
+		
 	</dependencies>
+
+	
     <build>
         <plugins>
             <plugin>
