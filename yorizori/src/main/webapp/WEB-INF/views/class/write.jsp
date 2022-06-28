@@ -233,7 +233,9 @@ $(function(){
 			</div>
 			<div class="line">
 				<p>클래스 상세내용</p>
-				<div class="editor"></div>
+				<div class="editor">
+				
+				</div>
 				<input type="hidden" name="classContent">
 			</div>
 			
@@ -259,6 +261,9 @@ videoArea.addEventListener('loadedmetadata', function(){
 	let minute = Math.floor(length / 60);
 	document.querySelector('input[name=videoTime]').setAttribute('value',minute);
 });
+</script>
+
+<script type="text/javascript">
 	ClassicEditor
 		.create( document.querySelector( '.editor' ), {
 			fontFamily: {
@@ -305,7 +310,9 @@ videoArea.addEventListener('loadedmetadata', function(){
 		.then( editor => {
 			window.editor = editor;
 		})
-		.catch( err => {
+		.catch( err => { 
 			console.error( err.stack );
 		});
 </script>
+
+

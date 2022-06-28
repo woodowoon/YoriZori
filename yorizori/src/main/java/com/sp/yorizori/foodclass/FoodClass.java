@@ -29,6 +29,8 @@ public class FoodClass {
 	private String videoFileName;
 	
 	private int classLikeCount;
+	
+	private int userClassLike;
 
 	public int getRnum() {
 		return rnum;
@@ -212,6 +214,14 @@ public class FoodClass {
 
 	public void setClassLikeCount(int classLikeCount) {
 		this.classLikeCount = classLikeCount;
+	}
+
+	public int getUserClassLike() {
+		return userClassLike;
+	}
+
+	public void setUserClassLike(int userClassLike) {
+		this.userClassLike = userClassLike;
 	}
 
 }

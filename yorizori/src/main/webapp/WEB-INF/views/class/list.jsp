@@ -80,16 +80,24 @@ function ajaxFun(url, method, query, dataType, fn) {
 
 $(function() {
 	$(".classLike").click(function(){
-		let userClassLike = "${userClassLike}";
+		
+		let classCode = $(this).attr("data-classCode");
+		let userClassLike = $(this).attr("data-userClassLike");
+		let isClassLike;
+		
+		if(userClassLike > 0) {
+			isClassLike = true;
+		} else {
+			isClassLike = false;
+		}
 		
 		let url = "${pageContext.request.contextPath}/class/insertClassLike";
-		let classCode = "${dto.classCode}";
-		let query = "classCode=" + classCode + "&userClassLike=" + userClassLike;
+		let query = "classCode=" + classCode + "&userClassLike=" + isClassLike;
 		
 		const fn = function(data) {
 			let state = data.state;
 			if(state === "true") {
-				location.href="${pageContext.request.contextPath}/class/article?${query}&classCode=${dto.classCode}";
+				location.href="${pageContext.request.contextPath}/class/list";
 			} else if(state === "false") {
 				alert("찜하기 실패");
 			}
@@ -139,16 +147,20 @@ $(function() {
 								<p>${dto.classSubject}</p>
 								<p>${dto.nickname} - 팔로워 (${dto.followCount})</p>
 								<p><fmt:formatNumber value="${dto.price}" groupingUsed="true"/>원</p>
-								<a href="#" class="classLike">
+								<div>
 									<c:choose>
-										<c:when test="${userClassLike == false}">
-											<img src="${pageContext.request.contextPath}/resources/images/heart1.png">
+										<c:when test="${dto.userClassLike == 0}">
+											<div class="classLike" data-classCode="${dto.classCode}" data-userClassLike="${dto.userClassLike}">
+												<img src="${pageContext.request.contextPath}/resources/images/heart1.png">
+											</div>
 										</c:when>
 										<c:otherwise>
+										<div class="classLike" data-classCode="${dto.classCode}" data-userClassLike="${dto.userClassLike}">
 											<img src="${pageContext.request.contextPath}/resources/images/heart2.png">
+										</div>
 										</c:otherwise>
 									</c:choose>
-								</a>
+								</div>
 							</div>
 						</div>
 					</li>

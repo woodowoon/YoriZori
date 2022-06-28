@@ -36,7 +36,7 @@
 		        LEFT OUTER JOIN (
 		            SELECT l.classCode, COUNT(*) userClassLike
 		            FROM classLike l
-		            WHERE l.userId = #{userId}
+		            WHERE userId = #{userId}
 		            GROUP BY l.classCode
 		        ) l ON c.classCode = l.classCode
 				<where>
