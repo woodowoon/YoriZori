@@ -30,10 +30,8 @@ h3 img {
 function deleteOk() {
 	let query = "dailyNum=${dto.dailyNum}&${query}&dailyPhotoName=${dto.dailyPhotoName}";
     let url = "${pageContext.request.contextPath}/daily/delete?" + query;
-
-    if(confirm("위 자료를 삭제 하시 겠습니까 ? ")) {
-  	  location.href = url;
-    }
+    location.href = url;
+    
 }
 </c:if>
 </script>

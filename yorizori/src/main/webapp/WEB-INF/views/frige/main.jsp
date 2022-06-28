@@ -126,7 +126,6 @@ sort {
 
 
 .field2 dd ul {
-    height: 270px;
     padding: 12px 0;
     overflow-x: hidden;
     overflow-y: visible;

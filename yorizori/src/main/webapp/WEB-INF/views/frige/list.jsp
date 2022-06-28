@@ -169,7 +169,6 @@
     top: -2.2rem;
     left: 50%;
     transform: translateX(-50%);
-    width: 100px;
     padding: 14px 20px;
     border-radius: 9999px;
     background: #f44502;
