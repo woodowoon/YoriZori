@@ -364,7 +364,7 @@
     background-color: #ffeee4;
 }
 
-img {
+.mainimg{
 	border-radius: 20px;
 	
 }
@@ -377,7 +377,7 @@ img {
 					<div class="month_recipe_box" style="display: -webkit-inline-box;">
 					<div class="recipe_box recipe_thumb">
 					
-							<span><img src="${pageContext.request.contextPath}/resources/images/frige-title.jpg" alt="20"></span>
+							<span><img class="mainimg" src="${pageContext.request.contextPath}/resources/images/frige-title.jpg" alt="20"></span>
 						</div>
 					 <div class="recipe_box recipe_infotxt" style="padding: 30px;">
 							<div class="recipe_tit">이달의 레시피</div>
