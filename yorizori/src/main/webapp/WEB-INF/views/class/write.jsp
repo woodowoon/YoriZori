@@ -258,7 +258,7 @@ videoFile.addEventListener("change", function(){
 
 videoArea.addEventListener('loadedmetadata', function(){
 	let length = videoArea.duration;
-	let minute = Math.floor(length / 60);
+	let minute = Math.ceil(length / 60);
 	document.querySelector('input[name=videoTime]').setAttribute('value',minute);
 });
 </script>
