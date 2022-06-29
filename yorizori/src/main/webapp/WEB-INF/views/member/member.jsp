@@ -4,25 +4,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <style type="text/css">
-.container {
-    width: 850px;
-}
-.body-title {
-    -webkit-font-smoothing: antialiased;
-    font-family: 'Noto Sans', sans-serif;
-    letter-spacing: -0.03em;
-    word-break: keep-all;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    -webkit-text-size-adjust: none;
-    border: 0;
-    outline: 0;
-    font-size: 4.4rem;
-    font-weight: 700;
-    line-height: 1em;
-    color: #000000;
-}
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+.signUpBody * { font-family: 'Noto Sans KR', sans-serif; }
+.signUpBody { width: 1200px; margin: 0 auto; }
 
 
 label {
@@ -34,18 +18,9 @@ label {
     font-weight: bold;
 }
 
-.body-container {
-	font-size: 25px
-	
-}
-
-.col-sm-10 {
-	margin-bottom: 50px;
-}
-
 #nickName, #userPwd, #userPwd2, #birth, #userName {
 	display: block;
-    width: 100%;
+    width: 600px;
     height: 60px;
     padding: 0 20px;
     border: 0;
@@ -59,7 +34,7 @@ label {
 
 #selectEmail {
 	display: block;
-    width: 100%;
+    width: 166px;
     height: 60px;
     padding: 0 20px;
     border: 0;
@@ -69,11 +44,12 @@ label {
     font-weight: 400;
     color: #777777;
     box-sizing: border-box;
+    text-align: center;
 }
 
 #selectEmail1 {
 	display: block;
-    width: 160px;
+    width: 200px;
     height: 60px;
     padding: 0 20px;
     border: 0;
@@ -87,7 +63,7 @@ label {
 
 #selectEmail2 {
 	display: block;
-    width: 160px;
+    width: 200px;
     height: 60px;
     padding: 0 20px;
     border: 0;
@@ -101,7 +77,7 @@ label {
 
 #tel1 {
 	display: block;
-    width: 140px;
+    width: 166px;
     height: 60px;
     padding: 0 20px;
     border: 0;
@@ -111,11 +87,12 @@ label {
     font-weight: 400;
     color: #777777;
     box-sizing: border-box;
+    text-align: center;
 }
 
 #tel2 {
 	display: block;
-    width: 170px;
+    width: 196px;
     height: 60px;
     padding: 0 20px;
     border: 0;
@@ -125,11 +102,12 @@ label {
     font-weight: 400;
     color: #777777;
     box-sizing: border-box;
+    text-align: center;
 }
 
 #tel3 {
 	display: block;
-    width: 170px;
+    width: 196px;
     height: 60px;
     padding: 0 20px;
     border: 0;
@@ -139,11 +117,12 @@ label {
     font-weight: 400;
     color: #777777;
     box-sizing: border-box;
+    text-align: center;
 }
 
 #addr1 {
 	display: block;
-    width: 600x;
+    width: 600px;
     height: 50px;
     padding: 0 20px;
     border: 0;
@@ -157,7 +136,7 @@ label {
 
 #addr2 {
 	display: block;
-    width: 600x;
+    width: 600px;
     height: 50px;
     padding: 0 20px;
     border: 0;
@@ -205,7 +184,7 @@ label {
     color: #777777;
     box-sizing: border-box;
     display: inline-block;
-    width: 72%;
+    width: 452px;
 }
 
 #zip {
@@ -220,7 +199,7 @@ label {
     color: #777777;
     box-sizing: border-box;
     display: inline-block;
-    width: 30%;
+    width: 457px;
  }
 
 
@@ -317,20 +296,23 @@ button {
     border: 0;
     cursor: pointer;
     font-family: 'Noto Sans', sans-serif !important;
-    display: block;
-    width: 50%;
-    padding: 20px 30px;
+    display: inline-block;
+    width: 200px;
+    padding: 10px 0;
     border-radius: 9999px;
     box-sizing: border-box;
     background: #f44502;
-    margin-left: 30%;
-    font-size: 30px;
+    font-size: 28px;
 }
 
-.select {
-	width:50%;
-}
-
+.signUpTitle { text-align: center; margin: 40px 0 70px; }
+.signUpTitle img { display: inline-block; width: 100px; }
+.signUpTitle h3 { display: inline-block; font-size: 45px; font-weight: bold; vertical-align: middle; margin: 0 0 0 30px; }
+.signUpBody .row > * { width: auto; }
+.signUpBody .row > label { width: 300px; font-size: 28px; margin-left: 90px; }
+.signUpBody .select label { font-size: 24px; }
+.signUpBody .form-check-label { font-size: 24px; }
+.signUpBody .btn-area { width: 100%; }
 </style>
 
 <script type="text/javascript">
@@ -474,18 +456,18 @@ function userIdCheck() {
 }
 </script>
 
-<div class="container">
-	<div class="body-container">	
-		<div class="body-title">
-			<h3 style="	font-size: 70%; margin-bottom: 7%;"> yorizori 회원가입 </h3>
-		</div>
-		    		
+<div class="signUp">
+	<div class="signUpBody">
+		<div class="signUpTitle">
+			<img src="${pageContext.request.contextPath}/resources/images/logo.png">	
+			<h3>회원가입 </h3>
+		</div>    		
 		<div class="body-main">
 
 			<form name="memberForm" method="post">
 				<div class="row mb-3">
-					<label class="col-sm-2 col-form-label" for="userId">아이디</label>
-					<div class="col-sm-10 userId-box">
+					<label class="col-form-label" for="userId">아이디</label>
+					<div class="userId-box">
 			            <input type="text" name="userId" id="userId" class="form-control" placeholder="아이디를 입력해주세요" value="${dto.userId}"
 			            		${mode=="update" ? "readonly='readonly' ":""}
 			            		placeholder="아이디">
@@ -500,44 +482,44 @@ function userIdCheck() {
 				</div>
 				
 				<div class="row mb-3">
-					<label class="col-sm-2 col-form-label" for="userName">이름</label>
-					<div class="col-sm-10">
+					<label class="col-form-label" for="userName">이름</label>
+					<div class="">
 			            <input type="text" name="userName" id="userName" class="form-control" autocomplete="off" placeholder="이름을 입력해주세요." value="${dto.userName}">			 
 			        </div>
 			    </div>
 			    
 				<div class="row mb-3">
-					<label class="col-sm-2 col-form-label" for="nickName">닉네임</label>
-					<div class="col-sm-10">
+					<label class="col-form-label" for="nickName">닉네임</label>
+					<div class="">
 			            <input type="text" name="nickName" id="nickName" class="form-control" autocomplete="off" placeholder="닉네임을 입력해주세요." value="${dto.nickName}">			 
 			        </div>
 			    </div>
 			 
 				<div class="row mb-3">
-					<label class="col-sm-2 col-form-label" for="userPwd">패스워드</label>
-					<div class="col-sm-10">
+					<label class="col-form-label" for="userPwd">패스워드</label>
+					<div class="">
 			            <input type="password" name="userPwd" id="userPwd" class="form-control" autocomplete="off" placeholder="패스워드를 입력해주세요.">			 
 			        </div>
 			    </div>
 			    
 			    <div class="row mb-3">
-			        <label class="col-sm-2 col-form-label" for="userPwd2">패스워드 확인</label>
-			        <div class="col-sm-10">
+			        <label class="col-form-label" for="userPwd2">패스워드 확인</label>
+			        <div class="">
 			            <input type="password" name="userPwd2" id="userPwd2" class="form-control" autocomplete="off" placeholder="패스워드 확인 더 입력해주세요.">
 			        </div>
 			    </div>
 			 
 			    <div class="row mb-3">
-			        <label class="col-sm-2 col-form-label" for="birth">생년월일</label>
-			        <div class="col-sm-10">
+			        <label class="col-form-label" for="birth">생년월일</label>
+			        <div class="">
 			            <input type="date" name="birth" id="birth" class="form-control" value="${dto.birth}" placeholder="생년월일">
 			            <small class="form-control-plaintext">생년월일은 2000-01-01 형식으로 입력 합니다.</small>
 			        </div>
 			    </div>
 			
 			    <div class="row mb-3">
-			        <label class="col-sm-2 col-form-label" for="selectEmail">이메일</label>
-						<div class="col-sm-10 row">
+			        <label class="col-form-label" for="selectEmail">이메일</label>
+						<div class="row">
 						<div class="col-3 pe-0">
 							<select name="selectEmail" id="selectEmail" class="form-select" onchange="changeEmail();">
 								<option value="">선 택</option>
@@ -558,8 +540,8 @@ function userIdCheck() {
 			    </div>
 			    
 			    <div class="row mb-3">
-			        <label class="col-sm-2 col-form-label" for="tel">전화번호</label>
-			        <div class="col-sm-10 row">
+			        <label class="col-form-label" for="tel">전화번호</label>
+			        <div class="row">
 						<div class="col-sm-3 pe-1">
 							<input type="text" name="tel1" id="tel1" class="form-control" value="${dto.tel1}" maxlength="3">
 						</div>
@@ -593,7 +575,7 @@ function userIdCheck() {
 						</c:if>
 				 -->
 			    <div class="row mb-3">
-			        <label class="col-sm-2 col-form-label" for="zip">우편번호</label>
+			        <label class="col-form-label" for="zip">우편번호</label>
 			        <div class="col-sm-6">
 			       		<div class="input-group">
 			           		<input type="text" name="zip" id="zip" class="form-control" placeholder="우편번호" value="${dto.zip}" readonly="readonly">
@@ -605,8 +587,8 @@ function userIdCheck() {
 					<button class="btn btn-light" id="zipSearch" type="button" style="margin-left: 3px;" onclick="daumPostcode();">우편번호 검색</button>
 				 -->
 			    <div class="row mb-3">
-			        <label class="col-sm-2 col-form-label" for="addr1">주소</label>
-			        <div class="col-sm-10">
+			        <label class="col-form-label" for="addr1">주소</label>
+			        <div class="">
 			       		<div>
 			           		<input type="text" name="addr1" id="addr1" class="form-control" placeholder="기본 주소" value="${dto.addr1}" readonly="readonly">
 			           	</div>
@@ -617,7 +599,7 @@ function userIdCheck() {
 			    </div>
 			    
 			     <div class="row mb-3">
-			        <label class="col-sm-2 col-form-label" for="countryNum">가장 선호하는 음식 ?</label>
+			        <label class="col-form-label" for="countryNum">가장 선호하는 음식 ?</label>
 			        <div class="col-sm-9">
 			        <div class="select">
 			        	<!-- 
@@ -658,7 +640,7 @@ function userIdCheck() {
 			    
 		
 			    <div class="row mb-3">
-			        <label class="col-sm-2 col-form-label" for="agree">약관 동의</label>
+			        <label class="col-form-label" for="agree">약관 동의</label>
 					<div class="col-sm-8">
 						<input type="checkbox" id="agree" name="agree"
 							class="form-check-input"
@@ -672,7 +654,7 @@ function userIdCheck() {
 			    </div>
 			     
 			    <div class="row mb-3">
-			        <div class="text-center">
+			        <div class="text-center btn-area">
 			            <button type="button" name="sendButton" class="btn1 btn-primary" onclick="memberOk();"> ${mode=="member"?"회원가입":"정보수정"} <i class="bi bi-check2"></i></button>
 			            <button type="button" class="btn1 btn-danger" onclick="location.href='${pageContext.request.contextPath}/';"> ${mode=="member"?"가입취소":"수정취소"} <i class="bi bi-x"></i></button>
 						<input type="hidden" name="userIdValid" id="userIdValid" value="false">
