@@ -5,15 +5,21 @@ public class Payment {
 	private String coupon;
 	private String userName;
 	private String email;
+	private String tel;
+	private String addr1;
+	private int zip;
 	
 	private int classCode;
 	private String classUser;
 	private String classSubject;
-	private int price; // 가격
+	private int price; // 최종 가격
 	
 	private int eventNum;
 	private String couponName;
 	private int discountprice; // 할인 쿠폰 가격
+	
+	private int orderCode; // 주문코드
+	private String orderEnroll; // 주문일자
 	
 	public String getUserId() {
 		return userId;
@@ -38,6 +44,24 @@ public class Payment {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+	public String getAddr1() {
+		return addr1;
+	}
+	public void setAddr1(String addr1) {
+		this.addr1 = addr1;
+	}
+	public int getZip() {
+		return zip;
+	}
+	public void setZip(int zip) {
+		this.zip = zip;
 	}
 	public int getClassCode() {
 		return classCode;
@@ -80,5 +104,17 @@ public class Payment {
 	}
 	public void setDiscountprice(int discountprice) {
 		this.discountprice = discountprice;
+	}
+	public int getOrderCode() {
+		return orderCode;
+	}
+	public void setOrderCode(int orderCode) {
+		this.orderCode = orderCode;
+	}
+	public String getOrderEnroll() {
+		return orderEnroll;
+	}
+	public void setOrderEnroll(String orderEnroll) {
+		this.orderEnroll = orderEnroll;
 	}
 }

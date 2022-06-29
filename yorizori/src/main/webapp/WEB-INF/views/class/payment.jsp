@@ -5,21 +5,19 @@
 
 <style type="text/css">
 .paymentbtn {
-	width: 241px!important;
-    display: block;
-    margin: 0 auto;
-    border: 0;
-    background-color: #fff;
+	
 }
 
 </style>
 
+
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
 <script type="text/javascript">
 
 function sendOk() {
 	var f = document.payment;
 	
-	f.action="${pageContext.request.contextPath}/payment/kakao";
+	f.action="${pageContext.request.contextPath}/payment/pay";
 	f.submit();
 	
 }
@@ -56,6 +54,8 @@ $(function() {
 		console.log(valueCheck);
 		if ( valueCheck == 'yes' ) {
 	        $('.paymentbtn').attr('disabled', false); 
+	    } else {
+	    	$('.paymentbtn').attr('disabled', true); 
 	    }
 		
 	});
@@ -88,16 +88,23 @@ $(function() {
 				let couponName = item.couponName;
 				let discountprice = item.discountprice;
 				let price = ${dto.price};
+				let totalprice = price - discountprice;
+				
+				console.log(eventNum);
+				
+				if(totalprice < 0) {
+					totalprice = 0;
+				}
 				
 				s = "<div class='text-success'><h6 class='my-0'>쿠폰</h6>";
 				s += "<small>" + couponName + "</small></div>";
-				s += "<span class='text-success'>" + discountprice + "원 할인 </span>"; 
-				s += "<input type='hidden' name='eventNum' value='"+ eventNum +"'>"
+				s += "<span class='text-success'>" + discountprice + "원 할인 </span>";
+				s += "<input type='hidden' name='eventNum' value='" + eventNum + "'>'";
 				
 				$(".coupon").append(s);
 				
-				l = "<strong>" + (price - discountprice) + "</strong>"
-				l += "<input type='hidden' name='price' value='"+ (price - discountprice) +"'>"
+				l = "<strong>" + (totalprice) + "</strong>"
+				l += "<input type='hidden' name='price' value='"+ (totalprice) +"'>"
 				
 				$(".price").append(l);
 				
@@ -113,7 +120,7 @@ $(function() {
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/boot-board.css" type="text/css">
 
-<form class="payment" name="payment">
+<form method="post" name="payment">
     <div class="row g-5" style="width: 1000px; margin: 0 auto;">
     
       <div class="col-md-5 col-lg-4 order-md-last">
@@ -190,7 +197,7 @@ $(function() {
 	              	<select name="couponlist" class="form-select">
 						<option value="0">:: 쿠폰목록 ::</option>
 							<c:forEach var="vo" items="${list}">
-								<option value="${vo.eventNum}">${vo.couponName}&nbsp;&nbsp;${vo.discountprice}원 할인</option>									
+								<option value="${vo.eventNum}">${vo.couponName}&nbsp;&nbsp;${vo.discountprice}원 할인</option>								
 							</c:forEach>
 					</select>
 	              	<div class="invalid-feedback">
@@ -209,13 +216,15 @@ $(function() {
           <div class="my-4"></div>
           
           <div>
-	         <button type="button" class="paymentbtn" onclick="sendOk();" disabled="disabled" >
-	         	<img alt="" src="${pageContext.request.contextPath}/resources/images/payment_kakao.png">
-	         </button>
-			</div>
+         	 <input type="hidden" class="form-control" name="classCode" id="classCode" value="${dto.classCode}">
+	         <button type="button" class="paymentbtn w-100 btn btn-primary btn-lg" onclick="sendOk();" disabled="disabled">결제하기</button>
+		  	 
+		  </div>
         
       </div>
      
     </div>
     </form>
-   
+    
+    
+    

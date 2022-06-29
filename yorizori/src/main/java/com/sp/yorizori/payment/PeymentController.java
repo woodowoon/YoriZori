@@ -46,6 +46,20 @@ public class PeymentController {
 		return ".class.payment";
 	}
 	
+	@RequestMapping(value = "pay", method = RequestMethod.POST)
+	public String paymentSubmit(Payment dto, HttpSession session) throws Exception {
+		
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		try {
+			dto.setUserId(info.getUserId());
+			service.insertOrder(dto);
+		} catch (Exception e) {
+		}
+		
+		return "redirect:/payment/paycheck?orderCode=" + dto.getOrderCode();
+	}
+	
 	@RequestMapping(value = "coupon", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> coupon (
@@ -61,16 +75,23 @@ public class PeymentController {
 		return model;
 	}
 	
-	@RequestMapping(value = "kakao")
-	public String kakao() {
-		try {
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	@RequestMapping(value = "paycheck")
+	public String pay(
+			@RequestParam int orderCode,
+			HttpSession session, Model model
+			) {
 		
-		return "";
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
 		
+		Payment dto = service.readOrder(orderCode);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("userId", info.getUserId());
+		map.put("orderCode", orderCode);
+		
+		model.addAttribute("dto", dto);
+		
+		return ".class.pay";
 	}
 }

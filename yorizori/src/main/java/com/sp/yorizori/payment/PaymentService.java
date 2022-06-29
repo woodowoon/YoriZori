@@ -11,5 +11,10 @@ public interface PaymentService {
 	public List<Payment> coupon(int eventNum);
 	
 	public String kakaoPay(Map<String, Object> map);
+	
+	// 결제 대기
+	public void insertOrder(Payment dto) throws Exception;
+	
+	public Payment readOrder(int orderCode);
 	 
 }
