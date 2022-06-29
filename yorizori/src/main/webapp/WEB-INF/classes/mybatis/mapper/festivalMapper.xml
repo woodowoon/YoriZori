@@ -10,7 +10,7 @@
 		INSERT INTO festival(festivalNum, festivalName, festivalContent, startDate, 
 			endDate, festivalHost, festivalSite, addr, place, latitude, longitude) 
 		VALUES (#{num}, #{name}, #{content}, #{start_date}, 
-			#{end_date}, #{host}, #{site}, #{addr}, #{place}, #{latitude}, #{longitude})
+			#{end_date}, #{host}, #{site, jdbcType=VARCHAR}, #{addr}, #{place}, #{latitude}, #{longitude})
 	</insert>
 	
 	<sql id="where-list">

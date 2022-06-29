@@ -74,16 +74,16 @@ function sendOk() {
         return;
     }
     
-    str = f.site.value.trim();
+    str = f.addr.value.trim();
     if(!str) {
-        alert("주소를 입력하세요. ");
+        alert("도로명 주소를 입력하세요. ");
         f.addr.focus();
         return;
     }
     
-    str = f.site.value.trim();
+    str = f.place.value.trim();
     if(!str) {
-        alert("축제장소를 입력하세요. ");
+        alert("축제 장소를 입력하세요. ");
         f.place.focus();
         return;
     }

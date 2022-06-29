@@ -26,7 +26,7 @@ main { background-color: #f7f8fb; font-family: 'Noto Sans KR', sans-serif; color
 .festival-list > li { margin: 0 0 20px 24px; width: calc(25% - 18px); }
 
 .festival-box { border: 1px solid #dadada; text-align: center; }
-.festival-img { margin-bottom: 20px; width: 295px; height: 300px; overflow: hidden;}
+.festival-img { margin-bottom: 20px; width: 294px; height: 300px; overflow: hidden;}
 .festival-img > a > img { max-width: 100%; min-height: 100%; }
 .festival-info { letter-spacing: 0; margin: 0 10px; }
 .festival-title { font-size: 20px; font-weight: 500; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
