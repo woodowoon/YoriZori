@@ -84,28 +84,13 @@
 	</select>
 	
 	<select id="dataCount" resultType="Integer" parameterType="map">
-		SELECT COUNT(*)
-		FROM recipe r
-		JOIN member m ON m.userId = r.userId
-		LEFT OUTER JOIN (
-		    SELECT follower_id, following_id FROM follow
-	    ) f ON r.userId = f.following_id 
-	    <where>
-			<choose>
-				<when test="isFollow == true">
-					follower_id = #{userId} OR (m.userId = #{userId})
-				</when>
-				<otherwise>
-					r.countryNum = #{userCountryNum} OR (m.userId = #{userId})
-				</otherwise>
-			</choose>
-		</where>
-
+		SELECT NVL(COUNT(*), 0)
+		FROM recipe
 	</select>
 	
 	<!-- feed -->
 	<select id="listRecipeFeed" resultType="com.sp.yorizori.recipe.Recipe" parameterType="map">
-	
+		
 		SELECT * FROM (
 		    SELECT ROWNUM rnum, tb.* FROM (
 		        SELECT r.recipeNum recipeNum, r.countryNum countryNum, recipeSubject, nickName, memberImageName, imageFilename, 
@@ -123,8 +108,8 @@
 		                SELECT recipeNum, recipePhotoName imageFilename FROM recipePhoto
 		            ) rp ON r.recipeNum = rp.recipeNum
 		            LEFT OUTER JOIN (
-		                SELECT recipeNum, NVL(COUNT(*), 0) userRecipeLike FROM recipeLike 
-		                	WHERE userId = #{userId}
+		                SELECT recipeNum, NVL(COUNT(*), 0) userRecipeLike FROM recipeLike ur
+		                	WHERE ur.userId = #{userId}
 		                GROUP BY recipeNum
 		            ) ur ON r.recipeNum = ur.recipeNum
 		            ORDER BY recipeLikeCount DESC
