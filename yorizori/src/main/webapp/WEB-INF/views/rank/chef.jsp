@@ -41,8 +41,8 @@ li { list-style: none; }
 
 .ranking .full .chef-list { padding: 40px 0px 20px 128px; }
 .ranking .full .chef-list li { position: relative; float: left; margin: 2px 45px 24px; }
-.ranking .full .chef-list li div { width: 108px; cursor: pointer; }
-.ranking .full .chef-list li div img { width: 100%; border-radius: 50%; }
+.ranking .full .chef-list li div { width: 108px; height: 108px; cursor: pointer; }
+.ranking .full .chef-list li div img { width: 100%; height: 100%; border-radius: 50%; border: 1px solid #ededed; }
 .ranking .full .chef-list li div a { display: block; font-size: 16px; text-align: center; padding: 8px 0; }
 .ranking .full .chef-list li div a:hover { text-decoration: none; color: #f44502; }
 

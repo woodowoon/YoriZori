@@ -21,7 +21,7 @@ li { list-style: none; }
 .myProfile { height: 300px; }
 .profile-detail { display: flex; height: 250px; padding-right: 25px; }
 .myImage { width: 250px; height: 250px; padding: 25px; margin-right: 100px; }
-.myImage > img { width: 200px; height: 200px; border-radius: 9999px; }
+.myImage > img { width: 200px; height: 200px; border-radius: 9999px; border: 1px solid #ededed; }
 .myInfo { width: 209px; height: 100px; margin: auto 0; text-align: center; }
 .myInfo .count { margin-top: 10px; margin-bottom: 0; font-size: 25px; font-weight: 700; }
 .myInfo .name { margin-bottom: 0; font-size: 16px; }
@@ -45,10 +45,10 @@ li { list-style: none; }
 .box:hover .text { visibility: visible; }
 
 .modal-body ul { margin: 0; padding: 0; }
-.modal-body ul li { display: flex; padding: 10px 0; line-height: 30px; }
-.modal-body ul li div img { width: 30px; height: 30px; border-radius: 9999px; margin-right: 10px; }
-.btn-sm-follow { width: 80px; height: 32px; border: 1px solid #0095f6; border-radius: 8px; background-color: #0095f6; color: #fff; font-size: 14px; letter-spacing: 0.03em; margin-left: auto; }
-.btn-sm-following { width: 80px; height: 32px; border: 1px solid #0095f6; border-radius: 8px; background-color: #fff; color: #0095f6; font-size: 14px; letter-spacing: 0.03em; margin-left: auto; }
+.modal-body ul li { display: flex; padding: 10px 0; line-height: 35px; }
+.modal-body ul li div img { width: 35px; height: 35px; border-radius: 9999px; border: 0.1px solid #ededed; margin-right: 10px; }
+.btn-sm-follow { width: 80px; height: 30px; border: 1px solid #0095f6; border-radius: 8px; background-color: #0095f6; color: #fff; font-size: 14px; letter-spacing: 0.03em; margin-left: auto; margin-top: 4px; line-height: 28px; }
+.btn-sm-following { width: 80px; height: 30px; border: 1px solid #0095f6; border-radius: 8px; background-color: #fff; color: #0095f6; font-size: 14px; letter-spacing: 0.03em; margin-left: auto; margin-top: 4px; line-height: 28px; }
 
 .page-item.active .page-link { background-color: #0095f6; border-color: #0095f6; }
 .page-link, .page-link:hover, .page-link:active { color: #0095f6; }
@@ -371,7 +371,7 @@ $(function(){
 				<div class="modal-body">
 					<ul>
 						<c:forEach var="vo" items="${listFollower}">
-							<li>
+							<li onclick="location.href='${pageContext.request.contextPath}/mypage/main?userId=${vo.followId}'">
 								<div>
 									<c:choose>
 										<c:when test="${vo.followImageName ne NULL}">
@@ -404,7 +404,7 @@ $(function(){
 				<div class="modal-body">
 					<ul>
 						<c:forEach var="vo" items="${listFollowing}">
-							<li>
+							<li onclick="location.href='${pageContext.request.contextPath}/mypage/main?userId=${vo.followId}'">
 								<div>
 									<c:choose>
 										<c:when test="${vo.followImageName ne NULL}">

@@ -12,8 +12,8 @@ main { background-color: #f7f8fb; font-family: 'Noto Sans KR', sans-serif; color
 .tbodyReply > tr:nth-child(2n) {
 	border-bottom: 1px solid #dee2e6;
 }
-.reply-writer .col-1 { padding: 0; }
-.reply-writer .col-1 img { width: 100%; border-radius: 9999px; }
+.reply-writer .col-1 { padding: 0; width: 47px; height: 47px; }
+.reply-writer .col-1 img { width: 100%; height: 100%; border-radius: 9999px; border: 1px solid #ededed; }
 .nickName { width: auto; line-height: 43px; font-size: 15px; font-weight: 500; cursor: pointer; }
 .regDate { width: auto; line-height: 43px; font-size: 15px; color: #aaa; font-weight: 300; }
 .replyContent { padding-bottom: 17px!important; }
