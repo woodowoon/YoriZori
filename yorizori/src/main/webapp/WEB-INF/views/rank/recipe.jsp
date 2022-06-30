@@ -43,7 +43,7 @@ li { list-style: none; }
 .ranking .full .rank-list li a img { width: 100%; height: 282px; }
 .ranking .full .rank-list p { font-size: 15px; margin: 14px 0px 8px 2px; }
 .ranking .full .rank-list .profile > div { display: inline-block; }
-.ranking .full .rank-list .profile > div > img { display: inline-block; width: 25px; height: 25px; border-radius: 50%; background: #f1f1f2; margin-right: 6px; }
+.ranking .full .rank-list .profile > div > img { display: inline-block; width: 26px; height: 26px; border-radius: 50%; border: 0.1px solid #ededed; background: #f1f1f2; margin-right: 6px; }
 .ranking .full .rank-list .profile span { cursor: pointer; font-size: 14px; vertical-align: top; display: inline-block; height: 25px; line-height: 24px; }
 .ranking .full .rank-list .info { margin-top: 3px; }
 .ranking .full .rank-list .info img { width: 25px; margin-right: 6px; }
