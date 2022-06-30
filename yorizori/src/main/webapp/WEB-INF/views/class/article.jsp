@@ -394,7 +394,7 @@ $(function(){
 		<div class="img-area">
 			<img src="${pageContext.request.contextPath}/uploads/class/${dto.imageFileName}">
 			<div class="user-info">
-				<a href="#">
+				<a href="${pageContext.request.contextPath}/mypage/main?userId=${dto.userId}">
 					<img src="${pageContext.request.contextPath}/resources/images/class-profile-dummy.png">
 				</a>
 				<span>${dto.nickname}</span>
