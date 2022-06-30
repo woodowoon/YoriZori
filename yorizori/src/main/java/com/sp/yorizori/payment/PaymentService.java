@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface PaymentService {
-	public List<Payment> listCoupon(String userId);
+	public List<Payment> listCoupon(String userId); 
 	public Payment readClass(int classCode);
 	public Payment readMember(String userId);
 	
