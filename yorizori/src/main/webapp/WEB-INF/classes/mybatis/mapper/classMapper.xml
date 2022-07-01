@@ -44,6 +44,7 @@
 						(c.class_Category = #{category} )
 					</if>
 				</where>
+				ORDER BY NVL(followCount, 0) DESC
 			) tb WHERE ROWNUM &lt;= #{end}
 		) WHERE rnum &gt;= #{start}
 	</select>
