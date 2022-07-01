@@ -404,7 +404,7 @@ $(function(){
 				<div class="modal-body">
 					<ul>
 						<c:forEach var="vo" items="${listFollowing}">
-							<li onclick="location.href='${pageContext.request.contextPath}/mypage/main?userId=${vo.followId}'">
+							<li>
 								<div>
 									<c:choose>
 										<c:when test="${vo.followImageName ne NULL}">
