@@ -51,6 +51,7 @@
 .lec-detail .reviewInfo * { font-size: 20px; border: 1px solid #ccc; border-radius: 4px; border-bottom: none; padding: 6px 50px; }
 .lec-detail .reviewInfo span:first-child { border-right: none; }
 .lec-detail .reviewInfo span:last-child { display: inline-block; width: 140px; text-align: center; color: #cead00; padding: 6px 10px; }
+.lec-detail .reviewDetail { margin-bottom: 20px; }
 .lec-detail .reviewDetail p { font-size: 16px; border: 1px solid #ccc; border-radius: 4px; padding: 10px 14px; }
 
 .lec-detail .classQna form * { display: inline-block; }
