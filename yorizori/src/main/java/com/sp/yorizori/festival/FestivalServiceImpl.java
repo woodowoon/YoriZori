@@ -13,7 +13,6 @@ import com.sp.yorizori.common.dao.CommonDAO;
 
 @Service("festival.festivalService")
 public class FestivalServiceImpl implements FestivalService {
-	
 	@Autowired
 	private CommonDAO dao;
 	
