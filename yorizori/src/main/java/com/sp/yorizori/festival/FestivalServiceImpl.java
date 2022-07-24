@@ -15,7 +15,6 @@ import com.sp.yorizori.common.dao.CommonDAO;
 public class FestivalServiceImpl implements FestivalService {
 	@Autowired
 	private CommonDAO dao;
-	
 	@Autowired
 	private FileManager fileManager;
 
