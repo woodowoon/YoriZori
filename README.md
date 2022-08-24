@@ -10,8 +10,8 @@
 다양한 사람들에게 요리에 대한 즐거움을 가져다 줄 수 있습니다.
 
 ## 팀원 소개
-![팀원](팀원소개.png)
+![팀원](https://user-images.githubusercontent.com/67787525/186371668-33350610-8fc2-4e3f-a9a9-f45aebb81eda.png)
 
 ## 개발 환경
-![image](https://user-images.githubusercontent.com/67787525/186371325-2330c28c-43f2-44e4-9bb8-ce43e2261bf6.png)
+![개발환경](https://user-images.githubusercontent.com/67787525/186371325-2330c28c-43f2-44e4-9bb8-ce43e2261bf6.png)
 
